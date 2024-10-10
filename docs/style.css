@@ -1,0 +1,52 @@
+:root {
+    --background: #121212;
+    --background-secondary: #1F1B24;
+    --primary: #42a5f5;
+    --secondary: #ab47bc;
+    --text: #fff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-secondary);
+}
+
+#title-container {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+    background-color: var(--background);
+    color: var(--text);
+}
+
+#title {
+    display: flexbox;
+}
+
+#header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    height: 5vh;
+    background-color: var(--background);
+}
+
+.header-item {
+    display: flexbox;
+    margin-left: 7vw;
+    color: var(--text);
+}
+
+.header-item > a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.header-item:hover {
+    background-color: var(--primary);
+}
