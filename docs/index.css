@@ -42,11 +42,44 @@ body {
     color: var(--text);
 }
 
-.header-item > a {
+.header-item > p > a {
     color: var(--text);
     text-decoration: none;
 }
 
 .header-item:hover {
     background-color: var(--primary);
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--background);
+    width: 10vw;
+    z-index: 1;
+}
+
+.dropdown-content > a {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    border-top: 1px solid var(--text);
+    border-bottom: 1px solid var(--text);
+    padding: 1vh;
+}
+
+.dropdown-content > a:hover {
+    background-color: var(--primary);
+}
+.dropdown-content > a:last-child, a:first-child {
+    border: none;
 }

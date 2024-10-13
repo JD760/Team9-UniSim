@@ -1,0 +1,33 @@
+:root {
+    --background: #121212;
+    --background-secondary: #1F1B24;
+    --background-tertiary: #4a4353;
+    --primary: #42a5f5;
+    --secondary: #ab47bc;
+    --text: #fff;
+}
+
+body {
+    background-color: var(--background);
+}
+
+#title {
+    text-align: center;
+    color: var(--text);
+    text-decoration: underline;
+}
+
+.weekly-plan {
+    width: 90vw;
+    height: 50vh;
+    background-color: var(--background-secondary);
+    margin-bottom: 5vh;
+    margin-left: 5vw;
+    border: 2px solid var(--background-tertiary);
+}
+
+.weekly-plan > .title {
+    color: var(--text);
+    text-align: center;
+    border-bottom: 1px solid var(--background-tertiary);
+}
