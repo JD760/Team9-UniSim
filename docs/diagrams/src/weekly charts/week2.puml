@@ -1,0 +1,8 @@
+@startgantt Week 2 Plan
+Project starts 2024-9-30
+[Research our deliverables] lasts 11 days
+[Plan client meeting] lasts 8 days
+[Monday meeting] starts 2024-9-30 and ends 2024-9-30
+[GitHub demo] starts 2024-10-3 and ends 2024-10-3
+[GitHub set up complete] happens at [GitHub demo]'s end
+@endgantt 

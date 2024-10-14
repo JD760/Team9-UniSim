@@ -1,0 +1,85 @@
+:root {
+    --background: #121212;
+    --background-secondary: #1F1B24;
+    --primary: #42a5f5;
+    --secondary: #ab47bc;
+    --text: #fff;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-secondary);
+}
+
+#title-container {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5vh;
+    background-color: var(--background);
+    color: var(--text);
+}
+
+#title {
+    display: flexbox;
+}
+
+#header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    height: 5vh;
+    background-color: var(--background);
+}
+
+.header-item {
+    display: flexbox;
+    margin-left: 7vw;
+    color: var(--text);
+}
+
+.header-item > p > a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.header-item:hover {
+    background-color: var(--primary);
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--background);
+    width: 10vw;
+    z-index: 1;
+}
+
+.dropdown-content > a {
+    display: block;
+    text-decoration: none;
+    color: var(--text);
+    border-top: 1px solid var(--text);
+    border-bottom: 1px solid var(--text);
+    padding: 1vh;
+}
+
+.dropdown-content > a:hover {
+    background-color: var(--primary);
+}
+.dropdown-content > a:last-child, a:first-child {
+    border: none;
+}
