@@ -1,0 +1,5 @@
+@startuml Architecture v1
+class Timer
+interface Component
+
+@enduml
