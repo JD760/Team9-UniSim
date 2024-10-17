@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /**
@@ -16,43 +17,50 @@ import com.badlogic.gdx.utils.ScreenUtils;
  */
 public class Main extends ApplicationAdapter {
   private Timer timer;
-  private SpriteBatch batch;
+  private SpriteBatch gameBatch;
+  private SpriteBatch uiBatch;
   private TiledMap map;
+  private Matrix4 projection;
   private float unitScale = 1 / 32f;
-  private OrthogonalTiledMapRenderer renderer;
+  private IsometricTiledMapRenderer renderer;
   private OrthographicCamera camera;
   private BitmapFont font;
 
   @Override
   public void create() {
     timer = new Timer(10_000);
-    batch = new SpriteBatch();
-    map = new TmxMapLoader().load("UniSim map test.tmx");
-    renderer = new OrthogonalTiledMapRenderer(map, unitScale);
-    camera = new OrthographicCamera();
-    camera.setToOrtho(false, 30, 20);
+    gameBatch = new SpriteBatch();
+    camera = new OrthographicCamera(300, 200);
+    uiBatch = new SpriteBatch();
+    map = new TmxMapLoader().load("map_2.tmx");
+    renderer = new IsometricTiledMapRenderer(map, unitScale);
     font = new BitmapFont();
   }
 
   @Override
   public void render() {
     ScreenUtils.clear(0.55f, 0.55f, 0.55f, 1f);
+
+    //renderer.setView(projection, 0, 0, 300, 200);
     camera.update();
     renderer.setView(camera);
     renderer.render();
-    batch.begin();
+
+    uiBatch.begin();
     if (timer.isRunning()) {
-      font.draw(batch, timer.getRemainingTime(), 10, 20);
+      font.draw(uiBatch, timer.getRemainingTime(), 10, 20);
     } else {
-      font.draw(batch, "Game Over!", 10, 20);
+      font.draw(uiBatch, "Game Over!", 10, 20);
     }
     timer.tick(Gdx.graphics.getDeltaTime() * 1000);
-    batch.end();
+    uiBatch.end();
+
   }
 
   @Override
   public void dispose() {
-    batch.dispose();
+    gameBatch.dispose();
+    uiBatch.dispose();
     map.dispose();
   }
 }
