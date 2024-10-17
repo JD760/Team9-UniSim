@@ -1,0 +1,13 @@
+@startgantt Week 4 Plan
+Project starts 2024-10-14
+[Monday meeting] starts 2024-10-14 and ends 2024-10-14
+[Architecture Diagram] starts at 2024-10-14 and ends 2024-10-15
+[Architecture Diagram Completed] happens at [Architecture Diagram]'s end
+[Behaviour Diagrams - Bertie] starts  and lasts 7 days
+[Map Implementation - Jacob] starts 2024-10-14 and lasts 7 days
+[Menu Implementation - Henry] starts 2024-10-14 and lasts 7 days
+[Thursday Meeting] starts 2024-10-17 and ends 2024-10-17
+[Method Selection/Planning - James] starts 2024-10-17 and lasts 7 days
+
+
+@endgantt
