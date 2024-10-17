@@ -1,0 +1,62 @@
+@startuml Project Structure
+class Game
+{
+    - music: Sound
+    + resize(): void
+    + render(): void
+}
+
+class Menu
+{
+    - clickSound: Sound
+    + render(): void
+}
+
+class Button
+{
+    - text: String
+    - position: Vector2
+    - size: Vector2
+}
+
+class World
+{
+    - soundEffects: sound
+    + render(): void
+    + scroll(): void
+    + zoom(): void
+    + addBuilding(): bool
+    + removeBuilding(): bool
+}
+
+class Tile
+{
+    - Type: Enum
+}
+
+class Timer
+{
+    - remainingTime: Time
+}
+
+class BuildingCounter
+{
+    - count: int
+}
+
+abstract class Building
+{
+    - image: Sprite
+    - type: Enum
+    - size: Vector2
+    - position: Vector2
+}
+
+Game *-- "1..1" World
+Game *-- "*" Menu
+World *-- "*" Tile
+World *-- "*" Building
+World *-- "4..4" BuildingCounter
+Game *-- "1..1" Timer
+Menu *-- "*" Button
+@enduml
