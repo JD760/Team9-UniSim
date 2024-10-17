@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
  * platforms.
  */
 public class Main extends ApplicationAdapter {
+  private Timer timer;
   private SpriteBatch batch;
   private TiledMap map;
   private float unitScale = 1 / 32f;
@@ -24,6 +25,7 @@ public class Main extends ApplicationAdapter {
 
   @Override
   public void create() {
+    timer = new Timer(10_000);
     batch = new SpriteBatch();
     map = new TmxMapLoader().load("UniSim map test.tmx");
     renderer = new OrthogonalTiledMapRenderer(map, unitScale);
@@ -39,7 +41,12 @@ public class Main extends ApplicationAdapter {
     renderer.setView(camera);
     renderer.render();
     batch.begin();
-    font.draw(batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 10, 20);
+    if (timer.isRunning()) {
+      font.draw(batch, timer.getRemainingTime(), 10, 20);
+    } else {
+      font.draw(batch, "Game Over!", 10, 20);
+    }
+    timer.tick(Gdx.graphics.getDeltaTime() * 1000);
     batch.end();
   }
 
