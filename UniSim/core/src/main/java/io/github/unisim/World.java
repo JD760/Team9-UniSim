@@ -15,17 +15,23 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  * It has the ablity to render the game and update the state of the game
  */
 public class World {
-  private float unitScale = 1 / 32f;
   private OrthographicCamera camera = new OrthographicCamera();
   private Viewport viewport = new ScreenViewport(camera);
-  private TiledMap map = new TmxMapLoader().load("map_2.tmx");
-  private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map, unitScale);
-  private Vector2 camPosition = new Vector2(0f, 0f);
+  private TiledMap map = new TmxMapLoader().load("map.tmx");
+  private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map);
+  private Vector2 camPosition = new Vector2(16000f, 0f);
   private Vector2 panVelocity = new Vector2(0f, 0f);
   private float zoomVelocity = 0f;
   final private float timeStepSize = 0.001f;
   private float panDT = 0f;
   private float zoomDT = 0f;
+
+  /**
+   * Create a new World
+   */
+  public World() {
+    camera.zoom = 5f;
+  }
 
   /**
    * Releases all resources of this object
@@ -107,8 +113,8 @@ public class World {
    * Limits the zoom of the camera to be between minZoom and maxZoom
    */
   private void updateZoom() {
-    final float minZoom = 0.02f;
-    final float maxZoom = 100f;
+    final float minZoom = 0.5f;
+    final float maxZoom = 5f;
     zoomDT += Gdx.graphics.getDeltaTime();
     while (zoomDT > timeStepSize) {
       zoomDT -= timeStepSize;
