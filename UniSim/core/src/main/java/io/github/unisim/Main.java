@@ -1,9 +1,6 @@
 package io.github.unisim;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
@@ -25,5 +22,10 @@ public class Main extends ApplicationAdapter {
   @Override
   public void dispose() {
     game.dispose();
+  }
+
+  @Override
+  public void resize(int width, int height) {
+    game.resize(width, height);
   }
 }
