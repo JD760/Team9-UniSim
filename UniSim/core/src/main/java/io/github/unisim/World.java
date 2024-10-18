@@ -21,7 +21,11 @@ public class World {
   private TiledMap map = new TmxMapLoader().load("map_2.tmx");
   private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map, unitScale);
   private Vector2 camPosition = new Vector2(0f, 0f);
+  private Vector2 panVelocity = new Vector2(0f, 0f);
   private float zoomVelocity = 0f;
+  final private float timeStepSize = 0.001f;
+  private float panDT = 0f;
+  private float zoomDT = 0f;
 
   /**
    * Releases all resources of this object
@@ -32,20 +36,19 @@ public class World {
   }
 
   /**
-   * Renders the gameplay
+   * Steps the world forward by delta time and renders the world
    */
   public void render() {
     viewport.apply();
 
     ScreenUtils.clear(0.55f, 0.55f, 0.55f, 1f);
 
+    updatePan();
     updateZoom();
     camera.position.set(camPosition.x, camPosition.y, 0);
     camera.update();
     renderer.setView((OrthographicCamera)viewport.getCamera());
     renderer.render();
-
-    Gdx.app.log("#INFO", new Vector2(camPosition).toString());
   }
 
   /**
@@ -64,11 +67,27 @@ public class World {
 
   /**
    * Pans the view of the game by translating the camera by a multiple of the vector (x, y)
+   * The view will continue to move in the same direction for a short period afterwards
    * 
    * @param x - The distance to pan horizontally
    * @param y - The distance to pan vertically
    */
   public void pan(float x, float y) {
+    camPosition.add(x * camera.zoom, y * camera.zoom);
+    if (Gdx.input.isButtonPressed(0) || Gdx.input.isButtonPressed(1)
+                                            || Gdx.input.isButtonPressed(2)) {
+      panVelocity.set(x * timeStepSize / Gdx.graphics.getDeltaTime(),
+                      y * timeStepSize / Gdx.graphics.getDeltaTime());
+    }
+  }
+
+  /**
+   * Pans the view of the game by translating the camera by a multiple of the vector (x, y)
+   * 
+   * @param x - The distance to pan horizontally
+   * @param y - The distance to pan vertically
+   */
+  public void panWithoutInertia(float x, float y) {
     camPosition.add(x * camera.zoom, y * camera.zoom);
   }
 
@@ -78,7 +97,7 @@ public class World {
    * @param amount - The speed to zoom at; negative to zoom in and positive to zoom out
    */
   public void zoom(float amount) {
-    final float zoomAcceleration = 0.01f;
+    final float zoomAcceleration = 0.001f;
     zoomVelocity += amount * zoomAcceleration;
   }
 
@@ -90,16 +109,36 @@ public class World {
   private void updateZoom() {
     final float minZoom = 0.02f;
     final float maxZoom = 100f;
-    zoomVelocity *= 0.8f;
-    float scaleFactor = (1f + zoomVelocity * (float)Math.sqrt(camera.zoom) / camera.zoom);
-    if (camera.zoom * scaleFactor < minZoom) {
-      scaleFactor = minZoom / camera.zoom;
+    zoomDT += Gdx.graphics.getDeltaTime();
+    while (zoomDT > timeStepSize) {
+      zoomDT -= timeStepSize;
+      zoomVelocity *= 0.987f;
+      float scaleFactor = (1f + zoomVelocity * (float)Math.sqrt(camera.zoom) / camera.zoom);
+      if (camera.zoom * scaleFactor < minZoom) {
+        scaleFactor = minZoom / camera.zoom;
+      }
+      if (camera.zoom * scaleFactor > maxZoom) {
+        scaleFactor = maxZoom / camera.zoom;
+      }
+      panWithoutInertia(Gdx.input.getX() - camera.viewportWidth / 2, camera.viewportHeight / 2 - Gdx.input.getY());
+      camera.zoom *= scaleFactor;
+      panWithoutInertia(camera.viewportWidth / 2 - Gdx.input.getX(), Gdx.input.getY() - camera.viewportHeight / 2);
     }
-    if (camera.zoom * scaleFactor > maxZoom) {
-      scaleFactor = maxZoom / camera.zoom;
+  }
+
+  /**
+   * Adjusts the panning of the camera based on the panVelocity
+   * Also slightly reduces the panVelocity to prevent infinite panning
+   */
+  private void updatePan() {
+    panDT += Gdx.graphics.getDeltaTime();
+    while (panDT > timeStepSize) {
+      panDT -= timeStepSize;
+      panVelocity.scl(0.987f);
+      if (!(Gdx.input.isButtonPressed(0) || Gdx.input.isButtonPressed(1)
+        || Gdx.input.isButtonPressed(2))) {
+          panWithoutInertia(panVelocity.x, panVelocity.y);
+      }
     }
-    pan(Gdx.input.getX() - camera.viewportWidth / 2, camera.viewportHeight / 2 - Gdx.input.getY());
-    camera.zoom *= scaleFactor;
-    pan(camera.viewportWidth / 2 - Gdx.input.getX(), Gdx.input.getY() - camera.viewportHeight / 2);
   }
 }
