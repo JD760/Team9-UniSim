@@ -1,6 +1,8 @@
 package io.github.unisim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,20 +11,20 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class Game {
-  private World world;
-  private Timer timer;
-  private SpriteBatch uiBatch;
-  private BitmapFont font;
-  private Viewport uiViewport;
-  private Camera uiCamera;
+  private World world = new World();
+  private Timer timer = new Timer(10_000);
+  private SpriteBatch uiBatch = new SpriteBatch();
+  private BitmapFont font = new BitmapFont();
+  private Camera uiCamera = new OrthographicCamera();
+  private Viewport uiViewport = new ScreenViewport(uiCamera);
+  private InputProcessor uiInputProcessor = new UIInputProcessor();
+  private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
+  private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   public Game() {
-    timer = new Timer(10_000);
-    uiBatch = new SpriteBatch();
-    font = new BitmapFont();
-    world = new World();
-    uiCamera = new OrthographicCamera();
-    uiViewport = new ScreenViewport(uiCamera);
+    inputMultiplexer.addProcessor(uiInputProcessor);
+    inputMultiplexer.addProcessor(worldInputProcessor);
+    Gdx.input.setInputProcessor(inputMultiplexer);
     uiCamera.position.set(uiCamera.viewportWidth / 2, uiCamera.viewportHeight / 2, 0);
   }
 
@@ -49,7 +51,7 @@ public class Game {
 
   public void resize(int width, int height) {
     world.resize(width, height);
-    uiViewport.update(width,height);
+    uiViewport.update(width, height);
     uiCamera.position.set(uiCamera.viewportWidth / 2, uiCamera.viewportHeight / 2, 0);
     uiBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
   }
