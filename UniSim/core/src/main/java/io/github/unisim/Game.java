@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/**
+ * A class that holds all the user interface and gameplay for UniSim
+ */
 public class Game {
   private World world = new World();
   private Timer timer = new Timer(10_000);
@@ -21,6 +24,9 @@ public class Game {
   private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
+  /**
+   * Create a new Game
+   */
   public Game() {
     inputMultiplexer.addProcessor(uiInputProcessor);
     inputMultiplexer.addProcessor(worldInputProcessor);
@@ -28,11 +34,18 @@ public class Game {
     uiCamera.position.set(uiCamera.viewportWidth / 2, uiCamera.viewportHeight / 2, 0);
   }
 
+  /**
+   * Releases all resources of this object
+   * Should be called when the Game object is no longer needed
+   */
   public void dispose() {
     uiBatch.dispose();
     world.dispose();
   }
 
+  /**
+   * Renders a frame of the game, including the user interface and the gameplay
+   */
   public void render() {
     timer.tick(Gdx.graphics.getDeltaTime() * 1000);
 
@@ -49,10 +62,16 @@ public class Game {
     uiBatch.end();
   }
 
+  /**
+   * Resizes the game (usually to fit the size of the window)
+   * This is mostly done by resizing the relevant viewports
+   * 
+   * @param width - The new width of the window
+   * @param height - The new height of the window
+   */
   public void resize(int width, int height) {
     world.resize(width, height);
     uiViewport.update(width, height);
-    uiCamera.position.set(uiCamera.viewportWidth / 2, uiCamera.viewportHeight / 2, 0);
     uiBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
   }
 }
