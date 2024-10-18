@@ -113,8 +113,8 @@ public class World {
    * Limits the zoom of the camera to be between minZoom and maxZoom
    */
   private void updateZoom() {
-    final float minZoom = 0.5f;
-    final float maxZoom = 5f;
+    final float minZoom = 500f / camera.viewportHeight;
+    final float maxZoom = 3000f / camera.viewportHeight;
     zoomDT += Gdx.graphics.getDeltaTime();
     while (zoomDT > timeStepSize) {
       zoomDT -= timeStepSize;
