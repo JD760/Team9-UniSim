@@ -18,8 +18,8 @@ public class World {
   private OrthographicCamera camera = new OrthographicCamera();
   private Viewport viewport = new ScreenViewport(camera);
   private TiledMap map = new TmxMapLoader().load("map.tmx");
-  private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map);
-  private Vector2 camPosition = new Vector2(16000f, 0f);
+  private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map, 1f/16f);
+  private Vector2 camPosition = new Vector2(500f, 0f);
   private Vector2 panVelocity = new Vector2(0f, 0f);
   private float zoomVelocity = 0f;
   final private float timeStepSize = 0.001f;
@@ -30,7 +30,7 @@ public class World {
    * Create a new World
    */
   public World() {
-    camera.zoom = 5f;
+    camera.zoom = 100f / 480;
   }
 
   /**
@@ -103,7 +103,7 @@ public class World {
    * @param amount - The speed to zoom at; negative to zoom in and positive to zoom out
    */
   public void zoom(float amount) {
-    final float zoomAcceleration = 0.001f;
+    final float zoomAcceleration = 0.0003f;
     zoomVelocity += amount * zoomAcceleration;
   }
 
@@ -113,8 +113,8 @@ public class World {
    * Limits the zoom of the camera to be between minZoom and maxZoom
    */
   private void updateZoom() {
-    final float minZoom = 500f / camera.viewportHeight;
-    final float maxZoom = 3000f / camera.viewportHeight;
+    final float minZoom = 10f / camera.viewportHeight;
+    final float maxZoom = 100f / camera.viewportHeight;
     zoomDT += Gdx.graphics.getDeltaTime();
     while (zoomDT > timeStepSize) {
       zoomDT -= timeStepSize;

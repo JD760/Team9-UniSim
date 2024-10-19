@@ -73,5 +73,6 @@ public class Game {
     world.resize(width, height);
     uiViewport.update(width, height);
     uiBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+    ((UIInputProcessor)uiInputProcessor).resize(width, height);
   }
 }
