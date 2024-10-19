@@ -29,12 +29,12 @@ public class UIInputProcessor implements InputProcessor {
       case Keys.F11:
         Monitor currMonitor = Gdx.graphics.getMonitor();
         DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
-        if (fullscreen) {
-          Gdx.graphics.setWindowedMode(windowSize[0], windowSize[1]);
-        } else {
-          Gdx.graphics.setFullscreenMode(displayMode);
-        }
         fullscreen = !fullscreen;
+        if (fullscreen) {
+          Gdx.graphics.setFullscreenMode(displayMode);
+        } else {
+          Gdx.graphics.setWindowedMode(windowSize[0], windowSize[1]);
+        }
         return true;
 
       default:

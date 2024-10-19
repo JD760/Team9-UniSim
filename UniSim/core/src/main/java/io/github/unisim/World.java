@@ -2,10 +2,14 @@ package io.github.unisim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -18,19 +22,25 @@ public class World {
   private OrthographicCamera camera = new OrthographicCamera();
   private Viewport viewport = new ScreenViewport(camera);
   private TiledMap map = new TmxMapLoader().load("map.tmx");
-  private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map, 1f/16f);
+  private float unitScale = 1f / 16f;
+  private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map, unitScale);
   private Vector2 camPosition = new Vector2(500f, 0f);
   private Vector2 panVelocity = new Vector2(0f, 0f);
   private float zoomVelocity = 0f;
   final private float timeStepSize = 0.001f;
   private float panDT = 0f;
   private float zoomDT = 0f;
+	private SpriteBatch batch = new SpriteBatch();
+  private Texture texture = new Texture(Gdx.files.internal("tileHighlight.png"));
+  private Matrix4 isoTransform;
+  private Matrix4 invIsoTransform;
 
   /**
    * Create a new World
    */
   public World() {
     camera.zoom = 100f / 480;
+    initIsometricTransform();
   }
 
   /**
@@ -53,8 +63,18 @@ public class World {
     updateZoom();
     camera.position.set(camPosition.x, camPosition.y, 0);
     camera.update();
+
+    // Render the map tiles
     renderer.setView((OrthographicCamera)viewport.getCamera());
     renderer.render();
+
+    batch.setProjectionMatrix(camera.combined);
+    batch.begin();
+    Vector2 cursorGridPos = getCursorGridPos();
+    Gdx.app.log("#INFO", cursorGridPos.toString());
+    Vector3 cursorWorldPos = new Vector3((float)Math.floor(cursorGridPos.x), (float)Math.floor(cursorGridPos.y), 0).mul(isoTransform);
+    batch.draw(texture, cursorWorldPos.x, cursorWorldPos.y, 1, 1);
+    batch.end();
   }
 
   /**
@@ -147,4 +167,32 @@ public class World {
       }
     }
   }
+
+  /**
+   * Calculates the position of the cursor in world space
+   * 
+   * @return - A Vector2 containing the position of the cursor in world space
+   */
+  public Vector2 getCursorGridPos() {
+    Vector3 unprojected = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)).mul(invIsoTransform);
+    unprojected.add(0.45f, -0.45f, 0f);
+    return new Vector2((float)Math.floor(unprojected.x), (float)Math.floor(unprojected.y));
+  }
+
+  /**
+   * Calculates the matrices needed to transform a point into and outof isometric world space
+   */
+  private void initIsometricTransform () {
+		// create the isometric transform
+		isoTransform = new Matrix4();
+		isoTransform.idt();
+
+		// isoTransform.translate(0, 32, 0);
+		isoTransform.scale((float)(Math.sqrt(2.0) / 2.0), (float)(Math.sqrt(2.0) / 4.0), 1.0f);
+		isoTransform.rotate(0.0f, 0.0f, 1.0f, -45);
+
+		// ... and the inverse matrix
+		invIsoTransform = new Matrix4(isoTransform);
+		invIsoTransform.inv();
+	}
 }
