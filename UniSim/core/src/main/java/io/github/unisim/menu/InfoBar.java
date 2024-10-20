@@ -1,10 +1,7 @@
 package io.github.unisim.menu;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Create a Title bar with basic info.
@@ -13,6 +10,11 @@ public class InfoBar {
   private Stage stage;
   private ShapeActor testActor;
 
+  /**
+   * Create a new infoBar and draws its' components onto the provided stage.
+
+   * @param stage - The stage on which to draw the InfoBar.
+   */
   public InfoBar(Stage stage) {
     this.stage = stage;
 

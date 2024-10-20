@@ -7,13 +7,21 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+/**
+ * Simple actor that generates a rectangle with a provided colour.
+ */
 public class ShapeActor extends Actor {
   private ShapeRenderer renderer = new ShapeRenderer();
-  private Color barColor;
+  private Color color;
 
-  public ShapeActor(Color barColor) {
+  /**
+   * Create a new Actor that can be attached to the stage to draw a rectangle.
+
+   * @param color - The color of the 
+   */
+  public ShapeActor(Color color) {
     super();
-    this.barColor = barColor;
+    this.color = color;
     Gdx.app.log("#INFO", "Drawing test Actor");
   }
 
@@ -25,12 +33,11 @@ public class ShapeActor extends Actor {
     renderer.translate(getX(), getY(), 0);
 
     renderer.begin(ShapeType.Filled);
-    renderer.setColor(barColor);
+    renderer.setColor(color);
     renderer.rect(0, 0, getWidth(), getHeight());
     renderer.end();
 
     batch.begin();
   }
-
 }
 

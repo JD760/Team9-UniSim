@@ -2,6 +2,9 @@ package io.github.unisim;
 
 import com.badlogic.gdx.InputProcessor;
 
+/**
+ * Handles input events related to the world, after they have passed through the UiInputProcessor.
+ */
 public class WorldInputProcessor implements InputProcessor {
   private World world;
   private int[] cursorPos = new int[2];
@@ -11,31 +14,46 @@ public class WorldInputProcessor implements InputProcessor {
     this.world = world;
   }
 
-  public boolean keyDown (int keycode) {
+
+  public boolean keyDown(int keycode) {
     return false;
   }
-  
-  public boolean keyUp (int keycode) {
+
+
+  public boolean keyUp(int keycode) {
     return false;
   }
-  
-  public boolean keyTyped (char character) {
+
+
+  public boolean keyTyped(char character) {
     return false;
   }
-  
-  public boolean touchDown (int x, int y, int pointer, int button) {
+
+  /**
+   * Detect when the mouse has been clicked and record the cursor postion.
+   * Sets the dragging flag, if the mouse has been clicked in a valid
+   * start location.
+   */
+  public boolean touchDown(int x, int y, int pointer, int button) {
     dragging = true;
     cursorPos[0] = x;
     cursorPos[1] = y;
     return true;
   }
-  
-  public boolean touchUp (int x, int y, int pointer, int button) {
+
+  /**
+   * When the mouse is released, stop tracking the dragging events.
+   */
+  public boolean touchUp(int x, int y, int pointer, int button) {
     dragging = false;
     return false;
   }
-  
-  public boolean touchDragged (int x, int y, int pointer) {
+
+  /**
+   * If the mouse has been clicked in a valid location, allow the map to be panned 
+   * by clicking and holding the mouse button.
+   */
+  public boolean touchDragged(int x, int y, int pointer) {
     if (dragging) {
       world.pan(cursorPos[0] - x, y - cursorPos[1]);
       cursorPos[0] = x;
@@ -48,12 +66,15 @@ public class WorldInputProcessor implements InputProcessor {
   public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
     return false;
   }
-  
-  public boolean mouseMoved (int x, int y) {
+
+  public boolean mouseMoved(int x, int y) {
     return false;
   }
-  
-  public boolean scrolled (float amountX, float amountY) {
+
+  /**
+   * Zoom in on the map when the mouse wheel is scrolled.
+   */
+  public boolean scrolled(float amountX, float amountY) {
     world.zoom(amountY);
     return true;
   }
