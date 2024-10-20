@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Runs before the WorldInputProcessor and handles any input events generated from the UI.
  */
+@SuppressWarnings("OuterTypeFilename")
 public class UiInputProcessor implements InputProcessor {
   int[] windowSize = new int[2];
   boolean fullscreen = false;

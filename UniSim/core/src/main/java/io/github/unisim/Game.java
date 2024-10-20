@@ -16,6 +16,7 @@ public class Game {
   private Stage stage = new Stage(new ScreenViewport());
   private InfoBar infoBar;
   private BuildingMenu buildingMenu;
+  private Timer timer;
   private InputProcessor uiInputProcessor = new UiInputProcessor(stage);
   private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
@@ -24,7 +25,8 @@ public class Game {
    * Create a new Game.
    */
   public Game() {
-    infoBar = new InfoBar(stage);
+    timer = new Timer(300_000);
+    infoBar = new InfoBar(stage, timer);
     buildingMenu = new BuildingMenu(stage);
 
     inputMultiplexer.addProcessor(uiInputProcessor);
@@ -48,6 +50,9 @@ public class Game {
     world.render();
 
     float dt = Gdx.graphics.getDeltaTime();
+    timer.tick(dt * 1000);
+    Gdx.app.log("#INFO", "Timer Ticked: " + timer.getRemainingTime());
+    infoBar.update();
     stage.act(dt);
     stage.draw();
   }
