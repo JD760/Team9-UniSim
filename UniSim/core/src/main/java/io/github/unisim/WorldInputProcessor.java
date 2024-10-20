@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 public class WorldInputProcessor implements InputProcessor {
   private World world;
   private int[] cursorPos = new int[2];
+  private boolean dragging = false;
 
   public WorldInputProcessor(World world) {
     this.world = world;
@@ -23,20 +24,25 @@ public class WorldInputProcessor implements InputProcessor {
   }
   
   public boolean touchDown (int x, int y, int pointer, int button) {
+    dragging = true;
     cursorPos[0] = x;
     cursorPos[1] = y;
     return true;
   }
   
   public boolean touchUp (int x, int y, int pointer, int button) {
+    dragging = false;
     return false;
   }
   
   public boolean touchDragged (int x, int y, int pointer) {
-    world.pan(cursorPos[0] - x, y - cursorPos[1]);
-    cursorPos[0] = x;
-    cursorPos[1] = y;
-    return true;
+    if (dragging) {
+      world.pan(cursorPos[0] - x, y - cursorPos[1]);
+      cursorPos[0] = x;
+      cursorPos[1] = y;
+      return true;
+    }
+    return false;
   }
 
   public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
