@@ -3,6 +3,10 @@ package io.github.unisim;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import io.github.unisim.menu.BuildingMenu;
 import io.github.unisim.menu.InfoBar;
 
 /**
@@ -10,7 +14,9 @@ import io.github.unisim.menu.InfoBar;
  */
 public class Game {
   private World world = new World();
-  private InfoBar bar = new InfoBar();
+  private Stage UiStage;
+  private InfoBar infoBar;
+  private BuildingMenu buildingMenu;
   private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
@@ -18,6 +24,11 @@ public class Game {
    * Create a new Game.
    */
   public Game() {
+    UiStage = new Stage(new ScreenViewport());
+    infoBar = new InfoBar(UiStage);
+    buildingMenu = new BuildingMenu(UiStage);
+
+    inputMultiplexer.addProcessor(UiStage);
     inputMultiplexer.addProcessor(worldInputProcessor);
     Gdx.input.setInputProcessor(inputMultiplexer);
   }
@@ -28,7 +39,7 @@ public class Game {
    */
   public void dispose() {
     world.dispose();
-    bar.dispose();
+    UiStage.dispose();
   }
 
   /**
@@ -36,7 +47,10 @@ public class Game {
    */
   public void render() {
     world.render();
-    bar.render();
+
+    float dt = Gdx.graphics.getDeltaTime();
+    UiStage.act(dt);
+    UiStage.draw();
   }
 
   /**
@@ -48,6 +62,7 @@ public class Game {
    */
   public void resize(int width, int height) {
     world.resize(width, height);
-    bar.resize(width, height);
+    infoBar.resize(width, height);
+    buildingMenu.resize(width, height);
   }
 }

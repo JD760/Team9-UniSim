@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class TestActor extends Actor {
+public class ShapeActor extends Actor {
   private ShapeRenderer renderer = new ShapeRenderer();
+  private Color barColor;
 
-  public TestActor() {
+  public ShapeActor(Color barColor) {
     super();
+    this.barColor = barColor;
     Gdx.app.log("#INFO", "Drawing test Actor");
   }
 
@@ -23,7 +25,7 @@ public class TestActor extends Actor {
     renderer.translate(getX(), getY(), 0);
 
     renderer.begin(ShapeType.Filled);
-    renderer.setColor(Color.BLUE);
+    renderer.setColor(barColor);
     renderer.rect(0, 0, getWidth(), getHeight());
     renderer.end();
 

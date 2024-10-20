@@ -1,37 +1,28 @@
 package io.github.unisim.menu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /**
  * Create a Title bar with basic info.
  */
-public class InfoBar implements Disposable {
+public class InfoBar {
   private Stage stage;
-  private TestActor testActor;
+  private ShapeActor testActor;
 
-  public InfoBar() {
-    stage = new Stage(new ScreenViewport());
-    Gdx.input.setInputProcessor(stage);
-    testActor = new TestActor();
+  public InfoBar(Stage stage) {
+    this.stage = stage;
 
+    //Gdx.input.setInputProcessor(stage);
+    testActor = new ShapeActor(Color.SLATE);
     stage.addActor(testActor);
   }
 
   public void resize(int width, int height) {
     stage.getViewport().update(width, height, true);
     testActor.setBounds(0, height * 0.95f, width, height * 0.05f);
-  }
-
-  public void render() {
-    float dt = Gdx.graphics.getDeltaTime();
-    stage.act(dt);
-    stage.draw();
-  }
-
-  public void dispose() {
-    stage.dispose();
   }
 }
