@@ -61,12 +61,18 @@ public class World {
 
     updatePan();
     updateZoom();
-    camera.position.set(camPosition.x, camPosition.y, 0);
-    camera.update();
 
     // Render the map tiles
+    // Render the map 0.0624 units lower than the rest of the world to account for the extra pixel
+    // at the bottom of each tile. (The pixel is used to prevent tiny gaps between the tiles caused
+    // by floating point errors)
+    camera.position.set(camPosition.x, camPosition.y + 0.0624f, 0);
+    camera.update();
     renderer.setView((OrthographicCamera)viewport.getCamera());
     renderer.render();
+
+    camera.position.set(camPosition.x, camPosition.y, 0);
+    camera.update();
 
     batch.setProjectionMatrix(camera.combined);
     batch.begin();
