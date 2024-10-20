@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
+import io.github.unisim.menu.InfoBar;
 
 /**
- * A class that holds all the user interface and gameplay for UniSim
+ * A class that holds all the user interface and gameplay for UniSim.
  */
 public class Game {
   private World world = new World();
@@ -23,19 +25,22 @@ public class Game {
   private InputProcessor uiInputProcessor = new UIInputProcessor();
   private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
+  private InfoBar infoBar;
 
   /**
-   * Create a new Game
+   * Create a new Game.
    */
   public Game() {
     inputMultiplexer.addProcessor(uiInputProcessor);
     inputMultiplexer.addProcessor(worldInputProcessor);
     Gdx.input.setInputProcessor(inputMultiplexer);
     uiCamera.position.set(uiCamera.viewportWidth / 2, uiCamera.viewportHeight / 2, 0);
+    infoBar = new InfoBar(uiBatch, timer);
+
   }
 
   /**
-   * Releases all resources of this object
+   * Releases all resources of this object.
    * Should be called when the Game object is no longer needed
    */
   public void dispose() {
@@ -44,28 +49,27 @@ public class Game {
   }
 
   /**
-   * Renders a frame of the game, including the user interface and the gameplay
+   * Renders a frame of the game, including the user interface and the gameplay.
    */
   public void render() {
-    timer.tick(Gdx.graphics.getDeltaTime() * 1000);
-
     world.render();
+    timer.tick(Gdx.graphics.getDeltaTime());
+    infoBar.update();
 
     uiViewport.apply();
     uiCamera.update();
+
     uiBatch.begin();
-    if (timer.isRunning()) {
-      font.draw(uiBatch, timer.getRemainingTime(), 10, 20);
-    } else {
-      font.draw(uiBatch, "Game Over!", 10, 20);
-    }
+    uiBatch.setProjectionMatrix(infoBar.stage.getCamera().combined);
     uiBatch.end();
+
+    infoBar.stage.draw();
   }
 
   /**
-   * Resizes the game (usually to fit the size of the window)
+   * Resizes the game (usually to fit the size of the window).
    * This is mostly done by resizing the relevant viewports
-   * 
+
    * @param width - The new width of the window
    * @param height - The new height of the window
    */
