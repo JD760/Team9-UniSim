@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
     // Initialize UI for pause menu
     stage = new Stage();
     Gdx.input.setInputProcessor(stage);
-    skin = new Skin(Gdx.files.internal("uiskin.json"));
+    skin = main.getDefaultSkin();
 
     // Resume button
     resumeButton = new TextButton("Resume", skin);
@@ -71,9 +71,10 @@ public class GameScreen implements Screen {
       // Clear the screen for the pause menu
       Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+      return; // Don't update game while paused
+    } else {
       stage.act(delta);
       stage.draw();
-      return; // Don't update game while paused
     }
 
     // Check if ESC is pressed to toggle pause

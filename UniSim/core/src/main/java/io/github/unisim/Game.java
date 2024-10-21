@@ -51,6 +51,7 @@ public class Game {
 
     float dt = Gdx.graphics.getDeltaTime();
     timer.tick(dt * 1000);
+    Gdx.app.log("#INFO", "Timer Ticked: " + timer.getRemainingTime());
     infoBar.update();
     stage.act(dt);
     stage.draw();
@@ -67,6 +68,5 @@ public class Game {
     world.resize(width, height);
     infoBar.resize(width, height);
     buildingMenu.resize(width, height);
-    ((UiInputProcessor)uiInputProcessor).resize(width, height);
   }
 }
