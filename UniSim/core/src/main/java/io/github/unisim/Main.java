@@ -1,6 +1,6 @@
 package io.github.unisim;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,10 +12,10 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /**
- * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
- * platforms.
+ * Main game class responsible for managing different screens (Start Menu, Settings, Game Screen)
+ * and controlling global settings like volume and rendering the game.
  */
-public class Main extends ApplicationAdapter {
+public class Main extends Game {
   private Timer timer;
   private SpriteBatch gameBatch;
   private SpriteBatch uiBatch;
@@ -25,7 +25,11 @@ public class Main extends ApplicationAdapter {
   private IsometricTiledMapRenderer renderer;
   private OrthographicCamera camera;
   private BitmapFont font;
+  private float volume = 1.0f; // Default volume
 
+  /**
+   * Initializes game components, loads the map, and sets the initial screen to the start menu.
+   */
   @Override
   public void create() {
     timer = new Timer(10_000);
@@ -35,32 +39,45 @@ public class Main extends ApplicationAdapter {
     map = new TmxMapLoader().load("map_2.tmx");
     renderer = new IsometricTiledMapRenderer(map, unitScale);
     font = new BitmapFont();
+
+    // Set the initial screen to the StartMenuScreen
+    this.setScreen(new StartMenuScreen(this));
   }
 
+  /**
+   * Gets the current volume setting.
+   * 
+   * @return the volume level (0.0 to 1.0)
+   */
+  public float getVolume() {
+    return volume;
+  }
+
+  /**
+   * Sets the game volume.
+   * 
+   * @param volume The volume level to set (0.0 to 1.0).
+   */
+  public void setVolume(float volume) {
+    this.volume = volume;
+  }
+
+  /**
+   * Renders the game or the active screen.
+   */
   @Override
   public void render() {
-    ScreenUtils.clear(0.55f, 0.55f, 0.55f, 1f);
-
-    //renderer.setView(projection, 0, 0, 300, 200);
-    camera.update();
-    renderer.setView(camera);
-    renderer.render();
-
-    uiBatch.begin();
-    if (timer.isRunning()) {
-      font.draw(uiBatch, timer.getRemainingTime(), 10, 20);
-    } else {
-      font.draw(uiBatch, "Game Over!", 10, 20);
-    }
-    timer.tick(Gdx.graphics.getDeltaTime() * 1000);
-    uiBatch.end();
-
+    super.render(); // Ensures the active screen is rendered
   }
 
+  /**
+   * Disposes of resources when the game exits.
+   */
   @Override
   public void dispose() {
     gameBatch.dispose();
     uiBatch.dispose();
     map.dispose();
+    super.dispose();
   }
 }
