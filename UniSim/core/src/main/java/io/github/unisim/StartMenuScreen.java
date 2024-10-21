@@ -1,6 +1,5 @@
 package io.github.unisim;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  * or access the settings menu.
  */
 public class StartMenuScreen implements Screen {
-  private Main main;
   private Stage stage;
   private Skin skin;
   private TextButton playButton;

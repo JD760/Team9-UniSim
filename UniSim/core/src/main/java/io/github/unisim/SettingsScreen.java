@@ -2,7 +2,6 @@ package io.github.unisim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  * The settings screen that allows the player to adjust the volume.
  */
 public class SettingsScreen implements Screen {
-  private Main main;
   private Stage stage;
   private Skin skin;
   private Slider volumeSlider;
@@ -23,10 +21,9 @@ public class SettingsScreen implements Screen {
   /**
    * Constructor for SettingsScreen.
 
-   * @param game Reference to the Main game class to manage screen switching.
+   * @param main Reference to the Main game class to manage screen switching.
    */
   public SettingsScreen(Main main) {
-    this.main = main;
     stage = new Stage();
     Gdx.input.setInputProcessor(stage);
 
