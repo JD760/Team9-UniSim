@@ -42,15 +42,15 @@ public class UiInputProcessor implements InputProcessor {
    * within UI components.
 
    * @param keycode - The unique identifier for the Key pressed.
-   * 
+   *
    * @return whether the event has been handled and needs to be further processed.
    */
   public boolean keyDown(int keycode) {
     switch (keycode) {
       // Toggle fullscreen
       case Keys.F11:
-        Monitor currMonitor = Gdx.graphics.getMonitor();
-        DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
+        Monitor currentMonitor = Gdx.graphics.getMonitor();
+        DisplayMode displayMode = Gdx.graphics.getDisplayMode(currentMonitor);
         fullscreen = !fullscreen;
         Gdx.app.log("#INFO", Boolean.toString(fullscreen));
         if (fullscreen) {
