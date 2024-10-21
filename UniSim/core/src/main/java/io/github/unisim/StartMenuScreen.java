@@ -1,6 +1,8 @@
 package io.github.unisim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,6 +20,7 @@ public class StartMenuScreen implements Screen {
   private Skin skin;
   private TextButton playButton;
   private TextButton settingsButton;
+  private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   /**
    * Constructor for the StartMenuScreen.
@@ -26,7 +29,6 @@ public class StartMenuScreen implements Screen {
    */
   public StartMenuScreen() {
     stage = new Stage();
-
     skin = GameState.defaultSkin;
 
     // Play button
@@ -56,6 +58,9 @@ public class StartMenuScreen implements Screen {
     // Add buttons to the stage
     stage.addActor(playButton);
     stage.addActor(settingsButton);
+
+    inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
+    inputMultiplexer.addProcessor(stage);
   }
 
   @Override
@@ -74,8 +79,7 @@ public class StartMenuScreen implements Screen {
   }
 
   @Override
-  public void resize(int width, int height) {
-  }
+  public void resize(int width, int height) {}
 
   @Override
   public void pause() {
@@ -83,7 +87,7 @@ public class StartMenuScreen implements Screen {
 
   @Override
   public void resume() {
-    Gdx.input.setInputProcessor(stage);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override

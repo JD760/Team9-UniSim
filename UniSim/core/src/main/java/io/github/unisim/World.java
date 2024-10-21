@@ -79,7 +79,6 @@ public class World {
     batch.setProjectionMatrix(camera.combined);
     batch.begin();
     Vector2 cursorGridPos = getCursorGridPos();
-    Gdx.app.log("#INFO", cursorGridPos.toString());
     Vector3 cursorWorldPos = new Vector3((float) Math.floor(cursorGridPos.x), (float) Math.floor(cursorGridPos.y), 0)
         .mul(isoTransform);
     batch.draw(texture, cursorWorldPos.x, cursorWorldPos.y, 1, 1);

@@ -1,6 +1,8 @@
 package io.github.unisim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -17,6 +19,7 @@ public class SettingsScreen implements Screen {
   private Skin skin;
   private Slider volumeSlider;
   private TextButton backButton;
+  private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   /**
    * Constructor for SettingsScreen.
@@ -25,7 +28,6 @@ public class SettingsScreen implements Screen {
    */
   public SettingsScreen() {
     stage = new Stage();
-
     skin = GameState.defaultSkin;
 
     // Volume slider
@@ -54,6 +56,9 @@ public class SettingsScreen implements Screen {
     // Add UI elements to stage
     stage.addActor(volumeSlider);
     stage.addActor(backButton);
+
+    inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
+    inputMultiplexer.addProcessor(stage);
   }
 
   @Override
@@ -78,7 +83,7 @@ public class SettingsScreen implements Screen {
 
   @Override
   public void resume() {
-    Gdx.input.setInputProcessor(stage);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override

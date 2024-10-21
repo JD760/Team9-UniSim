@@ -1,9 +1,6 @@
 package io.github.unisim;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics.DisplayMode;
-import com.badlogic.gdx.Graphics.Monitor;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,27 +12,11 @@ import com.badlogic.gdx.utils.Array;
  */
 @SuppressWarnings("OuterTypeFilename")
 public class UiInputProcessor implements InputProcessor {
-  int[] windowSize = new int[2];
-  boolean fullscreen = false;
   private Stage stage;
 
   public UiInputProcessor(Stage stage) {
     this.stage = stage;
   }
-
-  /**
-   * Inform the object about the current window size.
-
-   * @param width  - The new width of the window
-   * @param height - The new height of the window
-   */
-  public void resize(int width, int height) {
-    if (!fullscreen) {
-      windowSize[0] = width;
-      windowSize[1] = height;
-    }
-  }
-
 
   /**
    * Called when a key is pressed and handles logic related to keypresses
@@ -46,23 +27,7 @@ public class UiInputProcessor implements InputProcessor {
    * @return whether the event has been handled and needs to be further processed.
    */
   public boolean keyDown(int keycode) {
-    switch (keycode) {
-      // Toggle fullscreen
-      case Keys.F11:
-        Monitor currMonitor = Gdx.graphics.getMonitor();
-        DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
-        fullscreen = !fullscreen;
-        Gdx.app.log("#INFO", Boolean.toString(fullscreen));
-        if (fullscreen) {
-          Gdx.graphics.setFullscreenMode(displayMode);
-        } else {
-          Gdx.graphics.setWindowedMode(windowSize[0], windowSize[1]);
-        }
-        return true;
-
-      default:
-        return false;
-    }
+    return false;
   }
 
   public boolean keyUp(int keycode) {
@@ -72,7 +37,6 @@ public class UiInputProcessor implements InputProcessor {
   public boolean keyTyped(char character) {
     return false;
   }
-
 
   @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
@@ -125,7 +89,6 @@ public class UiInputProcessor implements InputProcessor {
 
       // check if the mouse click occurred in a rectangular region
       if (x > bottomLeft.x && x < topRight.x && y > bottomLeft.y && y < topRight.y) {
-        Gdx.app.log("#INFO", "Mouse clicked inside UI Component");
         inWorld = false;
       }
     }

@@ -30,6 +30,10 @@ public class GameScreen implements Screen {
     timer = new Timer(300_000);
     infoBar = new InfoBar(stage, timer);
     buildingMenu = new BuildingMenu(stage);
+
+    inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
+    inputMultiplexer.addProcessor(uiInputProcessor);
+    inputMultiplexer.addProcessor(worldInputProcessor);
   }
 
   @Override
@@ -59,8 +63,6 @@ public class GameScreen implements Screen {
 
   @Override
   public void resume() {
-    inputMultiplexer.addProcessor(uiInputProcessor);
-    inputMultiplexer.addProcessor(worldInputProcessor);
     Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
