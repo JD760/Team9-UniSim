@@ -1,24 +1,27 @@
 package io.github.unisim;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.unisim.menu.BuildingMenu;
+import io.github.unisim.menu.InfoBar;
 
 /**
  * Game screen where the main game is rendered and controlled.
  * Supports pausing the game with a pause menu.
  */
 public class GameScreen implements Screen {
-  private Stage stage;
-  private Skin skin;
-  private TextButton resumeButton;
-  private TextButton mainMenuButton;
-
-  private boolean isPaused = false;
+  private World world = new World();
+  private Stage stage = new Stage(new ScreenViewport());
+  private InfoBar infoBar;
+  private BuildingMenu buildingMenu;
+  private Timer timer;
+  private InputProcessor uiInputProcessor = new UiInputProcessor(stage);
+  private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
+  private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   /**
    * Constructor for the GameScreen.
@@ -26,39 +29,12 @@ public class GameScreen implements Screen {
    * @param main Reference to the Main game class to manage screen switching and volume.
    */
   public GameScreen(Main main) {
-    // Initialize UI for pause menu
-    stage = new Stage();
-    Gdx.input.setInputProcessor(stage);
-    skin = main.getDefaultSkin();
-
-    // Resume button
-    resumeButton = new TextButton("Resume", skin);
-    resumeButton.setPosition(150, 200);
-    resumeButton.setSize(200, 60);
-    resumeButton.addListener(new ClickListener() {
-      @Override
-      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-        // Unpause the game
-        isPaused = false;
-        Gdx.input.setInputProcessor(null); // Restore input to the game
-      }
-    });
-
-    // Main Menu button
-    mainMenuButton = new TextButton("Main Menu", skin);
-    mainMenuButton.setPosition(150, 120);
-    mainMenuButton.setSize(200, 60);
-    mainMenuButton.addListener(new ClickListener() {
-      @Override
-      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-        // Go back to the main menu
-        main.setScreen(new StartMenuScreen(main));
-      }
-    });
-
-    // Add buttons to the stage
-    stage.addActor(resumeButton);
-    stage.addActor(mainMenuButton);
+    timer = new Timer(300_000);
+    infoBar = new InfoBar(stage, timer);
+    buildingMenu = new BuildingMenu(stage);
+    inputMultiplexer.addProcessor(uiInputProcessor);
+    inputMultiplexer.addProcessor(worldInputProcessor);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override
@@ -67,25 +43,20 @@ public class GameScreen implements Screen {
 
   @Override
   public void render(float delta) {
-    if (isPaused) {
-      // Clear the screen for the pause menu
-      Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-      return; // Don't update game while paused
-    } else {
-      stage.act(delta);
-      stage.draw();
-    }
-
-    // Check if ESC is pressed to toggle pause
-    if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
-      isPaused = true;
-      Gdx.input.setInputProcessor(stage); // Capture input for the pause menu
-    }
+    world.render();
+    float dt = Gdx.graphics.getDeltaTime();
+    timer.tick(dt * 1000);
+    Gdx.app.log("#INFO", "Timer Ticked: " + timer.getRemainingTime());
+    infoBar.update();
+    stage.act(dt);
+    stage.draw();
   }
 
   @Override
   public void resize(int width, int height) {
+    world.resize(width, height);
+    infoBar.resize(width, height);
+    buildingMenu.resize(width, height);
   }
 
   @Override
@@ -102,7 +73,7 @@ public class GameScreen implements Screen {
 
   @Override
   public void dispose() {
+    world.dispose();
     stage.dispose();
-    skin.dispose();
   }
 }
