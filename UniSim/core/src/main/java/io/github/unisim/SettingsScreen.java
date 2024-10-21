@@ -23,20 +23,19 @@ public class SettingsScreen implements Screen {
 
    * @param main Reference to the Main game class to manage screen switching.
    */
-  public SettingsScreen(Main main) {
+  public SettingsScreen() {
     stage = new Stage();
-    Gdx.input.setInputProcessor(stage);
 
-    skin = main.getDefaultSkin();
+    skin = GameState.defaultSkin;
 
     // Volume slider
     volumeSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin);
-    volumeSlider.setValue(main.getVolume()); // Set current volume
+    volumeSlider.setValue(GameState.settings.getVolume()); // Set current volume
     volumeSlider.setPosition(150, 150);
     volumeSlider.setSize(200, 50);
     volumeSlider.addListener(event -> {
       // Adjust the game volume based on slider value
-      main.setVolume(volumeSlider.getValue());
+      GameState.settings.setVolume(volumeSlider.getValue());
       return false;
     });
 
@@ -48,7 +47,7 @@ public class SettingsScreen implements Screen {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         // Go back to the start menu
-        main.setScreen(new StartMenuScreen(main));
+        GameState.currentScreen = GameState.startScreen;
       }
     });
 
@@ -78,7 +77,9 @@ public class SettingsScreen implements Screen {
   public void pause() {}
 
   @Override
-  public void resume() {}
+  public void resume() {
+    Gdx.input.setInputProcessor(stage);
+  }
 
   @Override
   public void hide() {}

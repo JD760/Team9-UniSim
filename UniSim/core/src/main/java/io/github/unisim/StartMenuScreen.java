@@ -24,11 +24,10 @@ public class StartMenuScreen implements Screen {
 
    * @param main Reference to the Main game class to manage screen switching.
    */
-  public StartMenuScreen(Main main) {
+  public StartMenuScreen() {
     stage = new Stage();
-    Gdx.input.setInputProcessor(stage);
 
-    skin = main.getDefaultSkin();
+    skin = GameState.defaultSkin;
 
     // Play button
     playButton = new TextButton("Play", skin);
@@ -38,7 +37,7 @@ public class StartMenuScreen implements Screen {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         // Switch to the game screen
-        main.setScreen(new GameScreen(main));
+        GameState.currentScreen = GameState.gameScreen;
       }
     });
 
@@ -50,7 +49,7 @@ public class StartMenuScreen implements Screen {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         // Switch to the settings screen
-        main.setScreen(new SettingsScreen(main));
+        GameState.currentScreen = GameState.settingScreen;
       }
     });
 
@@ -84,6 +83,7 @@ public class StartMenuScreen implements Screen {
 
   @Override
   public void resume() {
+    Gdx.input.setInputProcessor(stage);
   }
 
   @Override

@@ -25,16 +25,11 @@ public class GameScreen implements Screen {
 
   /**
    * Constructor for the GameScreen.
-
-   * @param main Reference to the Main game class to manage screen switching and volume.
    */
-  public GameScreen(Main main) {
+  public GameScreen() {
     timer = new Timer(300_000);
     infoBar = new InfoBar(stage, timer);
     buildingMenu = new BuildingMenu(stage);
-    inputMultiplexer.addProcessor(uiInputProcessor);
-    inputMultiplexer.addProcessor(worldInputProcessor);
-    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override
@@ -64,6 +59,9 @@ public class GameScreen implements Screen {
 
   @Override
   public void resume() {
+    inputMultiplexer.addProcessor(uiInputProcessor);
+    inputMultiplexer.addProcessor(worldInputProcessor);
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override
