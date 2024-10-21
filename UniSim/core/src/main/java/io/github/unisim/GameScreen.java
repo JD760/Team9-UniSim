@@ -46,7 +46,6 @@ public class GameScreen implements Screen {
     world.render();
     float dt = Gdx.graphics.getDeltaTime();
     timer.tick(dt * 1000);
-    Gdx.app.log("#INFO", "Timer Ticked: " + timer.getRemainingTime());
     infoBar.update();
     stage.act(dt);
     stage.draw();
