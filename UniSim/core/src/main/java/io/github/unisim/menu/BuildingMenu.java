@@ -12,7 +12,7 @@ public class BuildingMenu {
   private ShapeActor bar = new ShapeActor(Color.CHARTREUSE);
 
   /**
-   * Create a Building Menu and attach its' actors and components to the provided stage.
+   * Create a Building Menu and attach its actors and components to the provided stage.
 
    * @param stage - The stage on which to draw the menu.
    */

@@ -52,6 +52,7 @@ public class UiInputProcessor implements InputProcessor {
         Monitor currMonitor = Gdx.graphics.getMonitor();
         DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
         fullscreen = !fullscreen;
+        Gdx.app.log("#INFO", Boolean.toString(fullscreen));
         if (fullscreen) {
           Gdx.graphics.setFullscreenMode(displayMode);
         } else {

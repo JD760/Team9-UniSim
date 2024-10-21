@@ -1,6 +1,5 @@
 package io.github.unisim.menu;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,7 +21,6 @@ public class ShapeActor extends Actor {
   public ShapeActor(Color color) {
     super();
     this.color = color;
-    Gdx.app.log("#INFO", "Drawing test Actor");
   }
 
   @Override

@@ -39,7 +39,6 @@ public class InfoBar {
     table.add(titleLabel).align(Align.center).pad(100);
     table.add(timerLabel).align(Align.right);
 
-    //Gdx.input.setInputProcessor(stage);
     testActor = new ShapeActor(Color.SLATE);
     stage.addActor(testActor);
     stage.addActor(table);
