@@ -2,6 +2,8 @@ package io.github.unisim.building;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 
@@ -23,7 +25,13 @@ public class BuildingManager {
     // for any non-buildable tiles.
     for (int x = btmLeft.x; x < topRight.x; x++) {
       for (int y = btmLeft.y; y < topRight.y; y++) {
-        TiledMapTile currentTile = tileLayer.getCell(x, y).getTile();
+        Cell currentCell = tileLayer.getCell(x, y);
+        if (currentCell == null) {
+          buildable = false;
+          continue;
+        }
+
+        TiledMapTile currentTile = currentCell.getTile();
         if (!tileBuildable(currentTile)) {
           buildable = false;
         }

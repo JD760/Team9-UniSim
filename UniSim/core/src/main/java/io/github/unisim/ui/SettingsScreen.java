@@ -1,8 +1,7 @@
-package io.github.unisim;
+package io.github.unisim.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import io.github.unisim.GameState;
 
 /**
  * The settings screen that allows the player to adjust the volume.
@@ -22,9 +22,7 @@ public class SettingsScreen implements Screen {
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   /**
-   * Constructor for SettingsScreen.
-
-   * @param main Reference to the Main game class to manage screen switching.
+   * Create a new Settings screen and draw the initial UI layout.
    */
   public SettingsScreen() {
     stage = new Stage();
@@ -56,6 +54,7 @@ public class SettingsScreen implements Screen {
     // Add UI elements to stage
     stage.addActor(volumeSlider);
     stage.addActor(backButton);
+
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
     inputMultiplexer.addProcessor(stage);

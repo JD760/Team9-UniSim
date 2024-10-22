@@ -5,6 +5,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import io.github.unisim.ui.GameScreen;
+import io.github.unisim.ui.SettingsScreen;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

@@ -2,11 +2,11 @@ package io.github.unisim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
@@ -17,24 +17,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  */
 public class StartMenuScreen implements Screen {
   private Stage stage;
+  private Table table;
   private Skin skin;
   private TextButton playButton;
   private TextButton settingsButton;
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   /**
-   * Constructor for the StartMenuScreen.
-
-   * @param main Reference to the Main game class to manage screen switching.
+   * Create a new StartMenuScreen and draw the initial UI layout.
    */
   public StartMenuScreen() {
     stage = new Stage();
+    table = new Table();
     skin = GameState.defaultSkin;
 
     // Play button
     playButton = new TextButton("Play", skin);
-    playButton.setPosition(150, 200);
-    playButton.setSize(200, 60);
     playButton.addListener(new ClickListener() {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
@@ -45,8 +43,6 @@ public class StartMenuScreen implements Screen {
 
     // Settings button
     settingsButton = new TextButton("Settings", skin);
-    settingsButton.setPosition(150, 120);
-    settingsButton.setSize(200, 60);
     settingsButton.addListener(new ClickListener() {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
@@ -56,8 +52,12 @@ public class StartMenuScreen implements Screen {
     });
 
     // Add buttons to the stage
-    stage.addActor(playButton);
-    stage.addActor(settingsButton);
+    table.center().center();
+    table.pad(100, 100, 100, 100);
+    table.add(playButton).center().width(250).height(100).padBottom(10);
+    table.row();
+    table.add(settingsButton).center().width(150).height(50);
+    stage.addActor(table);
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
     inputMultiplexer.addProcessor(stage);
@@ -79,7 +79,9 @@ public class StartMenuScreen implements Screen {
   }
 
   @Override
-  public void resize(int width, int height) {}
+  public void resize(int width, int height) {
+    table.setBounds(0, 0, width, height);
+  }
 
   @Override
   public void pause() {
