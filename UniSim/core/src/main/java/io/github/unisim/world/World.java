@@ -90,7 +90,8 @@ public class World {
       highlightRegion(btmLeft, topRight, GameState.canBuild ? tileHighlight : errTileHighlight);
     } else {
       Point gridPos = getCursorGridPos();
-      highlightRegion(gridPos, gridPos, tileHighlight);
+      boolean buildable = BuildingManager.isBuildable(gridPos, gridPos, getMapTiles());
+      highlightRegion(gridPos, gridPos, buildable ? tileHighlight : errTileHighlight);
     }
     tileHighlightBatch.end();
   }
@@ -208,7 +209,7 @@ public class World {
   }
 
   /**
-   * Highlight a rectangular region about the cursor with a given highlight texture
+   * Highlight a rectangular region about the cursor with a given highlight texture.
 
    * @param btmLeft - The bottom left edge of the region
    * @param topRight - The top right edge of the region
@@ -225,8 +226,8 @@ public class World {
   }
 
   /**
-   * Transforms a point from grid space to world space
-   * 
+   * Transforms a point from grid space to world space.
+
    * @param gridPos - The coordinates of the point in grid space
    * @return - The coordinates of the point in world space
    */

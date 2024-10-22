@@ -3,7 +3,6 @@ package io.github.unisim.building;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 

@@ -34,6 +34,6 @@ public class GameState {
       .scale((float) (Math.sqrt(2.0) / 2.0), (float) (Math.sqrt(2.0) / 4.0), 1.0f)
       .rotate(0.0f, 0.0f, 1.0f, -45);
   public static final Matrix4 invIsoTransform = isoTransform.inv();
-  public static boolean buildingMode = true;
+  public static boolean buildingMode = false;
   public static boolean canBuild = true;
 }
