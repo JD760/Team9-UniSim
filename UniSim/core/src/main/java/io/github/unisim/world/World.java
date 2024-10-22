@@ -1,21 +1,22 @@
-package io.github.unisim;
+package io.github.unisim.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * A class that holds all the gameplay elements of the game UniSim
+ * A class that holds all the gameplay elements of the game UniSim.
  * It has the ablity to render the game and update the state of the game
  */
 public class World {
@@ -27,16 +28,16 @@ public class World {
   private Vector2 camPosition = new Vector2(500f, 0f);
   private Vector2 panVelocity = new Vector2(0f, 0f);
   private float zoomVelocity = 0f;
-  final private float timeStepSize = 0.001f;
-  private float panDT = 0f;
-  private float zoomDT = 0f;
+  private final float timeStepSize = 0.001f;
+  private float panDt = 0f;
+  private float zoomDt = 0f;
   private SpriteBatch batch = new SpriteBatch();
   private Texture texture = new Texture(Gdx.files.internal("tileHighlight.png"));
   private Matrix4 isoTransform;
   private Matrix4 invIsoTransform;
 
   /**
-   * Create a new World
+   * Create a new World.
    */
   public World() {
     camera.zoom = 100f / 480;
@@ -44,7 +45,7 @@ public class World {
   }
 
   /**
-   * Releases all resources of this object
+   * Releases all resources of this object.
    * Should be called when the World object is no longer needed
    */
   public void dispose() {
@@ -52,7 +53,7 @@ public class World {
   }
 
   /**
-   * Steps the world forward by delta time and renders the world
+   * Steps the world forward by delta time and renders the world.
    */
   public void render() {
     viewport.apply();
@@ -79,7 +80,8 @@ public class World {
     batch.setProjectionMatrix(camera.combined);
     batch.begin();
     Vector2 cursorGridPos = getCursorGridPos();
-    Vector3 cursorWorldPos = new Vector3((float) Math.floor(cursorGridPos.x), (float) Math.floor(cursorGridPos.y), 0)
+    Vector3 cursorWorldPos = new Vector3(
+        (float) Math.floor(cursorGridPos.x), (float) Math.floor(cursorGridPos.y), 0)
         .mul(isoTransform);
     batch.draw(texture, cursorWorldPos.x, cursorWorldPos.y, 1, 1);
     batch.end();
@@ -87,8 +89,8 @@ public class World {
 
   /**
    * Resizes the gameplay (usually to fit the size of the window)
-   * This is mostly done by resizing the relevant viewports
-   * 
+   * This is mostly done by resizing the relevant viewports.
+
    * @param width  - The new width of the window
    * @param height - The new height of the window
    */
@@ -101,10 +103,10 @@ public class World {
 
   /**
    * Pans the view of the game by translating the camera by a multiple of the
-   * vector (x, y)
+   * vector (x, y).
    * The view will continue to move in the same direction for a short period
    * afterwards
-   * 
+
    * @param x - The distance to pan horizontally
    * @param y - The distance to pan vertically
    */
@@ -119,8 +121,8 @@ public class World {
 
   /**
    * Pans the view of the game by translating the camera by a multiple of the
-   * vector (x, y)
-   * 
+   * vector (x, y).
+
    * @param x - The distance to pan horizontally
    * @param y - The distance to pan vertically
    */
@@ -129,8 +131,8 @@ public class World {
   }
 
   /**
-   * Tell the game to zoom in or out by a certain amount
-   * 
+   * Tell the game to zoom in or out by a certain amount.
+
    * @param amount - The speed to zoom at; negative to zoom in and positive to
    *               zoom out
    */
@@ -140,16 +142,16 @@ public class World {
   }
 
   /**
-   * Adjusts the zoom of the camera based on the zoomVelocity
+   * Adjusts the zoom of the camera based on the zoomVelocity.
    * Also slightly reduces the zoomVelocity to prevent infinite zooming
    * Limits the zoom of the camera to be between minZoom and maxZoom
    */
   private void updateZoom() {
     final float minZoom = 10f / camera.viewportHeight;
     final float maxZoom = 100f / camera.viewportHeight;
-    zoomDT += Gdx.graphics.getDeltaTime();
-    while (zoomDT > timeStepSize) {
-      zoomDT -= timeStepSize;
+    zoomDt += Gdx.graphics.getDeltaTime();
+    while (zoomDt > timeStepSize) {
+      zoomDt -= timeStepSize;
       zoomVelocity *= 0.987f;
       float scaleFactor = (1f + zoomVelocity * (float) Math.sqrt(camera.zoom) / camera.zoom);
       if (camera.zoom * scaleFactor < minZoom) {
@@ -158,20 +160,24 @@ public class World {
       if (camera.zoom * scaleFactor > maxZoom) {
         scaleFactor = maxZoom / camera.zoom;
       }
-      panWithoutInertia(Gdx.input.getX() - camera.viewportWidth / 2, camera.viewportHeight / 2 - Gdx.input.getY());
+      panWithoutInertia(
+          Gdx.input.getX() - camera.viewportWidth / 2, camera.viewportHeight / 2 - Gdx.input.getY()
+      );
       camera.zoom *= scaleFactor;
-      panWithoutInertia(camera.viewportWidth / 2 - Gdx.input.getX(), Gdx.input.getY() - camera.viewportHeight / 2);
+      panWithoutInertia(
+          camera.viewportWidth / 2 - Gdx.input.getX(), Gdx.input.getY() - camera.viewportHeight / 2
+      );
     }
   }
 
   /**
-   * Adjusts the panning of the camera based on the panVelocity
+   * Adjusts the panning of the camera based on the panVelocity.
    * Also slightly reduces the panVelocity to prevent infinite panning
    */
   private void updatePan() {
-    panDT += Gdx.graphics.getDeltaTime();
-    while (panDT > timeStepSize) {
-      panDT -= timeStepSize;
+    panDt += Gdx.graphics.getDeltaTime();
+    while (panDt > timeStepSize) {
+      panDt -= timeStepSize;
       panVelocity.scl(0.987f);
       if (!(Gdx.input.isButtonPressed(0) || Gdx.input.isButtonPressed(1)
           || Gdx.input.isButtonPressed(2))) {
@@ -181,19 +187,21 @@ public class World {
   }
 
   /**
-   * Calculates the position of the cursor in world space.
-   * 
+   * Return the (x, y) co-ordinates of the grid cell that the mouse pointer
+   * is currently within.
+
    * @return - A Vector2 containing the position of the cursor in world space
    */
   public Vector2 getCursorGridPos() {
-    Vector3 unprojected = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)).mul(invIsoTransform);
+    Vector3 unprojected = camera.unproject(
+        new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)).mul(invIsoTransform);
     unprojected.add(0.45f, -0.45f, 0f);
     return new Vector2((float) Math.floor(unprojected.x), (float) Math.floor(unprojected.y));
   }
 
   /**
    * Calculates the matrices needed to transform a point into and outof isometric
-   * world space
+   * world space.
    */
   private void initIsometricTransform() {
     // create the isometric transform
@@ -207,5 +215,9 @@ public class World {
     // ... and the inverse matrix
     invIsoTransform = new Matrix4(isoTransform);
     invIsoTransform.inv();
+  }
+
+  public TiledMapTileLayer getMapTiles() {
+    return (TiledMapTileLayer) map.getLayers().get(0);
   }
 }

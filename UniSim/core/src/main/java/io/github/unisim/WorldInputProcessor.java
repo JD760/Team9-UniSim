@@ -1,6 +1,14 @@
 package io.github.unisim;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+
+import io.github.unisim.world.World;
 
 /**
  * Handles input events related to the world, after they have passed through the UiInputProcessor.
@@ -38,6 +46,10 @@ public class WorldInputProcessor implements InputProcessor {
     dragging = true;
     cursorPos[0] = x;
     cursorPos[1] = y;
+    Vector2 tilePos = world.getCursorGridPos();
+    TiledMapTileLayer tileLayer = world.getMapTiles();
+    TiledMapTile tile = tileLayer.getCell((int) tilePos.x, (int) tilePos.y).getTile();
+    Gdx.app.log("#INFO", Integer.toString(tile.getId()));
     return true;
   }
 

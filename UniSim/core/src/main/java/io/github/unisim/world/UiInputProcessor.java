@@ -1,4 +1,4 @@
-package io.github.unisim;
+package io.github.unisim.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
