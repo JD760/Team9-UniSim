@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import io.github.unisim.Point;
 
 /**
  * A class that holds all the gameplay elements of the game UniSim.
@@ -31,7 +32,7 @@ public class World {
   private final float timeStepSize = 0.001f;
   private float panDt = 0f;
   private float zoomDt = 0f;
-  private SpriteBatch batch = new SpriteBatch();
+  private SpriteBatch tileHighlightBatch = new SpriteBatch();
   private Texture texture = new Texture(Gdx.files.internal("tileHighlight.png"));
   private Matrix4 isoTransform;
   private Matrix4 invIsoTransform;
@@ -77,14 +78,10 @@ public class World {
     camera.position.set(camPosition.x, camPosition.y, 0);
     camera.update();
 
-    batch.setProjectionMatrix(camera.combined);
-    batch.begin();
-    Vector2 cursorGridPos = getCursorGridPos();
-    Vector3 cursorWorldPos = new Vector3(
-        (float) Math.floor(cursorGridPos.x), (float) Math.floor(cursorGridPos.y), 0)
-        .mul(isoTransform);
-    batch.draw(texture, cursorWorldPos.x, cursorWorldPos.y, 1, 1);
-    batch.end();
+    tileHighlightBatch.setProjectionMatrix(camera.combined);
+    tileHighlightBatch.begin();
+    setTileHighlight(3, tileHighlightBatch);
+    tileHighlightBatch.end();
   }
 
   /**
@@ -192,11 +189,31 @@ public class World {
 
    * @return - A Vector2 containing the position of the cursor in world space
    */
-  public Vector2 getCursorGridPos() {
+  public Point getCursorGridPos() {
     Vector3 unprojected = camera.unproject(
         new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0)).mul(invIsoTransform);
     unprojected.add(0.45f, -0.45f, 0f);
-    return new Vector2((float) Math.floor(unprojected.x), (float) Math.floor(unprojected.y));
+    return new Point((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y));
+  }
+
+  public void setTileHighlight(int size, SpriteBatch batch) {
+    Vector3 cursorPos = gridPosToWorldPos(getCursorGridPos());
+    batch.draw(texture, cursorPos.x, cursorPos.y, size, size);
+  }
+
+  /**
+   * Reset the highlighted tiles to the default (only the tile under the cursor).
+
+   * @param batch - the SpriteBatch in which to draw the tile highlight
+   */
+  public void resetTileHighlight(SpriteBatch batch) {
+    Vector3 worldPos = gridPosToWorldPos(getCursorGridPos());
+    batch.draw(texture, worldPos.x, worldPos.y, 1, 1);
+  }
+
+  private Vector3 gridPosToWorldPos(Point gridPos) {
+    return new Vector3(
+      (float) Math.floor(gridPos.x), (float) Math.floor(gridPos.y), 0f).mul(isoTransform);
   }
 
   /**

@@ -1,4 +1,4 @@
-package io.github.unisim.menu;
+package io.github.unisim.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

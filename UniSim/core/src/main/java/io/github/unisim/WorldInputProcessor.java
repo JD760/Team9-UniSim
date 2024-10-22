@@ -2,12 +2,8 @@ package io.github.unisim;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-
+import io.github.unisim.building.BuildingManager;
 import io.github.unisim.world.World;
 
 /**
@@ -46,10 +42,10 @@ public class WorldInputProcessor implements InputProcessor {
     dragging = true;
     cursorPos[0] = x;
     cursorPos[1] = y;
-    Vector2 tilePos = world.getCursorGridPos();
+    Point tilePos = world.getCursorGridPos();
     TiledMapTileLayer tileLayer = world.getMapTiles();
-    TiledMapTile tile = tileLayer.getCell((int) tilePos.x, (int) tilePos.y).getTile();
-    Gdx.app.log("#INFO", Integer.toString(tile.getId()));
+    boolean buildable = BuildingManager.isBuildable(tilePos, new Point(tilePos.x + 3, tilePos.y + 3), tileLayer);
+    Gdx.app.log("#INFO", tilePos.toString() + " - " + (buildable ? "Buildable" : "Not Buildable"));
     return true;
   }
 

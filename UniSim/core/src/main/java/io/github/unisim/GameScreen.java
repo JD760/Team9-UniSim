@@ -6,8 +6,11 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import io.github.unisim.menu.BuildingMenu;
-import io.github.unisim.menu.InfoBar;
+
+import io.github.unisim.ui.BuildingMenu;
+import io.github.unisim.ui.InfoBar;
+import io.github.unisim.world.UiInputProcessor;
+import io.github.unisim.world.World;
 
 /**
  * Game screen where the main game is rendered and controlled.
