@@ -56,6 +56,7 @@ public class GameScreen implements Screen {
   @Override
   public void resize(int width, int height) {
     world.resize(width, height);
+    stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);
     buildingMenu.resize(width, height);
   }

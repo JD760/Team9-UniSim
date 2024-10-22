@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.github.unisim.GameState;
@@ -16,6 +17,7 @@ import io.github.unisim.GameState;
  */
 public class SettingsScreen implements Screen {
   private Stage stage;
+  private Table table;
   private Skin skin;
   private Slider volumeSlider;
   private TextButton backButton;
@@ -26,6 +28,7 @@ public class SettingsScreen implements Screen {
    */
   public SettingsScreen() {
     stage = new Stage();
+    table = new Table();
     skin = GameState.defaultSkin;
 
     // Volume slider
@@ -52,9 +55,13 @@ public class SettingsScreen implements Screen {
     });
 
     // Add UI elements to stage
-    stage.addActor(volumeSlider);
-    stage.addActor(backButton);
-
+    table.setFillParent(true);
+    table.center().center();
+    table.pad(100, 100, 100, 100);
+    table.add(backButton).center().width(250).height(67).padBottom(10);
+    table.row();
+    table.add(volumeSlider).center().width(250).height(67);
+    stage.addActor(table);
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
     inputMultiplexer.addProcessor(stage);
@@ -75,7 +82,9 @@ public class SettingsScreen implements Screen {
   }
 
   @Override
-  public void resize(int width, int height) {}
+  public void resize(int width, int height) {
+    stage.getViewport().update(width, height, true);
+  }
 
   @Override
   public void pause() {}

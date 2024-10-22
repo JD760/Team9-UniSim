@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
  * from the list onto the map.
  */
 public class BuildingMenu {
-  private Stage stage;
   private ShapeActor bar = new ShapeActor(Color.CHARTREUSE);
 
   /**
@@ -17,13 +16,11 @@ public class BuildingMenu {
    * @param stage - The stage on which to draw the menu.
    */
   public BuildingMenu(Stage stage) {
-    this.stage = stage;
 
     stage.addActor(bar);
   }
 
   public void resize(int width, int height) {
-    stage.getViewport().update(width, height, true);
     bar.setBounds(0, 0, width, height * 0.1f);
   }
 }

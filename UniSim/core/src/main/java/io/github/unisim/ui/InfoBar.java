@@ -13,7 +13,6 @@ import io.github.unisim.Timer;
  * Create a Title bar with basic info.
  */
 public class InfoBar {
-  private Stage stage; 
   private ShapeActor testActor;
   private Table table = new Table();
   private Skin skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
@@ -28,7 +27,6 @@ public class InfoBar {
    * @param stage - The stage on which to draw the InfoBar.
    */
   public InfoBar(Stage stage, Timer timer) {
-    this.stage = stage;
     this.timer = timer;
     timerLabel = new Label(timer.getRemainingTime(), skin);
     //table.setDebug(true);
@@ -54,7 +52,6 @@ public class InfoBar {
    * @param height - The enw height of the screen in pixels.
    */
   public void resize(int width, int height) {
-    stage.getViewport().update(width, height, true);
     testActor.setBounds(0, height * 0.95f, width, height * 0.05f);
     table.setBounds(0, height * 0.95f, width, height * 0.05f);
   }

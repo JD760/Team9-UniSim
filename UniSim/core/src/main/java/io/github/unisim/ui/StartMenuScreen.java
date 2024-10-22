@@ -1,4 +1,4 @@
-package io.github.unisim;
+package io.github.unisim.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+
+import io.github.unisim.GameState;
 
 /**
  * The start menu screen which presents the player with the option to start the
@@ -51,12 +54,13 @@ public class StartMenuScreen implements Screen {
       }
     });
 
-    // Add buttons to the stage
+    // Add UI elements to the stage
+    table.setFillParent(true);
     table.center().center();
     table.pad(100, 100, 100, 100);
     table.add(playButton).center().width(250).height(100).padBottom(10);
     table.row();
-    table.add(settingsButton).center().width(150).height(50);
+    table.add(settingsButton).center().width(250).height(67);
     stage.addActor(table);
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
@@ -80,7 +84,7 @@ public class StartMenuScreen implements Screen {
 
   @Override
   public void resize(int width, int height) {
-    table.setBounds(0, 0, width, height);
+    stage.getViewport().update(width, height, true);
   }
 
   @Override
