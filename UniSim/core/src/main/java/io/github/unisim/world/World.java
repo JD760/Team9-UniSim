@@ -14,7 +14,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import io.github.unisim.GameState;
 import io.github.unisim.Point;
+import io.github.unisim.building.BuildingManager;
 
 /**
  * A class that holds all the gameplay elements of the game UniSim.
@@ -33,7 +35,8 @@ public class World {
   private float panDt = 0f;
   private float zoomDt = 0f;
   private SpriteBatch tileHighlightBatch = new SpriteBatch();
-  private Texture texture = new Texture(Gdx.files.internal("tileHighlight.png"));
+  private Texture tileHighlight = new Texture(Gdx.files.internal("tileHighlight.png"));
+  private Texture errTileHighlight = new Texture(Gdx.files.internal("errTileHighlight.png"));
   private Matrix4 isoTransform;
   private Matrix4 invIsoTransform;
 
@@ -80,7 +83,15 @@ public class World {
 
     tileHighlightBatch.setProjectionMatrix(camera.combined);
     tileHighlightBatch.begin();
-    setTileHighlight(3, tileHighlightBatch);
+    if (GameState.buildingMode) {
+      Point gridPos = getCursorGridPos();
+      GameState.canBuild = BuildingManager.isBuildable(
+        gridPos, new Point(gridPos.x + 3, gridPos.y + 3), getMapTiles()
+      );
+      setTileHighlight(3, tileHighlightBatch);
+    } else {
+      resetTileHighlight(tileHighlightBatch);
+    }
     tileHighlightBatch.end();
   }
 
@@ -196,9 +207,18 @@ public class World {
     return new Point((int) Math.floor(unprojected.x), (int) Math.floor(unprojected.y));
   }
 
+  /**
+   * Highlight a rectangular region about the cursor and render the colour depending
+   * on whether the region is buildable.
+
+   * @param size - The size of the region to highlight
+   * @param batch - A reference to the SpriteBatch to draw onto
+   */
   public void setTileHighlight(int size, SpriteBatch batch) {
     Vector3 cursorPos = gridPosToWorldPos(getCursorGridPos());
-    batch.draw(texture, cursorPos.x, cursorPos.y, size, size);
+    batch.draw(
+        GameState.canBuild ? tileHighlight : errTileHighlight, cursorPos.x, cursorPos.y, size, size
+    );
   }
 
   /**
@@ -207,8 +227,12 @@ public class World {
    * @param batch - the SpriteBatch in which to draw the tile highlight
    */
   public void resetTileHighlight(SpriteBatch batch) {
-    Vector3 worldPos = gridPosToWorldPos(getCursorGridPos());
-    batch.draw(texture, worldPos.x, worldPos.y, 1, 1);
+    Point gridPos = getCursorGridPos();
+    Vector3 worldPos = gridPosToWorldPos(gridPos);
+    boolean buildable = BuildingManager.isBuildable(
+        gridPos, new Point(gridPos.x + 1, gridPos.y + 1), getMapTiles()
+    );
+    batch.draw(buildable ? tileHighlight : errTileHighlight, worldPos.x, worldPos.y, 1, 1);
   }
 
   private Vector3 gridPosToWorldPos(Point gridPos) {

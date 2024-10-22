@@ -44,7 +44,9 @@ public class WorldInputProcessor implements InputProcessor {
     cursorPos[1] = y;
     Point tilePos = world.getCursorGridPos();
     TiledMapTileLayer tileLayer = world.getMapTiles();
-    boolean buildable = BuildingManager.isBuildable(tilePos, new Point(tilePos.x + 3, tilePos.y + 3), tileLayer);
+    boolean buildable = BuildingManager.isBuildable(
+        tilePos, new Point(tilePos.x + 3, tilePos.y + 3), tileLayer
+    );
     Gdx.app.log("#INFO", tilePos.toString() + " - " + (buildable ? "Buildable" : "Not Buildable"));
     return true;
   }
