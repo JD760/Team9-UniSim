@@ -23,8 +23,8 @@ public class BuildingManager {
     boolean buildable = true;
     // we iterate over each tile within the search region and check
     // for any non-buildable tiles.
-    for (int x = btmLeft.x; x < topRight.x; x++) {
-      for (int y = btmLeft.y; y < topRight.y; y++) {
+    for (int x = btmLeft.x; x <= topRight.x && buildable; x++) {
+      for (int y = btmLeft.y; y <= topRight.y && buildable; y++) {
         Cell currentCell = tileLayer.getCell(x, y);
         if (currentCell == null) {
           buildable = false;

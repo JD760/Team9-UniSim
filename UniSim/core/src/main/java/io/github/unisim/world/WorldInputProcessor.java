@@ -1,10 +1,11 @@
-package io.github.unisim;
+package io.github.unisim.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+
+import io.github.unisim.Point;
 import io.github.unisim.building.BuildingManager;
-import io.github.unisim.world.World;
 
 /**
  * Handles input events related to the world, after they have passed through the UiInputProcessor.

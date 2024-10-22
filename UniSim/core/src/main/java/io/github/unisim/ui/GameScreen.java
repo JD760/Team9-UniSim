@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
 import io.github.unisim.Timer;
-import io.github.unisim.WorldInputProcessor;
 import io.github.unisim.world.UiInputProcessor;
 import io.github.unisim.world.World;
+import io.github.unisim.world.WorldInputProcessor;
 
 /**
  * Game screen where the main game is rendered and controlled.

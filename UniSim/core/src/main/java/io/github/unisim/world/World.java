@@ -69,28 +69,28 @@ public class World {
 
     // Render the map tiles
     // Render the map 0.0624 units lower than the rest of the world to account for
-    // the extra pixel
-    // at the bottom of each tile. (The pixel is used to prevent tiny gaps between
-    // the tiles caused
-    // by floating point errors)
+    // the extra pixel at the bottom of each tile. (The pixel is used to prevent
+    // tiny gaps between the tiles caused by floating point errors)
     camera.position.set(camPosition.x, camPosition.y + 0.0624f, 0);
     camera.update();
     renderer.setView((OrthographicCamera) viewport.getCamera());
     renderer.render();
 
+    // Reset the camera position to the correct value for the rest of the world
     camera.position.set(camPosition.x, camPosition.y, 0);
     camera.update();
 
+    // Render the tile highlight
     tileHighlightBatch.setProjectionMatrix(camera.combined);
     tileHighlightBatch.begin();
     if (GameState.buildingMode) {
-      Point gridPos = getCursorGridPos();
-      GameState.canBuild = BuildingManager.isBuildable(
-        gridPos, new Point(gridPos.x + 3, gridPos.y + 3), getMapTiles()
-      );
-      setTileHighlight(3, tileHighlightBatch);
+      Point btmLeft = getCursorGridPos();
+      Point topRight = new Point(btmLeft.x + 3, btmLeft.y + 3);
+      GameState.canBuild = BuildingManager.isBuildable(btmLeft, topRight, getMapTiles());
+      highlightRegion(btmLeft, topRight, GameState.canBuild ? tileHighlight : errTileHighlight);
     } else {
-      resetTileHighlight(tileHighlightBatch);
+      Point gridPos = getCursorGridPos();
+      highlightRegion(gridPos, gridPos, tileHighlight);
     }
     tileHighlightBatch.end();
   }
@@ -208,33 +208,28 @@ public class World {
   }
 
   /**
-   * Highlight a rectangular region about the cursor and render the colour depending
-   * on whether the region is buildable.
+   * Highlight a rectangular region about the cursor with a given highlight texture
 
-   * @param size - The size of the region to highlight
-   * @param batch - A reference to the SpriteBatch to draw onto
+   * @param btmLeft - The bottom left edge of the region
+   * @param topRight - The top right edge of the region
+   * @param highlightTexture - The texture to highlight the squares with
    */
-  public void setTileHighlight(int size, SpriteBatch batch) {
-    Vector3 cursorPos = gridPosToWorldPos(getCursorGridPos());
-    batch.draw(
-        GameState.canBuild ? tileHighlight : errTileHighlight, cursorPos.x, cursorPos.y, size, size
-    );
+  public void highlightRegion(Point btmLeft, Point topRight, Texture highlightTexture) {
+    Point tilePos = new Point();
+    for (tilePos.x = btmLeft.x; tilePos.x <= topRight.x; tilePos.x++) {
+      for (tilePos.y = btmLeft.y; tilePos.y <= topRight.y; tilePos.y++) {
+        Vector3 worldPos = gridPosToWorldPos(tilePos);
+        tileHighlightBatch.draw(highlightTexture, worldPos.x, worldPos.y, 1, 1);
+      }
+    }
   }
 
   /**
-   * Reset the highlighted tiles to the default (only the tile under the cursor).
-
-   * @param batch - the SpriteBatch in which to draw the tile highlight
+   * Transforms a point from grid space to world space
+   * 
+   * @param gridPos - The coordinates of the point in grid space
+   * @return - The coordinates of the point in world space
    */
-  public void resetTileHighlight(SpriteBatch batch) {
-    Point gridPos = getCursorGridPos();
-    Vector3 worldPos = gridPosToWorldPos(gridPos);
-    boolean buildable = BuildingManager.isBuildable(
-        gridPos, new Point(gridPos.x + 1, gridPos.y + 1), getMapTiles()
-    );
-    batch.draw(buildable ? tileHighlight : errTileHighlight, worldPos.x, worldPos.y, 1, 1);
-  }
-
   private Vector3 gridPosToWorldPos(Point gridPos) {
     return new Vector3(
       (float) Math.floor(gridPos.x), (float) Math.floor(gridPos.y), 0f).mul(isoTransform);
