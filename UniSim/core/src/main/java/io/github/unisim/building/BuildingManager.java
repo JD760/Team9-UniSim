@@ -8,7 +8,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import java.util.ArrayList;
@@ -67,11 +66,16 @@ public class BuildingManager {
 
   public void initBuildings() {
     Building houseTest = new Building(new Texture(
-      Gdx.files.internal("building_2.png")), new Point(0, 0), new Point(3, 3)
+        Gdx.files.internal("building_2.png")), new Point(0, 0), new Point(3, 3)
     );
     buildings.add(houseTest);
   }
 
+  /**
+   * Draws each building from the building list onto the map.
+
+   * @param batch - the SpriteBatch in which to draw
+   */
   public void render(SpriteBatch batch) {
     for (Building building : buildings) {
       Vector3 worldPos = new Vector3(
@@ -90,5 +94,26 @@ public class BuildingManager {
   public void place(Building building) {
     // TODO: sort buildings in the list by position to ensure correct drawing order
     buildings.add(building);
+  }
+  
+  /**
+   * Draw the building texture at the position of the mouse cursor
+   * when building mode is enabled.
+
+   * @param building - The building to draw under the mouse cursor
+   * @param batch - the SpriteBatch to draw into
+   * @param cursorPos - The grid position of the cursor
+   */
+  public void drawAtCursor(Building building, SpriteBatch batch, Vector3 cursorPos) {
+    if (!GameState.buildingMode) {
+      return;
+    }
+
+    // Vector3 worldPos = new Vector3(
+    //       (float) cursorPos.x,
+    //       (float) cursorPos.y,
+    //       0f
+    //   ).mul(isoTransform);
+    batch.draw(building.texture, cursorPos.x, cursorPos.y, building.size.x, building.size.y);
   }
 }

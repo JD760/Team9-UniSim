@@ -1,12 +1,8 @@
 package io.github.unisim.world;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import io.github.unisim.GameState;
-import io.github.unisim.Point;
-import io.github.unisim.building.BuildingManager;
 
 /**
  * Handles input events related to the world, after they have passed through the UiInputProcessor.
@@ -86,6 +82,9 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean mouseMoved(int x, int y) {
+    if (GameState.buildingMode) {
+      
+    }
     return false;
   }
 

@@ -108,6 +108,11 @@ public class World {
     buildingBatch.setProjectionMatrix(camera.combined);
     buildingBatch.begin();
     buildingManager.render(buildingBatch);
+    buildingManager.drawAtCursor(
+        selectedBuilding,
+        buildingBatch,
+        camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))
+    );
     buildingBatch.end();
   }
 
@@ -214,7 +219,7 @@ public class World {
    * Return the (x, y) co-ordinates of the grid cell that the mouse pointer
    * is currently within.
 
-   * @return - A Vector2 containing the position of the cursor in world space
+   * @return - A Vector2 containing the position of the cursor in grid space
    */
   public Point getCursorGridPos() {
     Vector3 unprojected = camera.unproject(
@@ -273,6 +278,11 @@ public class World {
     return (TiledMapTileLayer) map.getLayers().get(0);
   }
 
+  /**
+   * Place a building onto the map, called when a tile is clicked and building mode is enabled.
+
+   * @return - True if building could be done successfully, false otherwise.
+   */
   public boolean placeBuilding() {
     Point tilePos = getCursorGridPos();
     boolean buildable = BuildingManager.isBuildable(
