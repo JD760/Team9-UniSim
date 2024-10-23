@@ -1,9 +1,10 @@
 package io.github.unisim.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-
+import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.BuildingManager;
 
@@ -20,7 +21,15 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
 
+  @Override
   public boolean keyDown(int keycode) {
+    switch (keycode) {
+      case Keys.SPACE:
+        GameState.paused = !GameState.paused;
+        break;
+      default:
+        break;
+    }
     return false;
   }
 
@@ -43,12 +52,10 @@ public class WorldInputProcessor implements InputProcessor {
     dragging = true;
     cursorPos[0] = x;
     cursorPos[1] = y;
-    Point tilePos = world.getCursorGridPos();
-    TiledMapTileLayer tileLayer = world.getMapTiles();
-    boolean buildable = BuildingManager.isBuildable(
-        tilePos, new Point(tilePos.x + 3, tilePos.y + 3), tileLayer
-    );
-    Gdx.app.log("#INFO", tilePos.toString() + " - " + (buildable ? "Buildable" : "Not Buildable"));
+
+    if (GameState.buildingMode) {
+      world.placeBuilding();
+    }
     return true;
   }
 

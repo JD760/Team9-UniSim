@@ -1,6 +1,7 @@
 package io.github.unisim.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,11 +12,11 @@ import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
+import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
 
 /**
@@ -35,10 +36,13 @@ public class World {
   private float panDt = 0f;
   private float zoomDt = 0f;
   private SpriteBatch tileHighlightBatch = new SpriteBatch();
+  private SpriteBatch buildingBatch = new SpriteBatch();
   private Texture tileHighlight = new Texture(Gdx.files.internal("tileHighlight.png"));
   private Texture errTileHighlight = new Texture(Gdx.files.internal("errTileHighlight.png"));
   private Matrix4 isoTransform;
   private Matrix4 invIsoTransform;
+  private BuildingManager buildingManager;
+  private Building selectedBuilding;
 
   /**
    * Create a new World.
@@ -46,6 +50,10 @@ public class World {
   public World() {
     camera.zoom = 100f / 480;
     initIsometricTransform();
+    buildingManager = new BuildingManager(isoTransform);
+    selectedBuilding = new Building(new Texture(
+      Gdx.files.internal("building_2.png")), new Point(), new Point(4, 4)
+    );
   }
 
   /**
@@ -62,7 +70,8 @@ public class World {
   public void render() {
     viewport.apply();
 
-    ScreenUtils.clear(0.55f, 0.55f, 0.55f, 1f);
+    Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     updatePan();
     updateZoom();
@@ -94,6 +103,12 @@ public class World {
       highlightRegion(gridPos, gridPos, buildable ? tileHighlight : errTileHighlight);
     }
     tileHighlightBatch.end();
+
+    // render buildings after all map related rendering
+    buildingBatch.setProjectionMatrix(camera.combined);
+    buildingBatch.begin();
+    buildingManager.render(buildingBatch);
+    buildingBatch.end();
   }
 
   /**
@@ -256,5 +271,19 @@ public class World {
 
   public TiledMapTileLayer getMapTiles() {
     return (TiledMapTileLayer) map.getLayers().get(0);
+  }
+
+  public boolean placeBuilding() {
+    Point tilePos = getCursorGridPos();
+    boolean buildable = BuildingManager.isBuildable(
+        tilePos, new Point(tilePos.x + 3, tilePos.y + 3), getMapTiles()
+    );
+
+    if (!buildable) {
+      return false;
+    }
+    selectedBuilding.location = tilePos;
+    buildingManager.place(selectedBuilding);
+    return true;
   }
 }
