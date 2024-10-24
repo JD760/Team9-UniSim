@@ -59,7 +59,13 @@ public class BuildingMenu {
             world.selectedBuilding = null;
           } else {
             world.selectedBuilding = buildings[buildingIndex];
-            world.selectedBuilding.flipped = false;
+            if (world.selectedBuilding.flipped) {
+              world.selectedBuilding.flipped = false;
+              int temp = world.selectedBuilding.size.x;
+              world.selectedBuilding.size.x = world.selectedBuilding.size.y;
+              world.selectedBuilding.size.y = temp;
+              world.selectedBuildingUpdated = true;
+            }
           }
         }
       });

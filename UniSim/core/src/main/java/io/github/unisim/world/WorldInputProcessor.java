@@ -32,6 +32,7 @@ public class WorldInputProcessor implements InputProcessor {
           int temp = world.selectedBuilding.size.x;
           world.selectedBuilding.size.x = world.selectedBuilding.size.y;
           world.selectedBuilding.size.y = temp;
+          world.selectedBuildingUpdated = true;
         }
       default:
         break;

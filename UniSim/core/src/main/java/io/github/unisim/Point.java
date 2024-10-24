@@ -38,7 +38,7 @@ public class Point {
     return "(" + x + ", " + y + ")";
   }
 
-  public Point getNewPoint(Point point) {
-    return new Point(point.x, point.y);
+  public Point getNewPoint() {
+    return new Point(x, y);
   }
 }
