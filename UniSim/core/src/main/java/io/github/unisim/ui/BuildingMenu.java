@@ -59,7 +59,6 @@ public class BuildingMenu {
         }
       });
       table.add(buildingImages[i]).width(64).height(64);
-      Gdx.app.log("#INFO", "Added building to table");
     }
 
     stage.addActor(bar);
