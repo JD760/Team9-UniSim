@@ -28,7 +28,7 @@ public class World {
   private TiledMap map = new TmxMapLoader().load("medium_map.tmx");
   private float unitScale = 1f / 16f;
   private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map, unitScale);
-  private Vector2 camPosition = new Vector2(0f, 0f);
+  private Vector2 camPosition = new Vector2(150f, 0f);
   private Vector2 panVelocity = new Vector2(0f, 0f);
   private float zoomVelocity = 0f;
   private final float timeStepSize = 0.001f;
@@ -46,6 +46,7 @@ public class World {
   private Point btmLeft;
   private Point topRight;
   public Building selectedBuilding;
+  public boolean selectedBuildingUpdated;
 
   /**
    * Create a new World.
@@ -92,7 +93,7 @@ public class World {
 
     // Update the mouse grid pos and the buildable flag
     Point mouseGridPos = getCursorGridPos();
-    if (!mouseGridPos.equals(mousePosInWorld)) {
+    if (!mouseGridPos.equals(mousePosInWorld) || selectedBuildingUpdated) {
       mousePosInWorld = mouseGridPos;
       btmLeft = mousePosInWorld;
       Point buildingSize = selectedBuilding == null ? new Point(1, 1) : selectedBuilding.size;
@@ -291,7 +292,10 @@ public class World {
       return false;
     }
     buildingManager.placeBuilding(
-      new Building(selectedBuilding.texture, selectedBuilding.location, selectedBuilding.size)
+      new Building(
+        selectedBuilding.texture, selectedBuilding.location.getNewPoint(),
+        selectedBuilding.size.getNewPoint(), selectedBuilding.flipped
+      )
     );
     selectedBuilding = null;
     return true;

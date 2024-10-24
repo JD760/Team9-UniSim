@@ -95,11 +95,11 @@ public class BuildingManager {
   public int placeBuilding(Building building) {
     // Insert the building into the correct place in the arrayList to ensure it
     // gets rendered in top-down order
-    int buildingHeight = building.location.y - building.location.x - building.size.x + 1;
+    int buildingHeight = building.location.y + building.size.y - 1 - building.location.x;
     int i = 0;
     while (i < buildings.size()) {
       Building other = buildings.get(i);
-      if (other.location.y - other.location.x - other.size.x + 1 > buildingHeight) {
+      if (other.location.y + other.size.y - 1 - other.location.x > buildingHeight) {
         i++;
       } else {
         break;
@@ -141,7 +141,9 @@ public class BuildingManager {
     batch.draw(
         building.texture, 
         btmLeftPos.x, btmRightPos.y, 
-        building.imageSize, building.imageSize
+        building.imageSize, building.imageSize,
+        0, 0, building.texture.getWidth(), building.texture.getHeight(),
+        building.flipped, false
     );
   }
 }

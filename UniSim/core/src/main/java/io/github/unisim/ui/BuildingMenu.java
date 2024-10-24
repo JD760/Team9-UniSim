@@ -35,16 +35,16 @@ public class BuildingMenu {
   public BuildingMenu(Stage stage, World world) {
     // Set building images and sizes
     buildings[0] = new Building(
-      new Texture(Gdx.files.internal("building_1.png")), new Point(), new Point(4, 4)
+      new Texture(Gdx.files.internal("building_1.png")), new Point(), new Point(4, 4), false
     );
     buildings[1] = new Building(
-      new Texture(Gdx.files.internal("building_2.png")), new Point(), new Point(3, 3)
+      new Texture(Gdx.files.internal("building_2.png")), new Point(), new Point(3, 3), false
     );
     buildings[2] = new Building(
-      new Texture(Gdx.files.internal("building_3.png")), new Point(), new Point(3, 4)
+      new Texture(Gdx.files.internal("building_3.png")), new Point(), new Point(3, 4), false
     );
     buildings[3] = new Building(
-      new Texture(Gdx.files.internal("building_4.png")), new Point(), new Point(2, 2)
+      new Texture(Gdx.files.internal("building_4.png")), new Point(), new Point(2, 2), false
     );
 
     table = new Table();
@@ -59,6 +59,13 @@ public class BuildingMenu {
             world.selectedBuilding = null;
           } else {
             world.selectedBuilding = buildings[buildingIndex];
+            if (world.selectedBuilding.flipped) {
+              world.selectedBuilding.flipped = false;
+              int temp = world.selectedBuilding.size.x;
+              world.selectedBuilding.size.x = world.selectedBuilding.size.y;
+              world.selectedBuilding.size.y = temp;
+              world.selectedBuildingUpdated = true;
+            }
           }
         }
       });
