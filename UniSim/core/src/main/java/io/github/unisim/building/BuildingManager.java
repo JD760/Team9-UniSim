@@ -1,7 +1,5 @@
 package io.github.unisim.building;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -22,7 +20,6 @@ public class BuildingManager {
 
   public BuildingManager(Matrix4 isoTransform) {
     this.isoTransform = isoTransform;
-    initBuildings();
   }
 
   /**
@@ -84,13 +81,6 @@ public class BuildingManager {
     return GameState.buildableTiles.contains(tile.getId());
   }
 
-  public void initBuildings() {
-    Building houseTest = new Building(new Texture(
-        Gdx.files.internal("building_2.png")), new Point(0, 0), new Point(3, 3)
-    );
-    buildings.add(houseTest);
-  }
-
   /**
    * Draws each building from the building list onto the map.
 
@@ -109,7 +99,7 @@ public class BuildingManager {
     int i = 0;
     while (i < buildings.size()) {
       Building other = buildings.get(i);
-      if (other.location.y - other.location.x - other.size.x + 1 >= buildingHeight) {
+      if (other.location.y - other.location.x - other.size.x + 1 > buildingHeight) {
         i++;
       } else {
         break;

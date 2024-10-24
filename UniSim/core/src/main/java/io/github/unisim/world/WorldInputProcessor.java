@@ -1,5 +1,6 @@
 package io.github.unisim.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import io.github.unisim.GameState;
@@ -57,9 +58,9 @@ public class WorldInputProcessor implements InputProcessor {
    * When the mouse is released, stop tracking the dragging events.
    */
   public boolean touchUp(int x, int y, int pointer, int button) {
+    dragging = false;
     if (!draggedSinceClick && world.selectedBuilding != null) {
       if (world.placeBuilding()) {
-        dragging = false;
         draggedSinceClick = true;
       }
     }
