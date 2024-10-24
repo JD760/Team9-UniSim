@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class BuildingManager {
   private ArrayList<Building> buildings = new ArrayList<>();
   private Matrix4 isoTransform;
+  private Building previewBuilding;
 
   public BuildingManager(Matrix4 isoTransform) {
     this.isoTransform = isoTransform;
@@ -62,6 +63,9 @@ public class BuildingManager {
           || building.location.y > topRight.y
           || building.location.y + building.size.y - 1 < btmLeft.y)
       ) {
+        if (building == previewBuilding) {
+          continue;
+        }
         buildable = false;
         break;
       }
@@ -98,9 +102,31 @@ public class BuildingManager {
     }
   }
 
-  public void place(Building building) {
-    // TODO: sort buildings in the list by position to ensure correct drawing order
-    buildings.add(building);
+  public int placeBuilding(Building building) {
+    // Insert the building into the correct place in the arrayList to ensure it
+    // gets rendered in top-down order
+    int buildingHeight = building.location.y - building.location.x - building.size.x + 1;
+    int i = 0;
+    while (i < buildings.size()) {
+      Building other = buildings.get(i);
+      if (other.location.y - other.location.x - other.size.x + 1 >= buildingHeight) {
+        i++;
+      } else {
+        break;
+      }
+    }
+    buildings.add(i, building);
+    return i;
+  }
+
+  public void setPreviewBuilding(Building previewBuilding) {
+    if (this.previewBuilding != null) {
+      buildings.remove(this.previewBuilding);
+    }
+    this.previewBuilding = previewBuilding;
+    if (previewBuilding != null) {
+      placeBuilding(previewBuilding);
+    }
   }
   
   /**

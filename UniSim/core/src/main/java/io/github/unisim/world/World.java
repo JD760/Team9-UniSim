@@ -100,6 +100,10 @@ public class World {
       btmLeft.y -= buildingSize.y / 2;
       topRight = new Point(btmLeft.x + buildingSize.x - 1, btmLeft.y + buildingSize.y - 1);
       canBuild = buildingManager.isBuildable(btmLeft, topRight, getMapTiles());
+      if (selectedBuilding != null) {
+        selectedBuilding.location = btmLeft;
+      }
+      buildingManager.setPreviewBuilding(selectedBuilding);
     }
 
     // Render the tile highlight
@@ -112,10 +116,6 @@ public class World {
     buildingBatch.setProjectionMatrix(camera.combined);
     buildingBatch.begin();
     buildingManager.render(buildingBatch);
-    if (selectedBuilding != null) {
-      selectedBuilding.location = btmLeft;
-      buildingManager.drawBuilding(selectedBuilding, buildingBatch);
-    }
     buildingBatch.end();
   }
 
@@ -290,7 +290,7 @@ public class World {
     if (!canBuild) {
       return false;
     }
-    buildingManager.place(
+    buildingManager.placeBuilding(
       new Building(selectedBuilding.texture, selectedBuilding.location, selectedBuilding.size)
     );
     selectedBuilding = null;
