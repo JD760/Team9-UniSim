@@ -25,10 +25,10 @@ import io.github.unisim.building.BuildingManager;
 public class World {
   private OrthographicCamera camera = new OrthographicCamera();
   private Viewport viewport = new ScreenViewport(camera);
-  private TiledMap map = new TmxMapLoader().load("map.tmx");
+  private TiledMap map = new TmxMapLoader().load("medium_map.tmx");
   private float unitScale = 1f / 16f;
   private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map, unitScale);
-  private Vector2 camPosition = new Vector2(500f, 0f);
+  private Vector2 camPosition = new Vector2(0f, 0f);
   private Vector2 panVelocity = new Vector2(0f, 0f);
   private float zoomVelocity = 0f;
   private final float timeStepSize = 0.001f;
