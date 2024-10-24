@@ -32,7 +32,7 @@ public class BuildingManager {
    * @param tileLayer - A reference to the map layer containing all terrain tiles
    * @return - true if the region is made solely of buildable tiles, false otherwise
    */
-  public static boolean isBuildable(Point btmLeft, Point topRight, TiledMapTileLayer tileLayer) {
+  public boolean isBuildable(Point btmLeft, Point topRight, TiledMapTileLayer tileLayer) {
     boolean buildable = true;
     // we iterate over each tile within the search region and check
     // for any non-buildable tiles.
@@ -50,7 +50,23 @@ public class BuildingManager {
         }
       }
     }
-    // buildable will be true unless one or more non-buildable tiles are found within the region
+    if (!buildable) {
+      return false;
+    }
+
+    // Next, iterate over the current buildings to see if any intersect the new building
+    for (Building building : buildings) {
+      // Use the seperating axis theorem to detect building overlap
+      if (!(building.location.x > topRight.x
+          || building.location.x + building.size.x - 1 < btmLeft.x
+          || building.location.y > topRight.y
+          || building.location.y + building.size.y - 1 < btmLeft.y)
+      ) {
+        buildable = false;
+        break;
+      }
+    }
+
     return buildable;
   }
 
@@ -109,7 +125,7 @@ public class BuildingManager {
     batch.draw(
         building.texture, 
         btmLeftPos.x, btmRightPos.y, 
-        building.size.x, building.size.y
+        building.imageSize, building.imageSize
     );
   }
 }

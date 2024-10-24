@@ -10,10 +10,12 @@ public class Building {
   // This works as all buildings are rectangular.
   public Point location;
   public Point size;
+  public int imageSize;
 
   public Building(Texture texture, Point location, Point size) {
     this.texture = texture;
     this.location = location;
     this.size = size;
+    this.imageSize = Math.min(size.x, size.y);
   }
 }

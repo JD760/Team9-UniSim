@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
@@ -42,8 +41,11 @@ public class World {
   private Matrix4 isoTransform;
   private Matrix4 invIsoTransform;
   private BuildingManager buildingManager;
+  private boolean canBuild;
+  private Point mousePosInWorld;
+  private Point btmLeft;
+  private Point topRight;
   public Building selectedBuilding;
-  private boolean canBuild = true;
 
   /**
    * Create a new World.
@@ -88,22 +90,22 @@ public class World {
     camera.position.set(camPosition.x, camPosition.y, 0);
     camera.update();
 
+    // Update the mouse grid pos and the buildable flag
+    Point mouseGridPos = getCursorGridPos();
+    if (!mouseGridPos.equals(mousePosInWorld)) {
+      mousePosInWorld = mouseGridPos;
+      btmLeft = mousePosInWorld;
+      Point buildingSize = selectedBuilding == null ? new Point(1, 1) : selectedBuilding.size;
+      btmLeft.x -= buildingSize.x / 2;
+      btmLeft.y -= buildingSize.y / 2;
+      topRight = new Point(btmLeft.x + buildingSize.x - 1, btmLeft.y + buildingSize.y - 1);
+      canBuild = buildingManager.isBuildable(btmLeft, topRight, getMapTiles());
+    }
+
     // Render the tile highlight
     tileHighlightBatch.setProjectionMatrix(camera.combined);
     tileHighlightBatch.begin();
-    Point btmLeft = getCursorGridPos();
-    if (selectedBuilding != null) {
-      btmLeft.x -= selectedBuilding.size.x / 2;
-      btmLeft.y -= selectedBuilding.size.y / 2;
-      Point topRight = new Point(
-        btmLeft.x + selectedBuilding.size.x - 1, btmLeft.y + selectedBuilding.size.y - 1
-      );
-      canBuild = BuildingManager.isBuildable(btmLeft, topRight, getMapTiles());
-      highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
-    } else {
-      boolean buildable = BuildingManager.isBuildable(btmLeft, btmLeft, getMapTiles());
-      highlightRegion(btmLeft, btmLeft, buildable ? tileHighlight : errTileHighlight);
-    }
+    highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
     tileHighlightBatch.end();
 
     // render buildings after all map related rendering
@@ -285,13 +287,7 @@ public class World {
    * @return - True if building could be done successfully, false otherwise.
    */
   public boolean placeBuilding() {
-    boolean buildable = BuildingManager.isBuildable(
-        selectedBuilding.location,
-        new Point(selectedBuilding.location.x + selectedBuilding.size.x - 1,
-        selectedBuilding.location.y + selectedBuilding.size.y - 1),
-        getMapTiles()
-    );
-    if (!buildable) {
+    if (!canBuild) {
       return false;
     }
     buildingManager.place(

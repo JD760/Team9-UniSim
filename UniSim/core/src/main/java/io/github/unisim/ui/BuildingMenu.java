@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.world.World;
@@ -20,7 +19,6 @@ import io.github.unisim.world.World;
 public class BuildingMenu {
   private ShapeActor bar = new ShapeActor(Color.GRAY);
   private Table table;
-  private World world;
   private final int NUM_BUILDINGS = 4;
   private Building[] buildings = new Building[NUM_BUILDINGS];
   private Image[] buildingImages = new Image[NUM_BUILDINGS];
