@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
   public GameScreen() {
     timer = new Timer(300_000);
     infoBar = new InfoBar(stage, timer);
-    buildingMenu = new BuildingMenu(stage);
+    buildingMenu = new BuildingMenu(stage, world);
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
     inputMultiplexer.addProcessor(stage);

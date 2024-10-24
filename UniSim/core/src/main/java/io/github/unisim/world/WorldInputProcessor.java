@@ -11,6 +11,7 @@ public class WorldInputProcessor implements InputProcessor {
   private World world;
   private int[] cursorPos = new int[2];
   private boolean dragging = false;
+  private boolean draggedSinceClick = true;
 
   public WorldInputProcessor(World world) {
     this.world = world;
@@ -46,12 +47,9 @@ public class WorldInputProcessor implements InputProcessor {
    */
   public boolean touchDown(int x, int y, int pointer, int button) {
     dragging = true;
+    draggedSinceClick = false;
     cursorPos[0] = x;
     cursorPos[1] = y;
-
-    if (GameState.buildingMode) {
-      world.placeBuilding();
-    }
     return true;
   }
 
@@ -59,7 +57,11 @@ public class WorldInputProcessor implements InputProcessor {
    * When the mouse is released, stop tracking the dragging events.
    */
   public boolean touchUp(int x, int y, int pointer, int button) {
+    if (!draggedSinceClick && world.selectedBuilding != null) {
+      world.placeBuilding();
+    }
     dragging = false;
+    draggedSinceClick = true;
     return false;
   }
 
@@ -69,6 +71,7 @@ public class WorldInputProcessor implements InputProcessor {
    */
   public boolean touchDragged(int x, int y, int pointer) {
     if (dragging) {
+      draggedSinceClick = true;
       world.pan(cursorPos[0] - x, y - cursorPos[1]);
       cursorPos[0] = x;
       cursorPos[1] = y;
@@ -82,7 +85,7 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean mouseMoved(int x, int y) {
-    if (GameState.buildingMode) {
+    if (world.selectedBuilding != null) {
       
     }
     return false;

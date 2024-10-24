@@ -105,9 +105,6 @@ public class BuildingManager {
    * @param cursorPos - The grid position of the cursor
    */
   public void drawAtCursor(Building building, SpriteBatch batch, Vector3 cursorPos) {
-    if (!GameState.buildingMode) {
-      return;
-    }
 
     // Vector3 worldPos = new Vector3(
     //       (float) cursorPos.x,

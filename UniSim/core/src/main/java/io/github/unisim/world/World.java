@@ -42,7 +42,8 @@ public class World {
   private Matrix4 isoTransform;
   private Matrix4 invIsoTransform;
   private BuildingManager buildingManager;
-  private Building selectedBuilding;
+  public Building selectedBuilding;
+  private boolean canBuild = true;
 
   /**
    * Create a new World.
@@ -51,9 +52,7 @@ public class World {
     camera.zoom = 100f / 480;
     initIsometricTransform();
     buildingManager = new BuildingManager(isoTransform);
-    selectedBuilding = new Building(new Texture(
-      Gdx.files.internal("building_2.png")), new Point(), new Point(4, 4)
-    );
+    selectedBuilding = null;
   }
 
   /**
@@ -92,11 +91,11 @@ public class World {
     // Render the tile highlight
     tileHighlightBatch.setProjectionMatrix(camera.combined);
     tileHighlightBatch.begin();
-    if (GameState.buildingMode) {
+    if (selectedBuilding != null) {
       Point btmLeft = getCursorGridPos();
       Point topRight = new Point(btmLeft.x + 3, btmLeft.y + 3);
-      GameState.canBuild = BuildingManager.isBuildable(btmLeft, topRight, getMapTiles());
-      highlightRegion(btmLeft, topRight, GameState.canBuild ? tileHighlight : errTileHighlight);
+      canBuild = BuildingManager.isBuildable(btmLeft, topRight, getMapTiles());
+      highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
     } else {
       Point gridPos = getCursorGridPos();
       boolean buildable = BuildingManager.isBuildable(gridPos, gridPos, getMapTiles());
@@ -108,11 +107,13 @@ public class World {
     buildingBatch.setProjectionMatrix(camera.combined);
     buildingBatch.begin();
     buildingManager.render(buildingBatch);
-    buildingManager.drawAtCursor(
-        selectedBuilding,
-        buildingBatch,
-        camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))
-    );
+    if (selectedBuilding != null) {
+      buildingManager.drawAtCursor(
+          selectedBuilding,
+          buildingBatch,
+          camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))
+      );
+    }
     buildingBatch.end();
   }
 
@@ -288,12 +289,14 @@ public class World {
     boolean buildable = BuildingManager.isBuildable(
         tilePos, new Point(tilePos.x + 3, tilePos.y + 3), getMapTiles()
     );
-
     if (!buildable) {
       return false;
     }
     selectedBuilding.location = tilePos;
-    buildingManager.place(selectedBuilding);
+    buildingManager.place(
+      new Building(selectedBuilding.texture, selectedBuilding.location, selectedBuilding.size)
+    );
+    selectedBuilding = null;
     return true;
   }
 }
