@@ -91,15 +91,18 @@ public class World {
     // Render the tile highlight
     tileHighlightBatch.setProjectionMatrix(camera.combined);
     tileHighlightBatch.begin();
+    Point btmLeft = getCursorGridPos();
     if (selectedBuilding != null) {
-      Point btmLeft = getCursorGridPos();
-      Point topRight = new Point(btmLeft.x + 3, btmLeft.y + 3);
+      btmLeft.x -= selectedBuilding.size.x / 2;
+      btmLeft.y -= selectedBuilding.size.y / 2;
+      Point topRight = new Point(
+        btmLeft.x + selectedBuilding.size.x - 1, btmLeft.y + selectedBuilding.size.y - 1
+      );
       canBuild = BuildingManager.isBuildable(btmLeft, topRight, getMapTiles());
       highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
     } else {
-      Point gridPos = getCursorGridPos();
-      boolean buildable = BuildingManager.isBuildable(gridPos, gridPos, getMapTiles());
-      highlightRegion(gridPos, gridPos, buildable ? tileHighlight : errTileHighlight);
+      boolean buildable = BuildingManager.isBuildable(btmLeft, btmLeft, getMapTiles());
+      highlightRegion(btmLeft, btmLeft, buildable ? tileHighlight : errTileHighlight);
     }
     tileHighlightBatch.end();
 
@@ -108,11 +111,8 @@ public class World {
     buildingBatch.begin();
     buildingManager.render(buildingBatch);
     if (selectedBuilding != null) {
-      buildingManager.drawAtCursor(
-          selectedBuilding,
-          buildingBatch,
-          camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0))
-      );
+      selectedBuilding.location = btmLeft;
+      buildingManager.drawBuilding(selectedBuilding, buildingBatch);
     }
     buildingBatch.end();
   }
@@ -285,14 +285,15 @@ public class World {
    * @return - True if building could be done successfully, false otherwise.
    */
   public boolean placeBuilding() {
-    Point tilePos = getCursorGridPos();
     boolean buildable = BuildingManager.isBuildable(
-        tilePos, new Point(tilePos.x + 3, tilePos.y + 3), getMapTiles()
+        selectedBuilding.location,
+        new Point(selectedBuilding.location.x + selectedBuilding.size.x - 1,
+        selectedBuilding.location.y + selectedBuilding.size.y - 1),
+        getMapTiles()
     );
     if (!buildable) {
       return false;
     }
-    selectedBuilding.location = tilePos;
     buildingManager.place(
       new Building(selectedBuilding.texture, selectedBuilding.location, selectedBuilding.size)
     );

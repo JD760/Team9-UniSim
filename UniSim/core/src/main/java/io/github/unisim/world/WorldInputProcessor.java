@@ -58,10 +58,11 @@ public class WorldInputProcessor implements InputProcessor {
    */
   public boolean touchUp(int x, int y, int pointer, int button) {
     if (!draggedSinceClick && world.selectedBuilding != null) {
-      world.placeBuilding();
+      if (world.placeBuilding()) {
+        dragging = false;
+        draggedSinceClick = true;
+      }
     }
-    dragging = false;
-    draggedSinceClick = true;
     return false;
   }
 

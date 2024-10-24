@@ -78,16 +78,7 @@ public class BuildingManager {
    */
   public void render(SpriteBatch batch) {
     for (Building building : buildings) {
-      Vector3 worldPos = new Vector3(
-          (float) building.location.x,
-          (float) building.location.y,
-          0f
-      ).mul(isoTransform);
-      batch.draw(
-          building.texture, 
-          worldPos.x, worldPos.y, 
-          building.size.x, building.size.y
-      );
+      drawBuilding(building, batch);
     }
   }
 
@@ -104,13 +95,21 @@ public class BuildingManager {
    * @param batch - the SpriteBatch to draw into
    * @param cursorPos - The grid position of the cursor
    */
-  public void drawAtCursor(Building building, SpriteBatch batch, Vector3 cursorPos) {
-
-    // Vector3 worldPos = new Vector3(
-    //       (float) cursorPos.x,
-    //       (float) cursorPos.y,
-    //       0f
-    //   ).mul(isoTransform);
-    batch.draw(building.texture, cursorPos.x, cursorPos.y, building.size.x, building.size.y);
+  public void drawBuilding(Building building, SpriteBatch batch) {
+    Vector3 btmLeftPos = new Vector3(
+        (float) building.location.x,
+        (float) building.location.y,
+        0f
+    ).mul(isoTransform);
+    Vector3 btmRightPos = new Vector3(
+        (float) building.location.x + building.size.x,
+        (float) building.location.y,
+        0f
+    ).mul(isoTransform);
+    batch.draw(
+        building.texture, 
+        btmLeftPos.x, btmRightPos.y, 
+        building.size.x, building.size.y
+    );
   }
 }
