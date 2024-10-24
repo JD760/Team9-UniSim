@@ -25,6 +25,14 @@ public class WorldInputProcessor implements InputProcessor {
       case Keys.SPACE:
         GameState.paused = !GameState.paused;
         break;
+      case Keys.F:
+        // Flip the selected building
+        if (world.selectedBuilding != null) {
+          world.selectedBuilding.flipped = !world.selectedBuilding.flipped;
+          int temp = world.selectedBuilding.size.x;
+          world.selectedBuilding.size.x = world.selectedBuilding.size.y;
+          world.selectedBuilding.size.y = temp;
+        }
       default:
         break;
     }

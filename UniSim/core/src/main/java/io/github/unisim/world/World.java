@@ -291,7 +291,10 @@ public class World {
       return false;
     }
     buildingManager.placeBuilding(
-      new Building(selectedBuilding.texture, selectedBuilding.location, selectedBuilding.size)
+      new Building(
+        selectedBuilding.texture, selectedBuilding.location, selectedBuilding.size,
+        selectedBuilding.flipped
+      )
     );
     selectedBuilding = null;
     return true;

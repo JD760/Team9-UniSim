@@ -11,11 +11,13 @@ public class Building {
   public Point location;
   public Point size;
   public int imageSize;
+  public boolean flipped;
 
-  public Building(Texture texture, Point location, Point size) {
+  public Building(Texture texture, Point location, Point size, Boolean flipped) {
     this.texture = texture;
     this.location = location;
     this.size = size;
     this.imageSize = Math.min(size.x, size.y);
+    this.flipped = flipped;
   }
 }

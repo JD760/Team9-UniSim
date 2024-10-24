@@ -141,7 +141,9 @@ public class BuildingManager {
     batch.draw(
         building.texture, 
         btmLeftPos.x, btmRightPos.y, 
-        building.imageSize, building.imageSize
+        building.imageSize, building.imageSize,
+        0, 0, building.texture.getWidth(), building.texture.getHeight(),
+        building.flipped, false
     );
   }
 }
