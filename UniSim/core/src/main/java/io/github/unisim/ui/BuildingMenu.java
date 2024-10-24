@@ -3,11 +3,15 @@ package io.github.unisim.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
+
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.world.World;
@@ -17,7 +21,7 @@ import io.github.unisim.world.World;
  * from the list onto the map.
  */
 public class BuildingMenu {
-  private ShapeActor bar = new ShapeActor(Color.GRAY);
+  private ShapeActor bar = new ShapeActor(new Color(0.882f, 0.612f, 0.408f, 1.0f));
   private Table table;
   private final int NUM_BUILDINGS = 4;
   private Building[] buildings = new Building[NUM_BUILDINGS];
@@ -68,5 +72,9 @@ public class BuildingMenu {
   public void resize(int width, int height) {
     table.setBounds(0, 0, width, height * 0.1f);
     bar.setBounds(0, 0, width, height * 0.1f);
+    Array<Cell> cells = table.getCells();
+    for (Cell cell : cells) {
+      cell.height(height * 0.1f).width(height * 0.1f);
+    }
   }
 }
