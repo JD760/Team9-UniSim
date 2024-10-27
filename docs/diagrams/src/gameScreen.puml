@@ -1,0 +1,47 @@
+@startuml Project Structure
+class GameScreen implements Screen
+{
+    + render(): void
+    + resize(): void
+    + resume(): void
+}
+
+class World
+{
+    - map: TiledMap
+    + render(): void
+    + scroll(): void
+    + zoom(): void
+    + placeBuilding(): bool
+}
+
+class Timer
+{
+    - remainingTime: Time
+}
+
+class InfoBar
+
+class BuildingManager
+{
+    + render(): void
+    + isBuildable(): boolean
+    + placeBuilding(): int
+}
+
+abstract class Building
+{
+    - image: Sprite
+    - type: Enum
+    - size: Vector2
+    - position: Vector2
+}
+
+GameScreen *-- "1..1" World
+GameScreen *-- "1..1" Timer
+GameScreen *-- "1..1" InfoBar
+GameScreen *-- "1..1" BuildingBar
+World *-- "1..1" BuildingManager
+BuildingManager *-- "*" Building
+World *-- "4..4" BuildingCounter
+@enduml

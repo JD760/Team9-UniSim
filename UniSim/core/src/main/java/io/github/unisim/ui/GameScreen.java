@@ -1,0 +1,88 @@
+package io.github.unisim.ui;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import io.github.unisim.GameState;
+import io.github.unisim.Timer;
+import io.github.unisim.world.UiInputProcessor;
+import io.github.unisim.world.World;
+import io.github.unisim.world.WorldInputProcessor;
+
+/**
+ * Game screen where the main game is rendered and controlled.
+ * Supports pausing the game with a pause menu.
+ */
+public class GameScreen implements Screen {
+  private World world = new World();
+  private Stage stage = new Stage(new ScreenViewport());
+  private Table pauseTable;
+  private InfoBar infoBar;
+  private BuildingMenu buildingMenu;
+  private Timer timer;
+  private InputProcessor uiInputProcessor = new UiInputProcessor(stage);
+  private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
+  private InputMultiplexer inputMultiplexer = new InputMultiplexer();
+
+  /**
+   * Constructor for the GameScreen.
+   */
+  public GameScreen() {
+    timer = new Timer(300_000);
+    infoBar = new InfoBar(stage, timer);
+    buildingMenu = new BuildingMenu(stage, world);
+    pauseTable = new Table();
+    pauseTable.setDebug(true);
+
+    inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
+    inputMultiplexer.addProcessor(stage);
+    inputMultiplexer.addProcessor(uiInputProcessor);
+    inputMultiplexer.addProcessor(worldInputProcessor);
+  }
+
+  @Override
+  public void show() {
+  }
+
+  @Override
+  public void render(float delta) {
+    world.render();
+    float dt = Gdx.graphics.getDeltaTime();
+    timer.tick(dt * 1000);
+    infoBar.update();
+    stage.act(dt);
+    stage.draw();
+  }
+
+  @Override
+  public void resize(int width, int height) {
+    world.resize(width, height);
+    stage.getViewport().update(width, height, true);
+    infoBar.resize(width, height);
+    buildingMenu.resize(width, height);
+    pauseTable.setBounds(0, height * 0.1f, width, height * 0.95f);
+  }
+
+  @Override
+  public void pause() {
+  }
+
+  @Override
+  public void resume() {
+    Gdx.input.setInputProcessor(inputMultiplexer);
+  }
+ 
+  @Override
+  public void hide() {
+  }
+
+  @Override
+  public void dispose() {
+    world.dispose();
+    stage.dispose();
+  }
+}
