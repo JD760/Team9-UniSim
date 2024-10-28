@@ -27,5 +27,5 @@ public class GameState {
   public static Set<Integer> buildableTiles = Stream.of(
       8, 9, 10, 11, 12, 13, 14).collect(Collectors.toUnmodifiableSet()
   );
-  public static boolean paused = false;
+  public static boolean paused = true;
 }
