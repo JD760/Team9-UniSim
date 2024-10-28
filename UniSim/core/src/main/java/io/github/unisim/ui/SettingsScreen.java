@@ -3,8 +3,10 @@ package io.github.unisim.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -18,8 +20,9 @@ import io.github.unisim.GameState;
 public class SettingsScreen implements Screen {
   private Stage stage;
   private Table table;
-  private Skin skin;
+  private Skin skin = GameState.defaultSkin;;
   private Slider volumeSlider;
+  private Label volumeLabel;
   private TextButton backButton;
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
@@ -29,7 +32,10 @@ public class SettingsScreen implements Screen {
   public SettingsScreen() {
     stage = new Stage();
     table = new Table();
-    skin = GameState.defaultSkin;
+
+    // Volume label
+    volumeLabel = new Label("Volume: ", skin);
+    volumeLabel.setColor(new Color(0.9f, 0.9f, 0.9f, 1.0f));
 
     // Volume slider
     volumeSlider = new Slider(0.0f, 1.0f, 0.1f, false, skin);
@@ -59,6 +65,8 @@ public class SettingsScreen implements Screen {
     table.center().center();
     table.pad(100, 100, 100, 100);
     table.add(backButton).center().width(250).height(67).padBottom(10);
+    table.row();
+    table.add(volumeLabel).center();
     table.row();
     table.add(volumeSlider).center().width(250).height(67);
     stage.addActor(table);

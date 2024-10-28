@@ -2,15 +2,22 @@ package io.github.unisim.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
+import io.github.unisim.GameState;
 import io.github.unisim.Timer;
 
 /**
@@ -23,7 +30,15 @@ public class InfoBar {
   private Label scoreLabel = new Label("86%", skin);
   private Label titleLabel = new Label("UniSim", skin);
   private Label timerLabel;
+  private Texture pauseTexture = new Texture("pause.png");
+  private Texture playTexture = new Texture("play.png");
+  private Image pauseImage = new Image(pauseTexture);
+  private Image playImage = new Image(playTexture);
   private Timer timer;
+  private Cell<Label> titleLableCell;
+  private Cell<Label> timerLableCell;
+  private Cell<Label> scoreLabelCell;
+  private Cell<Image> pauseButtonCell;
 
   /**
    * Create a new infoBar and draws its' components onto the provided stage.
@@ -38,6 +53,28 @@ public class InfoBar {
     table.add(scoreLabel).expandX().align(Align.left).pad(100);
     table.add(titleLabel).expandX().align(Align.center).pad(100);
     table.add(timerLabel).expandX().align(Align.right).pad(100);
+    scoreLabelCell = table.add(scoreLabel);
+    titleLableCell = table.add(titleLabel).align(Align.center);
+    timerLableCell = table.add(timerLabel).align(Align.right);
+    pauseButtonCell = table.add(playImage);
+
+    // Pause button
+    pauseImage.addListener(new ClickListener() {
+      @Override
+      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+        GameState.paused = true;
+        pauseButtonCell.setActor(playImage);
+      }
+    });
+
+    // Play button
+    playImage.addListener(new ClickListener() {
+      @Override
+      public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
+        GameState.paused = false;
+        pauseButtonCell.setActor(pauseImage);
+      }
+    });
 
     testActor = new ShapeActor(new Color(0.635f, 0.345f, 0.125f, 1.0f));
     stage.addActor(testActor);
@@ -56,13 +93,16 @@ public class InfoBar {
    */
   public void resize(int width, int height) {
     testActor.setBounds(0, height * 0.95f, width, height * 0.05f);
-    table.setBounds(0, height * 0.95f, width, height * 0.05f);
+    table.setBounds(width * -0.015f, height * 0.95f, width, height * 0.05f);
     Array<Cell> cells = table.getCells();
     for (Cell cell : cells) {
       cell.height(height * 0.05f).width(height * 0.05f);
     }
-    titleLabel.setFontScale(height * 0.004f);
+    titleLabel.setFontScale(height * 0.003f);
+    titleLableCell.pad(height * 0.2f);
     scoreLabel.setFontScale(height * 0.002f);
     timerLabel.setFontScale(height * 0.002f);
+    timerLableCell.padLeft(height * 0.2f);
+    scoreLabelCell.pad(height * 0.2f);
   }
 }

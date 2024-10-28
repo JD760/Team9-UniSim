@@ -52,7 +52,9 @@ public class GameScreen implements Screen {
   public void render(float delta) {
     world.render();
     float dt = Gdx.graphics.getDeltaTime();
-    timer.tick(dt * 1000);
+    if (!GameState.paused) {
+      timer.tick(dt * 1000);
+    }
     infoBar.update();
     stage.act(dt);
     stage.draw();
