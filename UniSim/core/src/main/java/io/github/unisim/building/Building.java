@@ -12,6 +12,7 @@ public class Building {
   public Point size;
   public int imageSize;
   public boolean flipped;
+  public BuildingType type;
 
   public Building(Texture texture, Point location, Point size, Boolean flipped) {
     this.texture = texture;

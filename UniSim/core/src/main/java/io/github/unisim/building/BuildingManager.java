@@ -9,12 +9,15 @@ import com.badlogic.gdx.math.Vector3;
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Manage the buildings placed in the world and methods common to all buildings.
  */
 public class BuildingManager {
   private ArrayList<Building> buildings = new ArrayList<>();
+  private Map<BuildingType, Integer> buildingCounts = new HashMap<>();
   private Matrix4 isoTransform;
   private Building previewBuilding;
 
@@ -106,7 +109,16 @@ public class BuildingManager {
       }
     }
     buildings.add(i, building);
+    updateCounters(building);
     return i;
+  }
+
+  public void updateCounters(Building building) {
+    if (!buildingCounts.containsKey(building.type)) {
+      buildingCounts.put(building.type, 1);
+      return;
+    }
+    buildingCounts.put(building.type, buildingCounts.get(building.type) + 1);
   }
 
   public void setPreviewBuilding(Building previewBuilding) {
