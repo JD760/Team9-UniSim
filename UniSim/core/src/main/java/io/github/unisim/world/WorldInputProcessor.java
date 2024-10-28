@@ -1,6 +1,5 @@
 package io.github.unisim.world;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import io.github.unisim.GameState;
@@ -34,6 +33,7 @@ public class WorldInputProcessor implements InputProcessor {
           world.selectedBuilding.size.y = temp;
           world.selectedBuildingUpdated = true;
         }
+        break;
       default:
         break;
     }
@@ -41,11 +41,12 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
 
+  @Override
   public boolean keyUp(int keycode) {
     return false;
   }
 
-
+  @Override
   public boolean keyTyped(char character) {
     return false;
   }
@@ -55,6 +56,7 @@ public class WorldInputProcessor implements InputProcessor {
    * Sets the dragging flag, if the mouse has been clicked in a valid
    * start location.
    */
+  @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
     dragging = true;
     draggedSinceClick = false;
@@ -66,6 +68,7 @@ public class WorldInputProcessor implements InputProcessor {
   /**
    * When the mouse is released, stop tracking the dragging events.
    */
+  @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
     dragging = false;
     if (!draggedSinceClick && world.selectedBuilding != null) {
@@ -80,6 +83,7 @@ public class WorldInputProcessor implements InputProcessor {
    * If the mouse has been clicked in a valid location, allow the map to be panned 
    * by clicking and holding the mouse button.
    */
+  @Override
   public boolean touchDragged(int x, int y, int pointer) {
     if (dragging) {
       draggedSinceClick = true;
@@ -91,20 +95,20 @@ public class WorldInputProcessor implements InputProcessor {
     return false;
   }
 
+  @Override
   public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
     return false;
   }
 
+  @Override
   public boolean mouseMoved(int x, int y) {
-    if (world.selectedBuilding != null) {
-      
-    }
     return false;
   }
 
   /**
    * Zoom in on the map when the mouse wheel is scrolled.
    */
+  @Override
   public boolean scrolled(float amountX, float amountY) {
     world.zoom(amountY);
     return true;

@@ -95,6 +95,13 @@ public class BuildingManager {
     }
   }
 
+  /**
+   * Handle placement of a building into the world by determining
+   * the correct draw order and updating the building counters.
+
+   * @param building - A reference to a building object to be placed
+   * @return - The location in the buildings array that the building was placed at
+   */
   public int placeBuilding(Building building) {
     // Insert the building into the correct place in the arrayList to ensure it
     // gets rendered in top-down order
@@ -113,6 +120,12 @@ public class BuildingManager {
     return i;
   }
 
+  /**
+   * Creates a counter for the building's type if it is the first to be placed,
+   * otherwise increments the counter for that type by one.
+
+   * @param building - A reference to the building object that was placed
+   */
   public void updateCounters(Building building) {
     if (!buildingCounts.containsKey(building.type)) {
       buildingCounts.put(building.type, 1);
@@ -121,6 +134,11 @@ public class BuildingManager {
     buildingCounts.put(building.type, buildingCounts.get(building.type) + 1);
   }
 
+  /**
+   * Sets the building to render as a 'preview' on the map prior to placement.
+
+   * @param previewBuilding - The building to draw as a preview
+   */
   public void setPreviewBuilding(Building previewBuilding) {
     if (this.previewBuilding != null) {
       buildings.remove(this.previewBuilding);
@@ -137,7 +155,6 @@ public class BuildingManager {
 
    * @param building - The building to draw under the mouse cursor
    * @param batch - the SpriteBatch to draw into
-   * @param cursorPos - The grid position of the cursor
    */
   public void drawBuilding(Building building, SpriteBatch batch) {
     Vector3 btmLeftPos = new Vector3(

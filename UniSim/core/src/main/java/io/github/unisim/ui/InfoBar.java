@@ -9,8 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
-
 import io.github.unisim.Timer;
 
 /**
@@ -54,11 +52,14 @@ public class InfoBar {
    * @param width - The new width of the screen in pixels.
    * @param height - The enw height of the screen in pixels.
    */
+  @SuppressWarnings("unchecked")
   public void resize(int width, int height) {
     testActor.setBounds(0, height * 0.95f, width, height * 0.05f);
     table.setBounds(0, height * 0.95f, width, height * 0.05f);
-    Array<Cell> cells = table.getCells();
-    for (Cell cell : cells) {
+
+    // we must perform an unchecked type conversion here
+    // this is acceptable as we know our table only contains instances of Actors
+    for (Cell<Actor> cell : table.getCells()) {
       cell.height(height * 0.05f).width(height * 0.05f);
     }
     titleLabel.setFontScale(height * 0.004f);
