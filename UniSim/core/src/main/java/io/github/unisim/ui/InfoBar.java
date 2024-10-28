@@ -35,9 +35,9 @@ public class InfoBar {
     timerLabel = new Label(timer.getRemainingTime(), skin);
     //table.setDebug(true);
     table.center().center();
-    table.add(scoreLabel);
-    table.add(titleLabel).align(Align.center).pad(100);
-    table.add(timerLabel).align(Align.right);
+    table.add(scoreLabel).expandX().align(Align.left).pad(100);
+    table.add(titleLabel).expandX().align(Align.center).pad(100);
+    table.add(timerLabel).expandX().align(Align.right).pad(100);
 
     testActor = new ShapeActor(new Color(0.635f, 0.345f, 0.125f, 1.0f));
     stage.addActor(testActor);
