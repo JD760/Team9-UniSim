@@ -18,4 +18,5 @@ class Main extends Game
     + render(): void
     + resize(): void
 }
+
 @enduml
