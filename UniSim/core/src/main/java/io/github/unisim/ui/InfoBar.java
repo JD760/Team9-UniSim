@@ -48,15 +48,13 @@ public class InfoBar {
   public InfoBar(Stage stage, Timer timer) {
     this.timer = timer;
     timerLabel = new Label(timer.getRemainingTime(), skin);
-    //table.setDebug(true);
+    table.setDebug(true);
     table.center().center();
-    table.add(scoreLabel).expandX().align(Align.left).pad(100);
-    table.add(titleLabel).expandX().align(Align.center).pad(100);
-    table.add(timerLabel).expandX().align(Align.right).pad(100);
-    scoreLabelCell = table.add(scoreLabel);
-    titleLableCell = table.add(titleLabel).align(Align.center);
-    timerLableCell = table.add(timerLabel).align(Align.right);
-    pauseButtonCell = table.add(playImage);
+    table.add(new Actor()).expandX().align(Align.center);
+    scoreLabelCell = table.add(scoreLabel).expandX().align(Align.center);
+    titleLableCell = table.add(titleLabel).expandX().align(Align.center);
+    timerLableCell = table.add(timerLabel).expandX().align(Align.center);
+    pauseButtonCell = table.add(playImage).expandX().align(Align.center);
 
     // Pause button
     pauseImage.addListener(new ClickListener() {
@@ -93,16 +91,16 @@ public class InfoBar {
    */
   public void resize(int width, int height) {
     testActor.setBounds(0, height * 0.95f, width, height * 0.05f);
-    table.setBounds(width * -0.015f, height * 0.95f, width, height * 0.05f);
+    table.setBounds(0, height * 0.95f, width, height * 0.05f);
     Array<Cell> cells = table.getCells();
     for (Cell cell : cells) {
       cell.height(height * 0.05f).width(height * 0.05f);
     }
     titleLabel.setFontScale(height * 0.003f);
-    titleLableCell.pad(height * 0.2f);
+    //titleLableCell.pad(height * 0.2f);
     scoreLabel.setFontScale(height * 0.002f);
     timerLabel.setFontScale(height * 0.002f);
-    timerLableCell.padLeft(height * 0.2f);
-    scoreLabelCell.pad(height * 0.2f);
+    //timerLableCell.padLeft(height * 0.2f);
+    //scoreLabelCell.pad(height * 0.2f);
   }
 }
