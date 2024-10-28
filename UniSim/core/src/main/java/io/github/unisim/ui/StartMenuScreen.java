@@ -1,12 +1,15 @@
-package io.github.unisim;
+package io.github.unisim.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import io.github.unisim.GameState;
 
 /**
  * The start menu screen which presents the player with the option to start the
@@ -15,48 +18,51 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  */
 public class StartMenuScreen implements Screen {
   private Stage stage;
+  private Table table;
   private Skin skin;
   private TextButton playButton;
   private TextButton settingsButton;
+  private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   /**
-   * Constructor for the StartMenuScreen.
-
-   * @param main Reference to the Main game class to manage screen switching.
+   * Create a new StartMenuScreen and draw the initial UI layout.
    */
-  public StartMenuScreen(Main main) {
+  public StartMenuScreen() {
     stage = new Stage();
-    Gdx.input.setInputProcessor(stage);
-
-    skin = main.getDefaultSkin();
+    table = new Table();
+    skin = GameState.defaultSkin;
 
     // Play button
     playButton = new TextButton("Play", skin);
-    playButton.setPosition(150, 200);
-    playButton.setSize(200, 60);
     playButton.addListener(new ClickListener() {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         // Switch to the game screen
-        main.setScreen(new GameScreen(main));
+        GameState.currentScreen = GameState.gameScreen;
       }
     });
 
     // Settings button
     settingsButton = new TextButton("Settings", skin);
-    settingsButton.setPosition(150, 120);
-    settingsButton.setSize(200, 60);
     settingsButton.addListener(new ClickListener() {
       @Override
       public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
         // Switch to the settings screen
-        main.setScreen(new SettingsScreen(main));
+        GameState.currentScreen = GameState.settingScreen;
       }
     });
 
-    // Add buttons to the stage
-    stage.addActor(playButton);
-    stage.addActor(settingsButton);
+    // Add UI elements to the stage
+    table.setFillParent(true);
+    table.center().center();
+    table.pad(100, 100, 100, 100);
+    table.add(playButton).center().width(250).height(100).padBottom(10);
+    table.row();
+    table.add(settingsButton).center().width(250).height(67);
+    stage.addActor(table);
+
+    inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
+    inputMultiplexer.addProcessor(stage);
   }
 
   @Override
@@ -76,6 +82,7 @@ public class StartMenuScreen implements Screen {
 
   @Override
   public void resize(int width, int height) {
+    stage.getViewport().update(width, height, true);
   }
 
   @Override
@@ -84,6 +91,7 @@ public class StartMenuScreen implements Screen {
 
   @Override
   public void resume() {
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override

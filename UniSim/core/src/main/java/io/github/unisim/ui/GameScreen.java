@@ -1,13 +1,17 @@
-package io.github.unisim;
+package io.github.unisim.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import io.github.unisim.menu.BuildingMenu;
-import io.github.unisim.menu.InfoBar;
+import io.github.unisim.GameState;
+import io.github.unisim.Timer;
+import io.github.unisim.world.UiInputProcessor;
+import io.github.unisim.world.World;
+import io.github.unisim.world.WorldInputProcessor;
 
 /**
  * Game screen where the main game is rendered and controlled.
@@ -16,6 +20,7 @@ import io.github.unisim.menu.InfoBar;
 public class GameScreen implements Screen {
   private World world = new World();
   private Stage stage = new Stage(new ScreenViewport());
+  private Table pauseTable;
   private InfoBar infoBar;
   private BuildingMenu buildingMenu;
   private Timer timer;
@@ -25,16 +30,18 @@ public class GameScreen implements Screen {
 
   /**
    * Constructor for the GameScreen.
-
-   * @param main Reference to the Main game class to manage screen switching and volume.
    */
-  public GameScreen(Main main) {
+  public GameScreen() {
     timer = new Timer(300_000);
     infoBar = new InfoBar(stage, timer);
-    buildingMenu = new BuildingMenu(stage);
+    buildingMenu = new BuildingMenu(stage, world);
+    pauseTable = new Table();
+    pauseTable.setDebug(true);
+
+    inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
+    inputMultiplexer.addProcessor(stage);
     inputMultiplexer.addProcessor(uiInputProcessor);
     inputMultiplexer.addProcessor(worldInputProcessor);
-    Gdx.input.setInputProcessor(inputMultiplexer);
   }
 
   @Override
@@ -54,8 +61,10 @@ public class GameScreen implements Screen {
   @Override
   public void resize(int width, int height) {
     world.resize(width, height);
+    stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);
     buildingMenu.resize(width, height);
+    pauseTable.setBounds(0, height * 0.1f, width, height * 0.95f);
   }
 
   @Override
@@ -64,8 +73,9 @@ public class GameScreen implements Screen {
 
   @Override
   public void resume() {
+    Gdx.input.setInputProcessor(inputMultiplexer);
   }
-
+ 
   @Override
   public void hide() {
   }

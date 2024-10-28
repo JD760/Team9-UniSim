@@ -1,47 +1,38 @@
 package io.github.unisim;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.Screen;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
  * platforms.
  */
 public class Main extends Game {
-  private Skin defaultSkin;
-  private float volume = 1.0f; // Default volume
+  private Screen currentScreen;
 
   @Override
   public void create() {
-    defaultSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
-    this.setScreen(new StartMenuScreen(this));
+    GameState.currentScreen = GameState.startScreen;
   }
 
   @Override
   public void render() {
+    if (currentScreen != GameState.currentScreen) {
+      currentScreen = GameState.currentScreen;
+      setScreen(currentScreen);
+      currentScreen.resume();
+    }
     super.render(); // Ensures the active screen is rendered
   }
 
   @Override
-  public void dispose() {
-
-  }
+  public void dispose() {}
 
   @Override
   public void resize(int width, int height) {
-
-  }
-
-  public float getVolume() {
-    return volume;
-  }
-
-  public void setVolume(float volume) {
-    this.volume = volume;
-  }
-
-  public Skin getDefaultSkin() {
-    return defaultSkin;
+    ((FullscreenInputProcessor)GameState.fullscreenInputProcessor).resize(width, height);
+    GameState.gameScreen.resize(width, height);
+    GameState.settingScreen.resize(width, height);
+    GameState.startScreen.resize(width, height);
   }
 }

@@ -5,23 +5,14 @@ import com.badlogic.gdx.Graphics.DisplayMode;
 import com.badlogic.gdx.Graphics.Monitor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 
 /**
  * Runs before the WorldInputProcessor and handles any input events generated from the UI.
  */
 @SuppressWarnings("OuterTypeFilename")
-public class UiInputProcessor implements InputProcessor {
+public class FullscreenInputProcessor implements InputProcessor {
   int[] windowSize = new int[2];
   boolean fullscreen = false;
-  private Stage stage;
-
-  public UiInputProcessor(Stage stage) {
-    this.stage = stage;
-  }
 
   /**
    * Inform the object about the current window size.
@@ -36,7 +27,6 @@ public class UiInputProcessor implements InputProcessor {
     }
   }
 
-
   /**
    * Called when a key is pressed and handles logic related to keypresses
    * within UI components.
@@ -49,10 +39,9 @@ public class UiInputProcessor implements InputProcessor {
     switch (keycode) {
       // Toggle fullscreen
       case Keys.F11:
-        Monitor currMonitor = Gdx.graphics.getMonitor();
-        DisplayMode displayMode = Gdx.graphics.getDisplayMode(currMonitor);
+        Monitor currentMonitor = Gdx.graphics.getMonitor();
+        DisplayMode displayMode = Gdx.graphics.getDisplayMode(currentMonitor);
         fullscreen = !fullscreen;
-        Gdx.app.log("#INFO", Boolean.toString(fullscreen));
         if (fullscreen) {
           Gdx.graphics.setFullscreenMode(displayMode);
         } else {
@@ -73,10 +62,9 @@ public class UiInputProcessor implements InputProcessor {
     return false;
   }
 
-
   @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
-    return validateMouseClick(x, y);
+    return false;
   }
 
   public boolean touchUp(int x, int y, int pointer, int button) {
@@ -97,39 +85,5 @@ public class UiInputProcessor implements InputProcessor {
 
   public boolean scrolled(float amountX, float amountY) {
     return false;
-  }
-
-  /**
-   * Only allow a mouse click to be passed down to the next processor stage
-   * if and only if it occurs within a UI component.
-
-   * @param x - The x co-ordinate of the mouse pointer
-   * @param y - The y co-ordinate of the mouse pointer
-   * @return - true if the click occurred within a UI component, false otherwise
-   */
-  private boolean validateMouseClick(int x, int y) {
-    // determine whether the point (x, y) is within the world or UI components
-    boolean inWorld = true;
-    Vector2 bottomLeft;
-    Vector2 topRight;
-
-    // transform the y co-ordinate into the co-ordinate space we are working in
-    // such that (0, 0) becomes the bottom left corner.
-    y = Gdx.graphics.getHeight() - y;
-
-    // for each actor, check whether the mouse was clicked within their bounds.
-    Array<Actor> actors = stage.getActors();
-    for (Actor actor : actors) {
-      bottomLeft = new Vector2(actor.getX(), actor.getY());
-      topRight = new Vector2(actor.getWidth(), actor.getHeight()).add(bottomLeft);
-
-      // check if the mouse click occurred in a rectangular region
-      if (x > bottomLeft.x && x < topRight.x && y > bottomLeft.y && y < topRight.y) {
-        Gdx.app.log("#INFO", "Mouse clicked inside UI Component");
-        inWorld = false;
-      }
-    }
-    // return whether the click occurred within the world or within the UI.
-    return !inWorld;
   }
 }

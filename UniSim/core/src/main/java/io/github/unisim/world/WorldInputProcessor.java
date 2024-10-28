@@ -1,6 +1,9 @@
-package io.github.unisim;
+package io.github.unisim.world;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import io.github.unisim.GameState;
 
 /**
  * Handles input events related to the world, after they have passed through the UiInputProcessor.
@@ -9,13 +12,31 @@ public class WorldInputProcessor implements InputProcessor {
   private World world;
   private int[] cursorPos = new int[2];
   private boolean dragging = false;
+  private boolean draggedSinceClick = true;
 
   public WorldInputProcessor(World world) {
     this.world = world;
   }
 
 
+  @Override
   public boolean keyDown(int keycode) {
+    switch (keycode) {
+      case Keys.SPACE:
+        GameState.paused = !GameState.paused;
+        break;
+      case Keys.F:
+        // Flip the selected building
+        if (world.selectedBuilding != null) {
+          world.selectedBuilding.flipped = !world.selectedBuilding.flipped;
+          int temp = world.selectedBuilding.size.x;
+          world.selectedBuilding.size.x = world.selectedBuilding.size.y;
+          world.selectedBuilding.size.y = temp;
+          world.selectedBuildingUpdated = true;
+        }
+      default:
+        break;
+    }
     return false;
   }
 
@@ -36,6 +57,7 @@ public class WorldInputProcessor implements InputProcessor {
    */
   public boolean touchDown(int x, int y, int pointer, int button) {
     dragging = true;
+    draggedSinceClick = false;
     cursorPos[0] = x;
     cursorPos[1] = y;
     return true;
@@ -46,6 +68,11 @@ public class WorldInputProcessor implements InputProcessor {
    */
   public boolean touchUp(int x, int y, int pointer, int button) {
     dragging = false;
+    if (!draggedSinceClick && world.selectedBuilding != null) {
+      if (world.placeBuilding()) {
+        draggedSinceClick = true;
+      }
+    }
     return false;
   }
 
@@ -55,6 +82,7 @@ public class WorldInputProcessor implements InputProcessor {
    */
   public boolean touchDragged(int x, int y, int pointer) {
     if (dragging) {
+      draggedSinceClick = true;
       world.pan(cursorPos[0] - x, y - cursorPos[1]);
       cursorPos[0] = x;
       cursorPos[1] = y;
@@ -68,6 +96,9 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   public boolean mouseMoved(int x, int y) {
+    if (world.selectedBuilding != null) {
+      
+    }
     return false;
   }
 
