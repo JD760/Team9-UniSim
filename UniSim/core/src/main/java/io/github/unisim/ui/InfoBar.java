@@ -35,7 +35,6 @@ public class InfoBar {
     timerLabel = new Label(timer.getRemainingTime(), skin);
     //table.setDebug(true);
     table.center().center();
-    titleLabel.setFontScale(2);
     table.add(scoreLabel);
     table.add(titleLabel).align(Align.center).pad(100);
     table.add(timerLabel).align(Align.right);
@@ -62,5 +61,8 @@ public class InfoBar {
     for (Cell cell : cells) {
       cell.height(height * 0.05f).width(height * 0.05f);
     }
+    titleLabel.setFontScale(height * 0.004f);
+    scoreLabel.setFontScale(height * 0.002f);
+    timerLabel.setFontScale(height * 0.002f);
   }
 }
