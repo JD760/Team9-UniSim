@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.ScreenUtils;
+
 import io.github.unisim.GameState;
 
 /**
@@ -72,8 +74,7 @@ public class StartMenuScreen implements Screen {
   @Override
   public void render(float delta) {
     // Clear the screen
-    Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    ScreenUtils.clear(GameState.UISecondaryColour);
 
     // Draw the stage containing buttons
     stage.act(delta);

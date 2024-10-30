@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.unisim.Point;
@@ -52,7 +53,7 @@ public class World {
    * Create a new World.
    */
   public World() {
-    camera.zoom = 100f / 480;
+    camera.zoom = 0.05f;
     initIsometricTransform();
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
@@ -72,8 +73,7 @@ public class World {
   public void render() {
     viewport.apply();
 
-    Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    ScreenUtils.clear(0.59f, 0.72f, 1f, 1f);
 
     updatePan();
     updateZoom();

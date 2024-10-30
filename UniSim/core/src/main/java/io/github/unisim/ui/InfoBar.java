@@ -43,7 +43,7 @@ public class InfoBar {
   public InfoBar(Stage stage, Timer timer) {
     this.timer = timer;
     timerLabel = new Label(timer.getRemainingTime(), skin);
-    table.setDebug(true);
+    //table.setDebug(true);
     table.center().center();
     table.add(new Actor()).expandX().align(Align.center);
     scoreLabelCell = table.add(scoreLabel).expandX().align(Align.center);
