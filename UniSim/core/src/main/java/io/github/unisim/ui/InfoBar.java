@@ -30,8 +30,8 @@ public class InfoBar {
   private Image pauseImage = new Image(pauseTexture);
   private Image playImage = new Image(playTexture);
   private Timer timer;
-  private Cell<Label> titleLableCell;
-  private Cell<Label> timerLableCell;
+  private Cell<Label> titleLabelCell;
+  private Cell<Label> timerLabelCell;
   private Cell<Label> scoreLabelCell;
   private Cell<Image> pauseButtonCell;
 
@@ -47,8 +47,8 @@ public class InfoBar {
     table.center().center();
     table.add(new Actor()).expandX().align(Align.center);
     scoreLabelCell = table.add(scoreLabel).expandX().align(Align.center);
-    titleLableCell = table.add(titleLabel).expandX().align(Align.center);
-    timerLableCell = table.add(timerLabel).expandX().align(Align.center);
+    titleLabelCell = table.add(titleLabel).expandX().align(Align.center);
+    timerLabelCell = table.add(timerLabel).expandX().align(Align.center);
     pauseButtonCell = table.add(playImage).expandX().align(Align.center);
 
     // Pause button
@@ -95,10 +95,10 @@ public class InfoBar {
       cell.height(height * 0.05f).width(height * 0.05f);
     }
     titleLabel.setFontScale(height * 0.003f);
-    //titleLableCell.pad(height * 0.2f);
+    titleLabelCell.width(height * 0.11f);
     scoreLabel.setFontScale(height * 0.002f);
+    scoreLabelCell.width(height * 0.04f);
     timerLabel.setFontScale(height * 0.002f);
-    //timerLableCell.padLeft(height * 0.2f);
-    //scoreLabelCell.pad(height * 0.2f);
+    timerLabelCell.width(height * 0.06f);
   }
 }
