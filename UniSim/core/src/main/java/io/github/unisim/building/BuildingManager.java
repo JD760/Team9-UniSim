@@ -23,6 +23,10 @@ public class BuildingManager {
 
   public BuildingManager(Matrix4 isoTransform) {
     this.isoTransform = isoTransform;
+    buildingCounts.put(BuildingType.EATING, 0);
+    buildingCounts.put(BuildingType.LEARNING, 0);
+    buildingCounts.put(BuildingType.RECREATION, 0);
+    buildingCounts.put(BuildingType.SLEEPING, 0);
   }
 
   /**

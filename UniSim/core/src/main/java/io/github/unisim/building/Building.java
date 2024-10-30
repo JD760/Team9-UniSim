@@ -25,11 +25,13 @@ public class Building {
    * @param size - the dimensions (x, y) of the building
    * @param flipped - whether to render a flipped graphic
    */
-  public Building(Texture texture, Point location, Point size, Boolean flipped) {
+  public Building(
+      Texture texture, Point location, Point size, Boolean flipped, BuildingType type) {
     this.texture = texture;
     this.location = location;
     this.size = size;
     this.imageSize = Math.min(size.x, size.y);
     this.flipped = flipped;
+    this.type = type;
   }
 }

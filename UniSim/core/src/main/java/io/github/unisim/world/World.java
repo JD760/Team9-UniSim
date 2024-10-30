@@ -294,7 +294,7 @@ public class World {
     buildingManager.placeBuilding(
       new Building(
         selectedBuilding.texture, selectedBuilding.location.getNewPoint(),
-        selectedBuilding.size.getNewPoint(), selectedBuilding.flipped
+        selectedBuilding.size.getNewPoint(), selectedBuilding.flipped, selectedBuilding.type
       )
     );
     selectedBuilding = null;
