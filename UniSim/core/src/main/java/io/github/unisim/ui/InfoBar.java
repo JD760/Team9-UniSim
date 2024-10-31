@@ -134,9 +134,15 @@ public class InfoBar {
     scoreLabel.setFontScale(height * 0.002f);
     scoreLabelCell.width(height * 0.04f).height(height * 0.05f);
     scoreLabelCell.padLeft(Math.min(width, height * 2) * 0.14f);
-    pauseButtonCell.width(height * 0.04f).height(height * 0.04f);
+    pauseButtonCell.width(height * 0.03f).height(height * 0.03f).padLeft(height * 0.01f).padRight(
+      height * 0.01f
+    );
 
     titleLabel.setFontScale(height * 0.003f);
     titleLabelCell.width(height * 0.11f).height(height * 0.05f);
+  }
+
+  public void reset() {
+    pauseButtonCell.setActor(playImage);
   }
 }

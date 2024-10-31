@@ -40,6 +40,7 @@ public class Timer {
    */
   public void reset() {
     remainingTime = initialTime;
+    hasFinished = false;
   }
 
   /**

@@ -29,6 +29,7 @@ public class GameState {
       8, 9, 10, 11, 12, 13, 14).collect(Collectors.toUnmodifiableSet()
   );
   public static boolean paused = true;
+  public static boolean gameOver = false;
   public static Color UIPrimaryColour = new Color(0.635f, 0.345f, 0.125f, 1.0f);
   public static Color UISecondaryColour = new Color(0.882f, 0.612f, 0.408f, 1.0f);
 }

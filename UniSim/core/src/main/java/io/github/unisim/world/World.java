@@ -253,6 +253,15 @@ public class World {
   }
 
   /**
+   * Gets the camera position as a vector 2
+   * 
+   * @return a Vector2 holding the position of the camera
+   */
+  public Vector2 getCameraPos() {
+    return new Vector2(camera.position.x, camera.position.y);
+  }
+
+  /**
    * Transforms a point from grid space to world space.
 
    * @param gridPos - The coordinates of the point in grid space
@@ -314,5 +323,17 @@ public class World {
    */
   public int getBuildingCount(BuildingType type) {
     return buildingManager.getBuildingCount(type);
+  }
+
+  public void reset() {
+    camPosition = new Vector2(150f, 0f);
+    panVelocity = new Vector2(0f, 0f);
+    zoomVelocity = 0f;
+    panDt = 0f;
+    zoomDt = 0f;
+    camera.zoom = 0.05f;
+    initIsometricTransform();
+    buildingManager = new BuildingManager(isoTransform);
+    selectedBuilding = null;
   }
 }
