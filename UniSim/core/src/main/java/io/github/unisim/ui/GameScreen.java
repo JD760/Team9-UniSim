@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
    */
   public GameScreen() {
     timer = new Timer(300_000);
-    infoBar = new InfoBar(stage, timer);
+    infoBar = new InfoBar(stage, timer, world);
     buildingMenu = new BuildingMenu(stage, world);
     pauseTable = new Table();
     pauseTable.setDebug(true);

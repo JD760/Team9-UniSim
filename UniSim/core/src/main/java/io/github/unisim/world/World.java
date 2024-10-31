@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
+import io.github.unisim.building.BuildingType;
 
 /**
  * A class that holds all the gameplay elements of the game UniSim.
@@ -108,10 +109,12 @@ public class World {
     }
 
     // Render the tile highlight
-    tileHighlightBatch.setProjectionMatrix(camera.combined);
-    tileHighlightBatch.begin();
-    highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
-    tileHighlightBatch.end();
+    if (selectedBuilding != null) {
+      tileHighlightBatch.setProjectionMatrix(camera.combined);
+      tileHighlightBatch.begin();
+      highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
+      tileHighlightBatch.end();
+    }
 
     // render buildings after all map related rendering
     buildingBatch.setProjectionMatrix(camera.combined);
@@ -299,5 +302,17 @@ public class World {
     );
     selectedBuilding = null;
     return true;
+  }
+
+  /**
+   * Returns the number of buildings of a certain type that have been placed
+   * in the world.
+   * 
+   * @param type - The type of building
+   * @return - An int holding the number of that building that have been placed
+   *   in the world
+   */
+  public int getBuildingCount(BuildingType type) {
+    return buildingManager.getBuildingCount(type);
   }
 }

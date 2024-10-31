@@ -23,10 +23,6 @@ public class BuildingManager {
 
   public BuildingManager(Matrix4 isoTransform) {
     this.isoTransform = isoTransform;
-    buildingCounts.put(BuildingType.EATING, 0);
-    buildingCounts.put(BuildingType.LEARNING, 0);
-    buildingCounts.put(BuildingType.RECREATION, 0);
-    buildingCounts.put(BuildingType.SLEEPING, 0);
   }
 
   /**
@@ -130,12 +126,30 @@ public class BuildingManager {
 
    * @param building - A reference to the building object that was placed
    */
-  public void updateCounters(Building building) {
+  private void updateCounters(Building building) {
+    if (building == previewBuilding) {
+      return;
+    }
     if (!buildingCounts.containsKey(building.type)) {
       buildingCounts.put(building.type, 1);
       return;
     }
     buildingCounts.put(building.type, buildingCounts.get(building.type) + 1);
+  }
+
+  /**
+   * Returns the number of buildings of a certain type that have been placed
+   * in the world.
+   * 
+   * @param type - The type of building
+   * @return - An int holding the number of that building that have been placed
+   *   in the world
+   */
+  public int getBuildingCount(BuildingType type) {
+    if (!buildingCounts.containsKey(type)) {
+      return 0;
+    }
+    return buildingCounts.get(type);
   }
 
   /**
