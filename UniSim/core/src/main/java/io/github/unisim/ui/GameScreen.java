@@ -50,7 +50,7 @@ public class GameScreen implements Screen {
     world.render();
     float dt = Gdx.graphics.getDeltaTime();
     if (!GameState.paused && !GameState.gameOver) {
-      if(!timer.tick(dt * 1000)) {
+      if (!timer.tick(dt * 1000)) {
         GameState.gameOver = true;
         Gdx.input.setInputProcessor(gameOverMenu.getInputProcessor());
       }

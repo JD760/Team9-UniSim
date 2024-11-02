@@ -3,7 +3,6 @@ package io.github.unisim.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -40,9 +39,8 @@ public class InfoBar {
   private Cell<Label> scoreLabelCell;
   private Cell<Image> pauseButtonCell;
   private Cell<Table> buildingCountersTableCell;
-  private Cell<Label>[] buildingCounterCells = new Cell[4];
+  private Cell[] buildingCounterCells;
   private World world;
-
   /**
    * Create a new infoBar and draws its' components onto the provided stage.
 
@@ -51,6 +49,7 @@ public class InfoBar {
   public InfoBar(Stage stage, Timer timer, World world) {
     this.timer = timer;
     this.world = world;
+    buildingCounterCells = new Cell[4];
 
     // Building counter table
     for (int i = 0; i < 4; i++) {
@@ -97,17 +96,20 @@ public class InfoBar {
     stage.addActor(titleTable);
   }
 
+  /**
+   * Called when the UI needs to be updated, usually on every frame.
+   */
   public void update() {
     timerLabel.setText(timer.getRemainingTime());
-
-    buildingCounterLabels[0].setText("Recreation: " +
-      Integer.toString(world.getBuildingCount(BuildingType.RECREATION)));
-    buildingCounterLabels[1].setText("Learning: " +
-      Integer.toString(world.getBuildingCount(BuildingType.LEARNING)));
-    buildingCounterLabels[2].setText("Eating: " +
-      Integer.toString(world.getBuildingCount(BuildingType.EATING)));
-    buildingCounterLabels[3].setText("Sleeping: " +
-      Integer.toString(world.getBuildingCount(BuildingType.SLEEPING)));
+    buildingCounterLabels[0].setText("Recreation: "
+        + Integer.toString(world.getBuildingCount(BuildingType.RECREATION)));
+    buildingCounterLabels[1].setText("Learning: "
+        + Integer.toString(world.getBuildingCount(BuildingType.LEARNING)));
+    buildingCounterLabels[2].setText("Eating: "
+        + Integer.toString(world.getBuildingCount(BuildingType.EATING)));
+    buildingCounterLabels[3].setText("Sleeping: "
+        + Integer.toString(world.getBuildingCount(BuildingType.SLEEPING)));
+    pauseButtonCell.setActor(GameState.paused ? playImage : pauseImage);
   }
 
   /**
@@ -134,9 +136,8 @@ public class InfoBar {
     scoreLabel.setFontScale(height * 0.002f);
     scoreLabelCell.width(height * 0.04f).height(height * 0.05f);
     scoreLabelCell.padLeft(Math.min(width, height * 2) * 0.14f);
-    pauseButtonCell.width(height * 0.03f).height(height * 0.03f).padLeft(height * 0.01f).padRight(
-      height * 0.01f
-    );
+    pauseButtonCell.width(height * 0.03f).height(height * 0.03f)
+    .padLeft(height * 0.01f).padRight(height * 0.01f);
 
     titleLabel.setFontScale(height * 0.003f);
     titleLabelCell.width(height * 0.11f).height(height * 0.05f);

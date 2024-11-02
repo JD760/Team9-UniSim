@@ -36,16 +36,32 @@ public class BuildingMenu {
   public BuildingMenu(Stage stage, World world) {
     // Set building images and sizes
     buildings[0] = new Building(
-        new Texture(Gdx.files.internal("building_1.png")), new Point(), new Point(4, 4), false, BuildingType.EATING
+        new Texture(Gdx.files.internal("building_1.png")),
+        new Point(),
+        new Point(4, 4),
+        false,
+        BuildingType.EATING
     );
     buildings[1] = new Building(
-        new Texture(Gdx.files.internal("building_2.png")), new Point(), new Point(3, 3), false, BuildingType.LEARNING
+        new Texture(Gdx.files.internal("building_2.png")),
+        new Point(),
+        new Point(3, 3),
+        false,
+        BuildingType.LEARNING
     );
     buildings[2] = new Building(
-        new Texture(Gdx.files.internal("building_3.png")), new Point(), new Point(3, 4), false, BuildingType.RECREATION
+        new Texture(Gdx.files.internal("building_3.png")),
+        new Point(),
+        new Point(3, 4),
+        false,
+        BuildingType.RECREATION
     );
     buildings[3] = new Building(
-        new Texture(Gdx.files.internal("building_4.png")), new Point(), new Point(2, 2), false, BuildingType.SLEEPING
+        new Texture(Gdx.files.internal("building_4.png")),
+        new Point(),
+        new Point(2, 2),
+        false,
+        BuildingType.SLEEPING
     );
 
     table = new Table();

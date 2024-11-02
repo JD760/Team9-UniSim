@@ -1,7 +1,6 @@
 package io.github.unisim.world;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -253,8 +252,8 @@ public class World {
   }
 
   /**
-   * Gets the camera position as a vector 2
-   * 
+   * Gets the camera position as a 2D vector.
+
    * @return a Vector2 holding the position of the camera
    */
   public Vector2 getCameraPos() {
@@ -316,15 +315,18 @@ public class World {
   /**
    * Returns the number of buildings of a certain type that have been placed
    * in the world.
-   * 
+
    * @param type - The type of building
    * @return - An int holding the number of that building that have been placed
-   *   in the world
    */
   public int getBuildingCount(BuildingType type) {
     return buildingManager.getBuildingCount(type);
   }
 
+  /**
+   * Set the camera position to the starting point, rebuild the isometry matrices
+   * and deselect the selected building.
+   */
   public void reset() {
     camPosition = new Vector2(150f, 0f);
     panVelocity = new Vector2(0f, 0f);

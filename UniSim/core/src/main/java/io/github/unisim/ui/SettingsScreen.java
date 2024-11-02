@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-
 import io.github.unisim.GameState;
 
 /**
@@ -22,7 +20,7 @@ import io.github.unisim.GameState;
 public class SettingsScreen implements Screen {
   private Stage stage;
   private Table table;
-  private Skin skin = GameState.defaultSkin;;
+  private Skin skin = GameState.defaultSkin;
   private Slider volumeSlider;
   private Label volumeLabel;
   private TextButton backButton;

@@ -10,9 +10,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import io.github.unisim.GameState;
 
+/**
+ * Menu that is displayed when the timer has run out. This is where the final score
+ * will be calculated in future.
+ */
 public class GameOverMenu {
   private Stage stage;
   private Skin skin;
@@ -23,10 +26,7 @@ public class GameOverMenu {
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
 
   /**
-   * Create a Building Menu and attach its actors and components to the provided stage.
-   * Also handles drawing buildings and their flipped variants
-
-   * @param stage - The stage on which to draw the menu.
+   * Creates a new GameOverMenu and initialises all events and UI elements used in the menu.
    */
   public GameOverMenu() {
     stage = new Stage(new ScreenViewport());
@@ -58,6 +58,12 @@ public class GameOverMenu {
     stage.draw();
   }
 
+  /**
+   * Called when the game window is resized and we need to adjust the scale of the UI elements.
+
+   * @param width - The new game window width in pixels
+   * @param height - The new game window height in pixels
+   */
   public void resize(int width, int height) {
     stage.getViewport().update(width, height, true);
     table.setBounds(0, 0, width, height * 0.1f);
