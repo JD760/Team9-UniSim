@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import io.github.unisim.Point;
@@ -26,6 +28,9 @@ public class BuildingMenu {
   private final int NUM_BUILDINGS = 4;
   private Building[] buildings = new Building[NUM_BUILDINGS];
   private Image[] buildingImages = new Image[NUM_BUILDINGS];
+  private Label buildingInfoLabel = new Label(
+    "86%", new Skin(Gdx.files.internal("ui/uiskin.json"))
+  );
 
   /**
    * Create a Building Menu and attach its actors and components to the provided stage.
@@ -74,8 +79,10 @@ public class BuildingMenu {
         public void clicked(InputEvent e, float x, float y) {
           if (world.selectedBuilding == buildings[buildingIndex]) {
             world.selectedBuilding = null;
+            buildingInfoLabel.setText("");
           } else {
             world.selectedBuilding = buildings[buildingIndex];
+            buildingInfoLabel.setText("info");
             if (world.selectedBuilding.flipped) {
               world.selectedBuilding.flipped = false;
               int temp = world.selectedBuilding.size.x;
@@ -91,6 +98,7 @@ public class BuildingMenu {
 
     stage.addActor(bar);
     stage.addActor(table);
+    stage.addActor(buildingInfoLabel);
   }
 
   /**
@@ -103,6 +111,7 @@ public class BuildingMenu {
   public void resize(int width, int height) {
     table.setBounds(0, 0, width, height * 0.1f);
     bar.setBounds(0, 0, width, height * 0.1f);
+    buildingInfoLabel.setBounds(width * 0.5f - height * 0.15f, height * 0.15f, height * 0.1f, height * 0.15f);
     
     // we must perform an unchecked type conversion here
     // this is acceptable as we know our table only contains instances of Actors
