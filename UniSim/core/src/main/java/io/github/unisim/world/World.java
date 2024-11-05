@@ -37,6 +37,8 @@ public class World {
   private final float timeStepSize = 0.001f;
   private float panDt = 0f;
   private float zoomDt = 0f;
+  private float minZoom;
+  private float maxZoom;
   private SpriteBatch tileHighlightBatch = new SpriteBatch();
   private SpriteBatch buildingBatch = new SpriteBatch();
   private Texture tileHighlight = new Texture(Gdx.files.internal("tileHighlight.png"));
@@ -142,6 +144,8 @@ public class World {
       camera.zoom *= (float) camera.viewportHeight / height;
     }
     viewport.update(width, height);
+    minZoom = 10f / camera.viewportHeight;
+    maxZoom = 100f / camera.viewportHeight;
   }
 
   /**
@@ -190,8 +194,6 @@ public class World {
    * Limits the zoom of the camera to be between minZoom and maxZoom
    */
   private void updateZoom() {
-    final float minZoom = 10f / camera.viewportHeight;
-    final float maxZoom = 100f / camera.viewportHeight;
     zoomDt += Gdx.graphics.getDeltaTime();
     while (zoomDt > timeStepSize) {
       zoomDt -= timeStepSize;
@@ -227,6 +229,24 @@ public class World {
         panWithoutInertia(panVelocity.x, panVelocity.y);
       }
     }
+  }
+
+  /**
+   * Returns the maximum allowed zoom level.
+   *
+   * @return - A float holding the mazimum allowed zoom level
+   */
+  public float getMaxZoom() {
+    return maxZoom;
+  }
+
+  /**
+   * Returns the current zoom level.
+   *
+   * @return - A float holding the current zoom level
+   */
+  public float getZoom() {
+    return camera.zoom;
   }
 
   /**

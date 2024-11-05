@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
    * Constructor for the GameScreen.
    */
   public GameScreen() {
-    timer = new Timer(3_000);
+    timer = new Timer(300_000);
     infoBar = new InfoBar(stage, timer, world);
     buildingMenu = new BuildingMenu(stage, world);
 
@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
     buildingMenu.update();
     stage.draw();
     if (GameState.gameOver) {
-      world.zoom(0.1f);
+      world.zoom((world.getMaxZoom() - world.getZoom()) * 2f);
       world.pan((150 - world.getCameraPos().x) / 10, -world.getCameraPos().y / 10);
       gameOverMenu.render(delta);
     }

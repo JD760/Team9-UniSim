@@ -26,7 +26,7 @@ public class GameState {
   // Create an unmodifiable set containing the IDs of all buildable tiles
   // we use a set to make searching more efficient
   public static Set<Integer> buildableTiles = Stream.of(
-      8, 9, 10, 11, 12, 13, 14).collect(Collectors.toUnmodifiableSet()
+      14, 15).collect(Collectors.toUnmodifiableSet()
   );
   public static boolean paused = true;
   public static boolean gameOver = false;
