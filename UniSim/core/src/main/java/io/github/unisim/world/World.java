@@ -14,6 +14,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
@@ -90,6 +92,12 @@ public class World {
     // Reset the camera position to the correct value for the rest of the world
     camera.position.set(camPosition.x, camPosition.y, 0);
     camera.update();
+
+    // Deselect the selected building if the game is over
+    if (GameState.gameOver) {
+      selectedBuilding = null;
+      selectedBuildingUpdated = true;
+    }
 
     // Update the mouse grid pos and the buildable flag
     Point mouseGridPos = getCursorGridPos();
@@ -305,7 +313,8 @@ public class World {
     buildingManager.placeBuilding(
       new Building(
         selectedBuilding.texture, selectedBuilding.location.getNewPoint(),
-        selectedBuilding.size.getNewPoint(), selectedBuilding.flipped, selectedBuilding.type
+        selectedBuilding.size.getNewPoint(), selectedBuilding.flipped, selectedBuilding.type,
+        selectedBuilding.name
       )
     );
     selectedBuilding = null;

@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
    * Constructor for the GameScreen.
    */
   public GameScreen() {
-    timer = new Timer(300_000);
+    timer = new Timer(3_000);
     infoBar = new InfoBar(stage, timer, world);
     buildingMenu = new BuildingMenu(stage, world);
 
@@ -55,8 +55,9 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(gameOverMenu.getInputProcessor());
       }
     }
-    infoBar.update();
     stage.act(dt);
+    infoBar.update();
+    buildingMenu.update();
     stage.draw();
     if (GameState.gameOver) {
       world.zoom(0.1f);
@@ -88,9 +89,10 @@ public class GameScreen implements Screen {
       timer.reset();
       world.reset();
       infoBar.reset();
+      buildingMenu.reset();
     }
   }
- 
+
   @Override
   public void hide() {
   }

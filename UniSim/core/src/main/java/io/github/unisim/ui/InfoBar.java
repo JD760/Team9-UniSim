@@ -140,7 +140,6 @@ public class InfoBar {
     .padLeft(height * 0.01f).padRight(height * 0.01f);
 
     titleLabel.setFontScale(height * 0.003f);
-    titleLabelCell.width(height * 0.11f).height(height * 0.05f);
   }
 
   public void reset() {

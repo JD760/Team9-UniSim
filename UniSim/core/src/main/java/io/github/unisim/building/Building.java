@@ -16,6 +16,7 @@ public class Building {
   public int imageSize;
   public boolean flipped;
   public BuildingType type;
+  public String name;
 
   /**
    * Creates a new building that is added to the building menu and placed on the map.
@@ -26,12 +27,14 @@ public class Building {
    * @param flipped - whether to render a flipped graphic
    */
   public Building(
-      Texture texture, Point location, Point size, Boolean flipped, BuildingType type) {
+      Texture texture, Point location, Point size, Boolean flipped, BuildingType type, String name
+  ) {
     this.texture = texture;
     this.location = location;
     this.size = size;
     this.imageSize = Math.min(size.x, size.y);
     this.flipped = flipped;
     this.type = type;
+    this.name = name;
   }
 }
