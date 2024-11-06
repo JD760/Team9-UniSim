@@ -16,6 +16,8 @@ import java.util.stream.Stream;
  * Contains a collection of settings and references that should be available globally.
  */
 public class GameState {
+  public static Color UIPrimaryColour = new Color(0.250f, 0.326f, 0.865f, 1.0f);
+  public static Color UISecondaryColour = new Color(0.722f, 0.646f, 0.953f, 1.0f);
   public static Skin defaultSkin = new Skin(Gdx.files.internal("ui/uiskin.json"));
   public static Settings settings = new Settings();
   public static InputProcessor fullscreenInputProcessor = new FullscreenInputProcessor();
@@ -30,6 +32,4 @@ public class GameState {
   );
   public static boolean paused = true;
   public static boolean gameOver = false;
-  public static Color UIPrimaryColour = new Color(0.635f, 0.345f, 0.125f, 1.0f);
-  public static Color UISecondaryColour = new Color(0.882f, 0.612f, 0.408f, 1.0f);
 }

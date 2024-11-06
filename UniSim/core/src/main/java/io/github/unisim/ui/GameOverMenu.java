@@ -19,7 +19,7 @@ import io.github.unisim.GameState;
 public class GameOverMenu {
   private Stage stage;
   private Skin skin;
-  private ShapeActor bar = new ShapeActor(new Color(0.882f, 0.612f, 0.408f, 1.0f));
+  private ShapeActor bar = new ShapeActor(GameState.UISecondaryColour);
   private Table table;
   private TextButton mainMenuButton;
   private Cell<TextButton> buttonCell;

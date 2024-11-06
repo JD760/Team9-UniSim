@@ -27,7 +27,7 @@ import io.github.unisim.world.World;
 @SuppressWarnings({"MemberName", "AbbreviationAsWordInName"})
 public class BuildingMenu {
   private World world;
-  private ShapeActor bar = new ShapeActor(new Color(0.882f, 0.612f, 0.408f, 1.0f));
+  private ShapeActor bar = new ShapeActor(GameState.UISecondaryColour);
   private Table table;
   private final int NUM_BUILDINGS = 4;
   private Building[] buildings = new Building[NUM_BUILDINGS];
