@@ -105,11 +105,11 @@ public class BuildingManager {
   public int placeBuilding(Building building) {
     // Insert the building into the correct place in the arrayList to ensure it
     // gets rendered in top-down order
-    int buildingHeight = building.location.y + building.size.y - 1 - building.location.x;
+    int buildingHeight = building.location.y - building.location.x;
     int i = 0;
     while (i < buildings.size()) {
       Building other = buildings.get(i);
-      if (other.location.y + other.size.y - 1 - other.location.x > buildingHeight) {
+      if (other.location.y - other.location.x > buildingHeight) {
         i++;
       } else {
         break;
@@ -140,7 +140,7 @@ public class BuildingManager {
   /**
    * Returns the number of buildings of a certain type that have been placed
    * in the world.
-   * 
+   *
    * @param type - The type of building
    * @return - An int holding the number of that building that have been placed
    *   in the world
@@ -166,7 +166,7 @@ public class BuildingManager {
       placeBuilding(previewBuilding);
     }
   }
-  
+
   /**
    * Draw the building texture at the position of the mouse cursor
    * when building mode is enabled.
@@ -176,19 +176,22 @@ public class BuildingManager {
    */
   public void drawBuilding(Building building, SpriteBatch batch) {
     Vector3 btmLeftPos = new Vector3(
-        (float) building.location.x,
-        (float) building.location.y,
+        (float) building.location.x + (
+          building.flipped ? building.textureOffset.x : building.textureOffset.x
+        ),
+        (float) building.location.y + (
+          building.flipped ? building.textureOffset.y : building.textureOffset.y
+        ),
         0f
-    ).mul(isoTransform);
-    Vector3 btmRightPos = new Vector3(
-        (float) building.location.x + building.size.x,
-        (float) building.location.y,
-        0f
-    ).mul(isoTransform);
+    );
+    Vector3 btmRightPos = new Vector3(btmLeftPos).add(new Vector3(building.size.x - 1, 0f, 0f));
+    btmLeftPos.mul(isoTransform);
+    btmRightPos.mul(isoTransform);
     batch.draw(
-        building.texture, 
-        btmLeftPos.x, btmRightPos.y, 
-        building.imageSize, building.imageSize,
+        building.texture,
+        btmLeftPos.x, btmRightPos.y,
+        building.texture.getWidth() * building.textureScale,
+        building.texture.getHeight() * building.textureScale,
         0, 0, building.texture.getWidth(), building.texture.getHeight(),
         building.flipped, false
     );

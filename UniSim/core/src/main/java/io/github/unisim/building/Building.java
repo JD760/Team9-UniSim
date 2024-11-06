@@ -1,6 +1,7 @@
 package io.github.unisim.building;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import io.github.unisim.Point;
 
 
@@ -13,7 +14,8 @@ public class Building {
   // This works as all buildings are rectangular.
   public Point location;
   public Point size;
-  public int imageSize;
+  public float textureScale;
+  public Vector2 textureOffset;
   public boolean flipped;
   public BuildingType type;
   public String name;
@@ -27,12 +29,14 @@ public class Building {
    * @param flipped - whether to render a flipped graphic
    */
   public Building(
-      Texture texture, Point location, Point size, Boolean flipped, BuildingType type, String name
+      Texture texture, float textureScale, Vector2 textureOffset, Point location, Point size, Boolean flipped,
+      BuildingType type, String name
   ) {
     this.texture = texture;
     this.location = location;
     this.size = size;
-    this.imageSize = Math.min(size.x, size.y);
+    this.textureScale = textureScale;
+    this.textureOffset = textureOffset;
     this.flipped = flipped;
     this.type = type;
     this.name = name;
