@@ -1,0 +1,10 @@
+@startgantt Week 5 Plan
+Project starts 2024-10-21
+[Update Architecture Diagram] starts 2024-10-24 and ends 2024-10-28
+[Finish Architecture Writeup] starts at [Update Architecture Diagram]'s end and ends 2024-11-3
+[Implement Building Placement - Jacob & Bertie] starts 2024-10-21 and ends 2024-10-24
+[Merge UI and Map Dev Code] happens at 2024-10-21
+[Implement Info Bar UI - Jacob] starts at [Merge UI and Map Dev Code]'s end and ends 2024-10-31
+[Implement Building Menu UI - Bertie] starts at [Merge UI and Map Dev Code]'s end and ends 2024-10-30
+[Week 5 Risk Review] happens at 2024-10-21
+@endgantt

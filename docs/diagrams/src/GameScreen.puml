@@ -50,13 +50,12 @@ class GameOverMenu
 
 class BuildingManager
 {
-    - buildingCounts: Map
     + render(): void
     + isBuildable(): boolean
     + placeBuilding(): int
 }
 
-abstract class Building
+class Building
 {
     - image: Sprite
     - type: Enum
@@ -69,6 +68,7 @@ GameScreen *-- "1..1" Timer
 GameScreen *-- "1..1" InfoBar
 GameScreen *-- "1..1" BuildingBar
 GameScreen *-- "1..1" GameOverMenu
+
 World *-- "1..1" BuildingManager
 BuildingManager *-- "*" Building
 
