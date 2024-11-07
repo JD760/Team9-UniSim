@@ -7,3 +7,8 @@ h3 {
     text-align: center;
     text-decoration: underline;
 }
+
+img {
+    padding-left: 50vw;
+    transform: translate(-25%, 0%)
+}
