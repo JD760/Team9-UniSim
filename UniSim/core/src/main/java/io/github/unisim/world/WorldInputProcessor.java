@@ -1,6 +1,5 @@
 package io.github.unisim.world;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import io.github.unisim.GameState;
@@ -11,7 +10,8 @@ import io.github.unisim.GameState;
 public class WorldInputProcessor implements InputProcessor {
   private World world;
   private int[] cursorPos = new int[2];
-  private boolean dragging = false;
+  private int[] cursorPosWhenClicked = new int[2];
+  private boolean clickedOnWorld = false;
   private boolean draggedSinceClick = true;
 
   public WorldInputProcessor(World world) {
@@ -25,7 +25,7 @@ public class WorldInputProcessor implements InputProcessor {
       case Keys.SPACE:
         GameState.paused = !GameState.paused;
         break;
-      case Keys.F:
+      case Keys.R:
         // Flip the selected building
         if (world.selectedBuilding != null) {
           world.selectedBuilding.flipped = !world.selectedBuilding.flipped;
@@ -34,6 +34,7 @@ public class WorldInputProcessor implements InputProcessor {
           world.selectedBuilding.size.y = temp;
           world.selectedBuildingUpdated = true;
         }
+        break;
       default:
         break;
     }
@@ -41,33 +42,36 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
 
+  @Override
   public boolean keyUp(int keycode) {
     return false;
   }
 
-
+  @Override
   public boolean keyTyped(char character) {
     return false;
   }
 
   /**
    * Detect when the mouse has been clicked and record the cursor postion.
-   * Sets the dragging flag, if the mouse has been clicked in a valid
+   * Sets the clickedOnWorld flag, if the mouse has been clicked in a valid
    * start location.
    */
+  @Override
   public boolean touchDown(int x, int y, int pointer, int button) {
-    dragging = true;
+    clickedOnWorld = true;
     draggedSinceClick = false;
-    cursorPos[0] = x;
-    cursorPos[1] = y;
+    cursorPos[0] = cursorPosWhenClicked[0] = x;
+    cursorPos[1] = cursorPosWhenClicked[1] = y;
     return true;
   }
 
   /**
    * When the mouse is released, stop tracking the dragging events.
    */
+  @Override
   public boolean touchUp(int x, int y, int pointer, int button) {
-    dragging = false;
+    clickedOnWorld = false;
     if (!draggedSinceClick && world.selectedBuilding != null) {
       if (world.placeBuilding()) {
         draggedSinceClick = true;
@@ -77,12 +81,16 @@ public class WorldInputProcessor implements InputProcessor {
   }
 
   /**
-   * If the mouse has been clicked in a valid location, allow the map to be panned 
+   * If the mouse has been clicked in a valid location, allow the map to be panned
    * by clicking and holding the mouse button.
    */
+  @Override
   public boolean touchDragged(int x, int y, int pointer) {
-    if (dragging) {
-      draggedSinceClick = true;
+    if (clickedOnWorld) {
+      if (Math.max(Math.abs(cursorPos[0] - cursorPosWhenClicked[0]),
+          Math.abs(cursorPos[1] - cursorPosWhenClicked[1])) > 5) {
+        draggedSinceClick = true;
+      }
       world.pan(cursorPos[0] - x, y - cursorPos[1]);
       cursorPos[0] = x;
       cursorPos[1] = y;
@@ -91,20 +99,20 @@ public class WorldInputProcessor implements InputProcessor {
     return false;
   }
 
+  @Override
   public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
     return false;
   }
 
+  @Override
   public boolean mouseMoved(int x, int y) {
-    if (world.selectedBuilding != null) {
-      
-    }
     return false;
   }
 
   /**
    * Zoom in on the map when the mouse wheel is scrolled.
    */
+  @Override
   public boolean scrolled(float amountX, float amountY) {
     world.zoom(amountY);
     return true;

@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import io.github.unisim.GameState;
 import io.github.unisim.Timer;
@@ -20,23 +19,21 @@ import io.github.unisim.world.WorldInputProcessor;
 public class GameScreen implements Screen {
   private World world = new World();
   private Stage stage = new Stage(new ScreenViewport());
-  private Table pauseTable;
   private InfoBar infoBar;
   private BuildingMenu buildingMenu;
   private Timer timer;
   private InputProcessor uiInputProcessor = new UiInputProcessor(stage);
   private InputProcessor worldInputProcessor = new WorldInputProcessor(world);
   private InputMultiplexer inputMultiplexer = new InputMultiplexer();
+  private GameOverMenu gameOverMenu = new GameOverMenu();
 
   /**
    * Constructor for the GameScreen.
    */
   public GameScreen() {
     timer = new Timer(300_000);
-    infoBar = new InfoBar(stage, timer);
+    infoBar = new InfoBar(stage, timer, world);
     buildingMenu = new BuildingMenu(stage, world);
-    pauseTable = new Table();
-    pauseTable.setDebug(true);
 
     inputMultiplexer.addProcessor(GameState.fullscreenInputProcessor);
     inputMultiplexer.addProcessor(stage);
@@ -52,10 +49,21 @@ public class GameScreen implements Screen {
   public void render(float delta) {
     world.render();
     float dt = Gdx.graphics.getDeltaTime();
-    timer.tick(dt * 1000);
-    infoBar.update();
+    if (!GameState.paused && !GameState.gameOver) {
+      if (!timer.tick(dt * 1000)) {
+        GameState.gameOver = true;
+        Gdx.input.setInputProcessor(gameOverMenu.getInputProcessor());
+      }
+    }
     stage.act(dt);
+    infoBar.update();
+    buildingMenu.update();
     stage.draw();
+    if (GameState.gameOver) {
+      world.zoom((world.getMaxZoom() - world.getZoom()) * 2f);
+      world.pan((150 - world.getCameraPos().x) / 10, -world.getCameraPos().y / 10);
+      gameOverMenu.render(delta);
+    }
   }
 
   @Override
@@ -64,7 +72,7 @@ public class GameScreen implements Screen {
     stage.getViewport().update(width, height, true);
     infoBar.resize(width, height);
     buildingMenu.resize(width, height);
-    pauseTable.setBounds(0, height * 0.1f, width, height * 0.95f);
+    gameOverMenu.resize(width, height);
   }
 
   @Override
@@ -74,8 +82,17 @@ public class GameScreen implements Screen {
   @Override
   public void resume() {
     Gdx.input.setInputProcessor(inputMultiplexer);
+
+    if (GameState.gameOver) {
+      GameState.gameOver = false;
+      GameState.paused = true;
+      timer.reset();
+      world.reset();
+      infoBar.reset();
+      buildingMenu.reset();
+    }
   }
- 
+
   @Override
   public void hide() {
   }

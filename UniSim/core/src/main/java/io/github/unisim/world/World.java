@@ -1,7 +1,6 @@
 package io.github.unisim.world;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,11 +11,15 @@ import com.badlogic.gdx.maps.tiled.renderers.IsometricTiledMapRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingManager;
+import io.github.unisim.building.BuildingType;
 
 /**
  * A class that holds all the gameplay elements of the game UniSim.
@@ -34,6 +37,8 @@ public class World {
   private final float timeStepSize = 0.001f;
   private float panDt = 0f;
   private float zoomDt = 0f;
+  private float minZoom;
+  private float maxZoom;
   private SpriteBatch tileHighlightBatch = new SpriteBatch();
   private SpriteBatch buildingBatch = new SpriteBatch();
   private Texture tileHighlight = new Texture(Gdx.files.internal("tileHighlight.png"));
@@ -52,7 +57,7 @@ public class World {
    * Create a new World.
    */
   public World() {
-    camera.zoom = 100f / 480;
+    camera.zoom = 0.05f;
     initIsometricTransform();
     buildingManager = new BuildingManager(isoTransform);
     selectedBuilding = null;
@@ -72,8 +77,7 @@ public class World {
   public void render() {
     viewport.apply();
 
-    Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
-    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    ScreenUtils.clear(0.59f, 0.72f, 1f, 1f);
 
     updatePan();
     updateZoom();
@@ -90,6 +94,12 @@ public class World {
     // Reset the camera position to the correct value for the rest of the world
     camera.position.set(camPosition.x, camPosition.y, 0);
     camera.update();
+
+    // Deselect the selected building if the game is over
+    if (GameState.gameOver) {
+      selectedBuilding = null;
+      selectedBuildingUpdated = true;
+    }
 
     // Update the mouse grid pos and the buildable flag
     Point mouseGridPos = getCursorGridPos();
@@ -108,10 +118,12 @@ public class World {
     }
 
     // Render the tile highlight
-    tileHighlightBatch.setProjectionMatrix(camera.combined);
-    tileHighlightBatch.begin();
-    highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
-    tileHighlightBatch.end();
+    if (selectedBuilding != null) {
+      tileHighlightBatch.setProjectionMatrix(camera.combined);
+      tileHighlightBatch.begin();
+      highlightRegion(btmLeft, topRight, canBuild ? tileHighlight : errTileHighlight);
+      tileHighlightBatch.end();
+    }
 
     // render buildings after all map related rendering
     buildingBatch.setProjectionMatrix(camera.combined);
@@ -132,6 +144,8 @@ public class World {
       camera.zoom *= (float) camera.viewportHeight / height;
     }
     viewport.update(width, height);
+    minZoom = 10f / camera.viewportHeight;
+    maxZoom = 100f / camera.viewportHeight;
   }
 
   /**
@@ -180,8 +194,6 @@ public class World {
    * Limits the zoom of the camera to be between minZoom and maxZoom
    */
   private void updateZoom() {
-    final float minZoom = 10f / camera.viewportHeight;
-    final float maxZoom = 100f / camera.viewportHeight;
     zoomDt += Gdx.graphics.getDeltaTime();
     while (zoomDt > timeStepSize) {
       zoomDt -= timeStepSize;
@@ -220,6 +232,24 @@ public class World {
   }
 
   /**
+   * Returns the maximum allowed zoom level.
+   *
+   * @return - A float holding the mazimum allowed zoom level
+   */
+  public float getMaxZoom() {
+    return maxZoom;
+  }
+
+  /**
+   * Returns the current zoom level.
+   *
+   * @return - A float holding the current zoom level
+   */
+  public float getZoom() {
+    return camera.zoom;
+  }
+
+  /**
    * Return the (x, y) co-ordinates of the grid cell that the mouse pointer
    * is currently within.
 
@@ -247,6 +277,15 @@ public class World {
         tileHighlightBatch.draw(highlightTexture, worldPos.x, worldPos.y, 1, 1);
       }
     }
+  }
+
+  /**
+   * Gets the camera position as a 2D vector.
+
+   * @return a Vector2 holding the position of the camera
+   */
+  public Vector2 getCameraPos() {
+    return new Vector2(camera.position.x, camera.position.y);
   }
 
   /**
@@ -293,11 +332,39 @@ public class World {
     }
     buildingManager.placeBuilding(
       new Building(
-        selectedBuilding.texture, selectedBuilding.location.getNewPoint(),
-        selectedBuilding.size.getNewPoint(), selectedBuilding.flipped
+        selectedBuilding.texture, selectedBuilding.textureScale, selectedBuilding.textureOffset,
+        selectedBuilding.location.getNewPoint(), selectedBuilding.size.getNewPoint(),
+        selectedBuilding.flipped, selectedBuilding.type, selectedBuilding.name
       )
     );
     selectedBuilding = null;
     return true;
+  }
+
+  /**
+   * Returns the number of buildings of a certain type that have been placed
+   * in the world.
+
+   * @param type - The type of building
+   * @return - An int holding the number of that building that have been placed
+   */
+  public int getBuildingCount(BuildingType type) {
+    return buildingManager.getBuildingCount(type);
+  }
+
+  /**
+   * Set the camera position to the starting point, rebuild the isometry matrices
+   * and deselect the selected building.
+   */
+  public void reset() {
+    camPosition = new Vector2(150f, 0f);
+    panVelocity = new Vector2(0f, 0f);
+    zoomVelocity = 0f;
+    panDt = 0f;
+    zoomDt = 0f;
+    camera.zoom = 0.05f;
+    initIsometricTransform();
+    buildingManager = new BuildingManager(isoTransform);
+    selectedBuilding = null;
   }
 }

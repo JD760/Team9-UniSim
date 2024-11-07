@@ -9,12 +9,15 @@ import com.badlogic.gdx.math.Vector3;
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Manage the buildings placed in the world and methods common to all buildings.
  */
 public class BuildingManager {
   private ArrayList<Building> buildings = new ArrayList<>();
+  private Map<BuildingType, Integer> buildingCounts = new HashMap<>();
   private Matrix4 isoTransform;
   private Building previewBuilding;
 
@@ -92,23 +95,88 @@ public class BuildingManager {
     }
   }
 
+  /**
+   * Handle placement of a building into the world by determining
+   * the correct draw order and updating the building counters.
+
+   * @param building - A reference to a building object to be placed
+   * @return - The location in the buildings array that the building was placed at
+   */
   public int placeBuilding(Building building) {
     // Insert the building into the correct place in the arrayList to ensure it
     // gets rendered in top-down order
-    int buildingHeight = building.location.y + building.size.y - 1 - building.location.x;
+    int buildingHeightLeftSide = building.location.y - building.location.x;
+    int buildingHeightRightSide = buildingHeightLeftSide + building.size.y - building.size.x + 1;
+    Point leftCorner = building.location;
+    Point rightCorner = new Point(
+      building.location.x + building.size.x - 1,
+      building.location.y + building.size.y - 1
+    );
     int i = 0;
     while (i < buildings.size()) {
       Building other = buildings.get(i);
-      if (other.location.y + other.size.y - 1 - other.location.x > buildingHeight) {
+      int otherHeightLeftSide = other.location.y - other.location.x;
+      int otherHeightRightSide = otherHeightLeftSide + other.size.y - other.size.x + 1;
+      int distanceToLeft = Math.abs(leftCorner.x - other.location.x - other.size.x + 1)
+        + Math.abs(leftCorner.y - other.location.y - other.size.y + 1);
+      int distanceToRight = Math.abs(rightCorner.x - other.location.x)
+        + Math.abs(rightCorner.y - other.location.y);
+      if (distanceToLeft < Math.min(building.size.x + building.size.y, other.size.x + other.size.y)) {
+        if (otherHeightRightSide > buildingHeightLeftSide) {
+          i++;
+          continue;
+        } else {
+          break;
+        }
+      }
+      if (otherHeightLeftSide > buildingHeightRightSide) {
         i++;
       } else {
         break;
       }
     }
     buildings.add(i, building);
+    updateCounters(building);
     return i;
   }
 
+  /**
+   * Creates a counter for the building's type if it is the first to be placed,
+   * otherwise increments the counter for that type by one.
+
+   * @param building - A reference to the building object that was placed
+   */
+  private void updateCounters(Building building) {
+    if (building == previewBuilding) {
+      return;
+    }
+    if (!buildingCounts.containsKey(building.type)) {
+      buildingCounts.put(building.type, 1);
+      return;
+    }
+    buildingCounts.put(building.type, buildingCounts.get(building.type) + 1);
+  }
+
+  /**
+   * Returns the number of buildings of a certain type that have been placed
+   * in the world.
+   *
+   * @param type - The type of building
+   * @return - An int holding the number of that building that have been placed
+   *   in the world
+   */
+  public int getBuildingCount(BuildingType type) {
+    if (!buildingCounts.containsKey(type)) {
+      return 0;
+    }
+    return buildingCounts.get(type);
+  }
+
+  /**
+   * Sets the building to render as a 'preview' on the map prior to placement.
+
+   * @param previewBuilding - The building to draw as a preview
+   */
   public void setPreviewBuilding(Building previewBuilding) {
     if (this.previewBuilding != null) {
       buildings.remove(this.previewBuilding);
@@ -118,30 +186,32 @@ public class BuildingManager {
       placeBuilding(previewBuilding);
     }
   }
-  
+
   /**
    * Draw the building texture at the position of the mouse cursor
    * when building mode is enabled.
 
    * @param building - The building to draw under the mouse cursor
    * @param batch - the SpriteBatch to draw into
-   * @param cursorPos - The grid position of the cursor
    */
   public void drawBuilding(Building building, SpriteBatch batch) {
     Vector3 btmLeftPos = new Vector3(
-        (float) building.location.x,
-        (float) building.location.y,
+        (float) building.location.x + (
+          building.flipped ? building.textureOffset.x : building.textureOffset.x
+        ),
+        (float) building.location.y + (
+          building.flipped ? building.textureOffset.y : building.textureOffset.y
+        ),
         0f
-    ).mul(isoTransform);
-    Vector3 btmRightPos = new Vector3(
-        (float) building.location.x + building.size.x,
-        (float) building.location.y,
-        0f
-    ).mul(isoTransform);
+    );
+    Vector3 btmRightPos = new Vector3(btmLeftPos).add(new Vector3(building.size.x - 1, 0f, 0f));
+    btmLeftPos.mul(isoTransform);
+    btmRightPos.mul(isoTransform);
     batch.draw(
-        building.texture, 
-        btmLeftPos.x, btmRightPos.y, 
-        building.imageSize, building.imageSize,
+        building.texture,
+        btmLeftPos.x, btmRightPos.y,
+        building.texture.getWidth() * building.textureScale,
+        building.texture.getHeight() * building.textureScale,
         0, 0, building.texture.getWidth(), building.texture.getHeight(),
         building.flipped, false
     );
