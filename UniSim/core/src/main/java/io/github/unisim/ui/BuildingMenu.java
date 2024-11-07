@@ -174,7 +174,10 @@ public class BuildingMenu {
   }
 
   public void update() {
-    if (world.selectedBuilding == null || GameState.gameOver) {
+    if (GameState.gameOver) {
+      buildingInfoLabel.setText("Game Over!");
+    }
+    else if (world.selectedBuilding == null) {
       buildingInfoLabel.setText("");
     }
   }
