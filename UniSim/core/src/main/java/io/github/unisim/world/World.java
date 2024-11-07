@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
@@ -28,7 +27,7 @@ import io.github.unisim.building.BuildingType;
 public class World {
   private OrthographicCamera camera = new OrthographicCamera();
   private Viewport viewport = new ScreenViewport(camera);
-  private TiledMap map = new TmxMapLoader().load("medium_map.tmx");
+  private TiledMap map = new TmxMapLoader().load("map/medium_map.tmx");
   private float unitScale = 1f / 16f;
   private IsometricTiledMapRenderer renderer = new IsometricTiledMapRenderer(map, unitScale);
   private Vector2 camPosition = new Vector2(150f, 0f);
@@ -41,8 +40,8 @@ public class World {
   private float maxZoom;
   private SpriteBatch tileHighlightBatch = new SpriteBatch();
   private SpriteBatch buildingBatch = new SpriteBatch();
-  private Texture tileHighlight = new Texture(Gdx.files.internal("tileHighlight.png"));
-  private Texture errTileHighlight = new Texture(Gdx.files.internal("errTileHighlight.png"));
+  private Texture tileHighlight = new Texture(Gdx.files.internal("map/tileHighlight.png"));
+  private Texture errTileHighlight = new Texture(Gdx.files.internal("map/errTileHighlight.png"));
   private Matrix4 isoTransform;
   private Matrix4 invIsoTransform;
   private BuildingManager buildingManager;
