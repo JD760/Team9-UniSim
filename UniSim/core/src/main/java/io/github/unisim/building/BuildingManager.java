@@ -105,11 +105,31 @@ public class BuildingManager {
   public int placeBuilding(Building building) {
     // Insert the building into the correct place in the arrayList to ensure it
     // gets rendered in top-down order
-    int buildingHeight = building.location.y - building.location.x;
+    int buildingHeightLeftSide = building.location.y - building.location.x;
+    int buildingHeightRightSide = buildingHeightLeftSide + building.size.y - building.size.x + 1;
+    Point leftCorner = building.location;
+    Point rightCorner = new Point(
+      building.location.x + building.size.x - 1,
+      building.location.y + building.size.y - 1
+    );
     int i = 0;
     while (i < buildings.size()) {
       Building other = buildings.get(i);
-      if (other.location.y - other.location.x > buildingHeight) {
+      int otherHeightLeftSide = other.location.y - other.location.x;
+      int otherHeightRightSide = otherHeightLeftSide + other.size.y - other.size.x + 1;
+      int distanceToLeft = Math.abs(leftCorner.x - other.location.x - other.size.x + 1)
+        + Math.abs(leftCorner.y - other.location.y - other.size.y + 1);
+      int distanceToRight = Math.abs(rightCorner.x - other.location.x)
+        + Math.abs(rightCorner.y - other.location.y);
+      if (distanceToLeft < Math.min(building.size.x + building.size.y, other.size.x + other.size.y)) {
+        if (otherHeightRightSide > buildingHeightLeftSide) {
+          i++;
+          continue;
+        } else {
+          break;
+        }
+      }
+      if (otherHeightLeftSide > buildingHeightRightSide) {
         i++;
       } else {
         break;
