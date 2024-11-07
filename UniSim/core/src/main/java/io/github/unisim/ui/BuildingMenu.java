@@ -89,7 +89,8 @@ public class BuildingMenu {
         BuildingType.SLEEPING,
         "Student Accomodation"
     ));
-    buildings.add(new Building(
+    // Below is code to add placable roads in the same format as buildings
+    /*buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/road.png")),
         0.0625f,
         new Vector2(),
@@ -108,7 +109,7 @@ public class BuildingMenu {
         false,
         BuildingType.ROAD,
         "Tarmack Section"
-    ));
+    ));*/
 
     table = new Table();
     // Add buldings to the table
@@ -173,6 +174,9 @@ public class BuildingMenu {
     // buildingInfoCell.width(height * 0.11f).height(height * 0.025f);
   }
 
+  /**
+   * Updates the buiding menu visuals
+   */
   public void update() {
     if (GameState.gameOver) {
       buildingInfoLabel.setText("Game Over!");
@@ -182,6 +186,9 @@ public class BuildingMenu {
     }
   }
 
+  /**
+   * Reset the building menu visuals
+   */
   public void reset() {
     buildingInfoLabel.setText("");
   }
