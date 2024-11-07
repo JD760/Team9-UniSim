@@ -10,6 +10,7 @@ class gameState
 {
     + {static} currentScreen: Screen
     + {static} paused: boolean
+    + {static} gameOver: boolean
     + {static} settings: Settings
 }
 

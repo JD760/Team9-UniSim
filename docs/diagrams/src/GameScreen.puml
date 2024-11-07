@@ -17,11 +17,14 @@ class World
     + scroll(): void
     + zoom(): void
     + placeBuilding(): bool
+    + reset(): void
 }
 
 class Timer
 {
     - remainingTime: Time
+    + getRemainingTime(): String
+    + reset(): void
 }
 
 class InfoBar
@@ -38,6 +41,13 @@ class BuildingBar
     + resize(): void
 }
 
+class GameOverMenu
+{
+    - stage: Stage
+    + render(): void
+    + resize(): void
+}
+
 class BuildingManager
 {
     + render(): void
@@ -45,7 +55,7 @@ class BuildingManager
     + placeBuilding(): int
 }
 
-abstract class Building
+class Building
 {
     - image: Sprite
     - type: Enum
@@ -57,6 +67,8 @@ GameScreen *-- "1..1" World
 GameScreen *-- "1..1" Timer
 GameScreen *-- "1..1" InfoBar
 GameScreen *-- "1..1" BuildingBar
+GameScreen *-- "1..1" GameOverMenu
+
 World *-- "1..1" BuildingManager
 BuildingManager *-- "*" Building
 

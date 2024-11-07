@@ -2,18 +2,23 @@
 [*] --> StartMenu
 
 StartMenu: Displays the name of the game, a play
-StartMenu: button, a settings button, an
-StartMenu: instructions button and a quit button
+StartMenu: button and a settings button
 StartMenu --> Gameplay
-StartMenu --> InstructionsFromStart
-StartMenu --> SettingsFromStart
+StartMenu --> Settings
 StartMenu --> [*]
 
 Gameplay: The actual game, showing the tile-based
 Gameplay: world, the 5 minute timer and the
 Gameplay: building counters
-Gameplay --> PauseMenu
 Gameplay --> GameOverMenu
+
+GameOverMenu: Shows the final student satisfaction and
+GameOverMenu: an option to return to the start menu
+GameOverMenu --> StartMenu
+
+Settings: Displays options for volume, etc and a
+Settings: button to go back
+Settings --> StartMenu
 
 PauseMenu: Contains buttons to return to the game,
 PauseMenu: return to the start menu, go to settings
