@@ -1,5 +1,7 @@
 package io.github.unisim.ui;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,9 +32,8 @@ public class BuildingMenu {
   private World world;
   private ShapeActor bar = new ShapeActor(GameState.UISecondaryColour);
   private Table table;
-  private final int NUM_BUILDINGS = 6;
-  private Building[] buildings = new Building[NUM_BUILDINGS];
-  private Image[] buildingImages = new Image[NUM_BUILDINGS];
+  private ArrayList<Building> buildings = new ArrayList<>();
+  private ArrayList<Image> buildingImages = new ArrayList<>();
   private Label buildingInfoLabel = new Label(
     "", new Skin(Gdx.files.internal("ui/uiskin.json"))
   );
@@ -48,7 +49,7 @@ public class BuildingMenu {
   public BuildingMenu(Stage stage, World world) {
     this.world = world;
     // Set building images and sizes
-    buildings[0] = new Building(
+    buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/restaurant.png")),
         0.01f,
         new Vector2(0.35f, -0.9f),
@@ -57,8 +58,8 @@ public class BuildingMenu {
         false,
         BuildingType.EATING,
         "Canteen"
-    );
-    buildings[1] = new Building(
+    ));
+    buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/library.png")),
         0.0075f,
         new Vector2(1.8f, -4.6f),
@@ -67,8 +68,8 @@ public class BuildingMenu {
         false,
         BuildingType.LEARNING,
         "Library"
-    );
-    buildings[2] = new Building(
+    ));
+    buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/basketballCourt.png")),
         0.0025f,
         new Vector2(1f, -2.4f),
@@ -77,8 +78,8 @@ public class BuildingMenu {
         false,
         BuildingType.RECREATION,
         "Basketball Court"
-    );
-    buildings[3] = new Building(
+    ));
+    buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/studentHousing.png")),
         0.108f,
         new Vector2(1.4f, -2.8f),
@@ -87,8 +88,8 @@ public class BuildingMenu {
         false,
         BuildingType.SLEEPING,
         "Student Accomodation"
-    );
-    buildings[4] = new Building(
+    ));
+    buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/road.png")),
         0.0625f,
         new Vector2(),
@@ -97,8 +98,8 @@ public class BuildingMenu {
         false,
         BuildingType.ROAD,
         "Road Section"
-    );
-    buildings[5] = new Building(
+    ));
+    buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/tarmack.png")),
         0.0625f,
         new Vector2(),
@@ -107,20 +108,20 @@ public class BuildingMenu {
         false,
         BuildingType.ROAD,
         "Tarmack Section"
-    );
+    ));
 
     table = new Table();
     // Add buldings to the table
-    for (int i = 0; i < NUM_BUILDINGS; i++) {
-      buildingImages[i] = new Image(buildings[i].texture);
+    for (int i = 0; i < buildings.size(); i++) {
+      buildingImages.add(new Image(buildings.get(i).texture));
       final int buildingIndex = i;
-      buildingImages[i].addListener(new ClickListener() {
+      buildingImages.get(i).addListener(new ClickListener() {
         @Override
         public void clicked(InputEvent e, float x, float y) {
-          if (world.selectedBuilding == buildings[buildingIndex]) {
+          if (world.selectedBuilding == buildings.get(buildingIndex)) {
             world.selectedBuilding = null;
           } else {
-            world.selectedBuilding = buildings[buildingIndex];
+            world.selectedBuilding = buildings.get(buildingIndex);
             buildingInfoLabel.setText(world.selectedBuilding.name + " - Press 'R' to rotate");
             if (world.selectedBuilding.flipped) {
               world.selectedBuilding.flipped = false;
@@ -132,7 +133,7 @@ public class BuildingMenu {
           }
         }
       });
-      table.add(buildingImages[i]);
+      table.add(buildingImages.get(i));
     }
 
     // Building info text
