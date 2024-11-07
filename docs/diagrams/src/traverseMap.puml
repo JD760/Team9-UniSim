@@ -1,0 +1,18 @@
+@startuml Traverse Map
+
+actor User
+Group panMap
+User -> Event: Left mouse button clicked
+Event -> WorldInputProcessor: touchDown event sent
+WorldInputProcessor -> World: calls pan()
+World -> Map: redraw the map
+Map -> User: render the updated map
+end
+Group zoomMap
+User -> Event: Mouse wheel scrolled
+Event -> WorldInputProcessor: scrolled event sent
+WorldInputProcessor -> World: calls zoom()
+World -> Map: redraw the map
+Map -> User: render the updated map
+end
+@enduml
