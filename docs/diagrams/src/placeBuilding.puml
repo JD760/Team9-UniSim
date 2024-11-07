@@ -1,4 +1,4 @@
-@startuml
+@startuml Place Building
 actor User
 Group ButtonPress
 User -> Button: Place or remove building

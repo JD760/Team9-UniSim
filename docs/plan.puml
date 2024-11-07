@@ -1,0 +1,31 @@
+@startgantt Project Plan
+Project starts 2024-9-27
+[Week 2 Meeting] happens at 2024-9-30
+[Week 3 Meeting] happens at 2024-10-7 and displays on same row as [Week 2 Meeting]
+[Week 4 Meeting] happens at 2024-10-14 and displays on same row as [Week 2 Meeting]
+[Week 5 Meeting] happens at 2024-10-21 and displays on same row as [Week 2 Meeting]
+[CW Meeting] happens at 2024-10-28 and displays on same row as [Week 2 Meeting]
+[Week 6 Meeting] happens at 2024-11-4 and displays on same row as [Week 2 Meeting]
+[Thursday Meeting] happens 2024-10-3
+[Research deliverables] lasts 11 days
+[Start Risks Writeup] lasts 7 days and starts at [Research deliverables]'s end
+[Complete Risks Writeup] starts 2024-10-28 and ends 2024-11-7
+[Plan Client Meeting] starts 2024-10-3 and lasts 8 days
+[Client Meeting] happens at [Plan Client Meeting]'s end
+[Requirements] lasts 7 days
+[Start Architecture] lasts 5 days
+[Requirements] starts at [Plan Client Meeting]'s end
+[Start Architecture] starts at [Plan Client Meeting]'s end
+[Initial Architecture Diagram] happens at [Start Architecture]'s end
+[Map Implementation - Jacob & Bertie] starts at [Initial Architecture Diagram]'s end and lasts 7 days
+[Menu Implementation - Henry] starts at [Initial Architecture Diagram]'s end and lasts 7 days
+[Method Selection & Planning - James] starts at 2024-10-17 and lasts 7 days
+
+[Finish Architecture Writeup] starts 2024-10-28 and ends 2024-11-7
+
+[Final Submission Deadline] happens at 2024-11-11
+
+2024-11-8 is colored in green
+2024-11-11 is colored in red
+[Assessment 1 Submission] happens at 2024-11-8
+@endgantt
