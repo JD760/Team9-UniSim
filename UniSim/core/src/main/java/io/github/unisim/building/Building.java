@@ -21,16 +21,20 @@ public class Building {
   public String name;
 
   /**
-   * Creates a new building that is added to the building menu and placed on the map.
+   * Create a new building object that may be placed in the world or displayed on the building menu.
 
-   * @param texture - The texture to draw on the map/preview at the given location
-   * @param location - The grid location to place the bottom-left corner of the building
-   * @param size - the dimensions (x, y) of the building
-   * @param flipped - whether to render a flipped graphic
-   */
+  * @param texture - The texture to draw over the building.
+  * @param textureScale - The scale to display the texture at relative to the source image
+  * @param textureOffset - The texture offset in grid tiles
+  * @param location - The (x, y) co-ordinates of the building in the grid
+  * @param size - The size (width, height) of the building in grid tiles
+  * @param flipped - Whether to render a flipped building graphic
+  * @param type - The type of building to create
+  * @param name - The name of the building, displayed when selected
+  */
   public Building(
-      Texture texture, float textureScale, Vector2 textureOffset, Point location, Point size, Boolean flipped,
-      BuildingType type, String name
+      Texture texture, float textureScale, Vector2 textureOffset, Point location,
+      Point size, Boolean flipped, BuildingType type, String name
   ) {
     this.texture = texture;
     this.location = location;
