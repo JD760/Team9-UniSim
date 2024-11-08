@@ -1,6 +1,6 @@
-@startuml StartMenuScreen
+@startuml SettingsScreen
 
-class StartMenuScreen implements Screen
+class SettingsScreen implements Screen
 {
     - stage: Stage
     - inputProcessor: InputMultiplexer
@@ -15,6 +15,6 @@ class ClickListner
     + clicked(): void
 }
 
-StartMenuScreen *-- "2..2" ClickListner
+SettingsScreen *-- "2..2" ClickListener
 
 @enduml
