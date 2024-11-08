@@ -1,3 +1,11 @@
+:root {
+    --background: #121212;
+    --background-secondary: #1F1B24;
+    --primary: #42a5f5;
+    --secondary: #ab47bc;
+    --text: #fff;
+}
+
 h2 {
     text-align: center;
     text-decoration: underline;
@@ -6,4 +14,15 @@ h2 {
 h3 {
     text-align: center;
     text-decoration: underline;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-secondary);
+    color: var(--text);
+}
+
+div > a {
+    color: var(--text);
 }

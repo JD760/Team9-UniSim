@@ -10,7 +10,9 @@
 body {
     background-color: var(--background);
 }
-
+div > a {
+    color: var(--text);
+}
 #title {
     text-align: center;
     color: var(--text);

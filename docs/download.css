@@ -1,0 +1,16 @@
+:root {
+    --background: #121212;
+    --background-secondary: #1F1B24;
+    --background-tertiary: #4a4353;
+    --primary: #42a5f5;
+    --secondary: #ab47bc;
+    --text: #fff;
+}
+
+body {
+    background-color: var(--background);
+}
+
+div > a {
+    color: var(--text);
+}
