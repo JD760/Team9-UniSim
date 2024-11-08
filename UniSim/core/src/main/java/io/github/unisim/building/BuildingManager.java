@@ -108,20 +108,15 @@ public class BuildingManager {
     int buildingHeightLeftSide = building.location.y - building.location.x;
     int buildingHeightRightSide = buildingHeightLeftSide + building.size.y - building.size.x + 1;
     Point leftCorner = building.location;
-    Point rightCorner = new Point(
-      building.location.x + building.size.x - 1,
-      building.location.y + building.size.y - 1
-    );
+
     int i = 0;
     while (i < buildings.size()) {
       Building other = buildings.get(i);
       int otherHeightLeftSide = other.location.y - other.location.x;
       int otherHeightRightSide = otherHeightLeftSide + other.size.y - other.size.x + 1;
-      int distanceToLeft = Math.abs(leftCorner.x - other.location.x - other.size.x + 1)
-        + Math.abs(leftCorner.y - other.location.y - other.size.y + 1);
-      int distanceToRight = Math.abs(rightCorner.x - other.location.x)
-        + Math.abs(rightCorner.y - other.location.y);
-      if (distanceToLeft < Math.min(building.size.x + building.size.y, other.size.x + other.size.y)) {
+      int leftDistance = Math.abs(leftCorner.x - other.location.x - other.size.x + 1)
+          + Math.abs(leftCorner.y - other.location.y - other.size.y + 1);
+      if (leftDistance < Math.min(building.size.x + building.size.y, other.size.x + other.size.y)) {
         if (otherHeightRightSide > buildingHeightLeftSide) {
           i++;
           continue;
@@ -162,8 +157,7 @@ public class BuildingManager {
    * in the world.
    *
    * @param type - The type of building
-   * @return - An int holding the number of that building that have been placed
-   *   in the world
+   * @return - The number of buildings of that type currently placed in the world
    */
   public int getBuildingCount(BuildingType type) {
     if (!buildingCounts.containsKey(type)) {

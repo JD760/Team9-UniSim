@@ -1,7 +1,6 @@
 package io.github.unisim.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -29,8 +28,8 @@ public class InfoBar {
   private Label scoreLabel = new Label("86%", skin);
   private Label titleLabel = new Label("UniSim", skin);
   private Label timerLabel;
-  private Texture pauseTexture = new Texture("pause.png");
-  private Texture playTexture = new Texture("play.png");
+  private Texture pauseTexture = new Texture("ui/pause.png");
+  private Texture playTexture = new Texture("ui/play.png");
   private Image pauseImage = new Image(pauseTexture);
   private Image playImage = new Image(playTexture);
   private Timer timer;
@@ -87,7 +86,7 @@ public class InfoBar {
       }
     });
 
-    // Title table
+    // title Label
     titleLabelCell = titleTable.add(titleLabel).expandX().align(Align.center);
 
     bar = new ShapeActor(GameState.UIPrimaryColour);

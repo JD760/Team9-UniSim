@@ -1,9 +1,6 @@
 package io.github.unisim.ui;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,13 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
-
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.world.World;
+import java.util.ArrayList;
 
 /**
  * Menu used to place buildings in the world by clicking and dragging them
@@ -35,10 +31,9 @@ public class BuildingMenu {
   private ArrayList<Building> buildings = new ArrayList<>();
   private ArrayList<Image> buildingImages = new ArrayList<>();
   private Label buildingInfoLabel = new Label(
-    "", new Skin(Gdx.files.internal("ui/uiskin.json"))
+      "", new Skin(Gdx.files.internal("ui/uiskin.json"))
   );
   private Table buildingInfoTable = new Table();
-  private Cell buildingInfoCell;
 
   /**
    * Create a Building Menu and attach its actors and components to the provided stage.
@@ -89,7 +84,8 @@ public class BuildingMenu {
         BuildingType.SLEEPING,
         "Student Accomodation"
     ));
-    buildings.add(new Building(
+    // Below is code to add placable roads in the same format as buildings
+    /*buildings.add(new Building(
         new Texture(Gdx.files.internal("buildings/road.png")),
         0.0625f,
         new Vector2(),
@@ -108,7 +104,7 @@ public class BuildingMenu {
         false,
         BuildingType.ROAD,
         "Tarmack Section"
-    ));
+    ));*/
 
     table = new Table();
     // Add buldings to the table
@@ -136,9 +132,6 @@ public class BuildingMenu {
       table.add(buildingImages.get(i));
     }
 
-    // Building info text
-    buildingInfoCell = buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center);
-
     stage.addActor(bar);
     stage.addActor(table);
     stage.addActor(buildingInfoTable);
@@ -155,17 +148,16 @@ public class BuildingMenu {
     table.setBounds(0, 0, width, height * 0.1f);
     bar.setBounds(0, 0, width, height * 0.1f);
     buildingInfoTable.setBounds(0, height * 0.1f, width, height * 0.025f);
-    // buildingInfoLabel.setBounds(width * 0.5f - height * 0.15f, height * 0.15f, height * 0.1f, height * 0.15f);
 
     // we must perform an unchecked type conversion here
     // this is acceptable as we know our table only contains instances of Actors
     for (Cell<Actor> cell : table.getCells()) {
-      Image buildingImage = (Image)(cell.getActor());
+      Image buildingImage = (Image) (cell.getActor());
       Vector2 textureSize = new Vector2(buildingImage.getWidth(), buildingImage.getHeight());
       cell.width(
-        height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
+          height * 0.1f * (textureSize.x < textureSize.y ? textureSize.x / textureSize.y : 1)
       ).height(
-        height * 0.1f * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1)
+          height * 0.1f * (textureSize.y < textureSize.x ? textureSize.y / textureSize.x : 1)
       );
     }
 
@@ -173,15 +165,20 @@ public class BuildingMenu {
     // buildingInfoCell.width(height * 0.11f).height(height * 0.025f);
   }
 
+  /**
+   * Called when the building menu labels and actors need to be updated.
+   */
   public void update() {
     if (GameState.gameOver) {
       buildingInfoLabel.setText("Game Over!");
-    }
-    else if (world.selectedBuilding == null) {
+    } else if (world.selectedBuilding == null) {
       buildingInfoLabel.setText("");
     }
   }
 
+  /**
+   * Reset the building menu to its' initial state.
+   */
   public void reset() {
     buildingInfoLabel.setText("");
   }
