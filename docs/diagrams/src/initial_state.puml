@@ -1,0 +1,51 @@
+@startuml Initial Project State
+[*] --> StartMenu
+
+StartMenu: Displays the name of the game, a play
+StartMenu: button, a settings button, an
+StartMenu: instructions button and a quit button
+StartMenu --> Gameplay
+StartMenu --> InstructionsFromStart
+StartMenu --> SettingsFromStart
+StartMenu --> [*]
+
+Gameplay: The actual game, showing the tile-based
+Gameplay: world, the 5 minute timer and the
+Gameplay: building counters
+Gameplay --> PauseMenu
+Gameplay --> GameOverMenu
+
+PauseMenu: Allows the player to pause the game
+PauseMenu: and contains buttons to return to the
+PauseMenu: game, return to the start menu, go to
+PauseMenu: settings and see the instructions
+PauseMenu --> Gameplay
+PauseMenu --> StartMenu
+PauseMenu --> SettingsFromPause
+PauseMenu --> InstructionsFromPause
+
+GameOverMenu: Shows the final student satisfaction and
+GameOverMenu: Options to return to the start menu or
+GameOverMenu: quit the game
+GameOverMenu --> StartMenu
+GameOverMenu --> [*]
+
+InstructionsFromStart: Text giving basic instructions on how
+InstructionsFromStart: to play the game and contains a back
+InstructionsFromStart: button
+InstructionsFromStart --> StartMenu
+
+InstructionsFromPause: Text giving basic instructions on how
+InstructionsFromPause: to play the game and contains a back
+InstructionsFromPause: button
+InstructionsFromPause --> PauseMenu
+
+SettingsFromStart: Displays options for volum, etc and a
+SettingsFromStart: button to go back
+SettingsFromStart --> StartMenu
+
+SettingsFromPause: Displays options for volum, etc and a
+SettingsFromPause: button to go back
+SettingsFromPause --> PauseMenu
+
+@enduml

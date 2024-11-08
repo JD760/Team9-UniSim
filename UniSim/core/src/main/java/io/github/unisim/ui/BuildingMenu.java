@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
@@ -84,27 +85,6 @@ public class BuildingMenu {
         BuildingType.SLEEPING,
         "Student Accomodation"
     ));
-    // Below is code to add placable roads in the same format as buildings
-    /*buildings.add(new Building(
-        new Texture(Gdx.files.internal("buildings/road.png")),
-        0.0625f,
-        new Vector2(),
-        new Point(),
-        new Point(3, 4),
-        false,
-        BuildingType.ROAD,
-        "Road Section"
-    ));
-    buildings.add(new Building(
-        new Texture(Gdx.files.internal("buildings/tarmack.png")),
-        0.0625f,
-        new Vector2(),
-        new Point(),
-        new Point(3, 3),
-        false,
-        BuildingType.ROAD,
-        "Tarmack Section"
-    ));*/
 
     table = new Table();
     // Add buldings to the table
@@ -131,6 +111,8 @@ public class BuildingMenu {
       });
       table.add(buildingImages.get(i));
     }
+
+    buildingInfoTable.add(buildingInfoLabel).expandX().align(Align.center);
 
     stage.addActor(bar);
     stage.addActor(table);
@@ -162,11 +144,10 @@ public class BuildingMenu {
     }
 
     buildingInfoLabel.setFontScale(height * 0.0015f);
-    // buildingInfoCell.width(height * 0.11f).height(height * 0.025f);
   }
 
   /**
-   * Called when the building menu labels and actors need to be updated.
+   * Called when the building menu needs to be redrawn with new values in the labels.
    */
   public void update() {
     if (GameState.gameOver) {
@@ -176,9 +157,6 @@ public class BuildingMenu {
     }
   }
 
-  /**
-   * Reset the building menu to its' initial state.
-   */
   public void reset() {
     buildingInfoLabel.setText("");
   }

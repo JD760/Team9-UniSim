@@ -1,0 +1,20 @@
+@startuml StartMenuScreen
+
+class StartMenuScreen implements Screen
+{
+    - stage: Stage
+    - inputProcessor: InputMultiplexer
+    - table: Table
+    + render(): void
+    + resize(): void
+    + resume(): void
+}
+
+class ClickListner
+{
+    + clicked(): void
+}
+
+StartMenuScreen *-- "2..2" ClickListener
+
+@enduml

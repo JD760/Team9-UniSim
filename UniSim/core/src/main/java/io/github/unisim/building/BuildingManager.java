@@ -16,6 +16,8 @@ import java.util.Map;
  * Manage the buildings placed in the world and methods common to all buildings.
  */
 public class BuildingManager {
+  // create a list of buildings which will be sorted by a height metric derived from
+  // the locations of the corners of the buildings.
   private ArrayList<Building> buildings = new ArrayList<>();
   private Map<BuildingType, Integer> buildingCounts = new HashMap<>();
   private Matrix4 isoTransform;
@@ -105,18 +107,26 @@ public class BuildingManager {
   public int placeBuilding(Building building) {
     // Insert the building into the correct place in the arrayList to ensure it
     // gets rendered in top-down order
+    // Start by calculating the 'height' values for the left and right corners of the new building
+    // where height is the taxi-cab distance from the top of the map
     int buildingHeightLeftSide = building.location.y - building.location.x;
     int buildingHeightRightSide = buildingHeightLeftSide + building.size.y - building.size.x + 1;
     Point leftCorner = building.location;
 
+    // Move up the array, until the pointer is in the correct place for the new building so the
+    // array is sorted by height
     int i = 0;
     while (i < buildings.size()) {
       Building other = buildings.get(i);
       int otherHeightLeftSide = other.location.y - other.location.x;
-      int otherHeightRightSide = otherHeightLeftSide + other.size.y - other.size.x + 1;
+      // Calculate the taxi-cab distance between the new building's left corner and the other
+      // building's right corner
       int leftDistance = Math.abs(leftCorner.x - other.location.x - other.size.x + 1)
           + Math.abs(leftCorner.y - other.location.y - other.size.y + 1);
+      // If the distance is small, compare the height of the new buildin'g left corner to the
+      // height of the other buildings right corner
       if (leftDistance < Math.min(building.size.x + building.size.y, other.size.x + other.size.y)) {
+        int otherHeightRightSide = otherHeightLeftSide + other.size.y - other.size.x + 1;
         if (otherHeightRightSide > buildingHeightLeftSide) {
           i++;
           continue;
@@ -124,6 +134,8 @@ public class BuildingManager {
           break;
         }
       }
+      // Otherwise, compare the distance of the new building's right corner to the other building's
+      // left corner
       if (otherHeightLeftSide > buildingHeightRightSide) {
         i++;
       } else {
@@ -157,7 +169,7 @@ public class BuildingManager {
    * in the world.
    *
    * @param type - The type of building
-   * @return - The number of buildings of that type currently placed in the world
+   * @return - The number of buildings of that type that have been placed
    */
   public int getBuildingCount(BuildingType type) {
     if (!buildingCounts.containsKey(type)) {

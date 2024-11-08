@@ -1,4 +1,4 @@
-@startuml Traverse Map
+@startuml Place Building
 
 actor User
 User -> Event: Left mouse button clicked

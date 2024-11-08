@@ -33,7 +33,6 @@ public class InfoBar {
   private Image pauseImage = new Image(pauseTexture);
   private Image playImage = new Image(playTexture);
   private Timer timer;
-  private Cell<Label> titleLabelCell;
   private Cell<Label> timerLabelCell;
   private Cell<Label> scoreLabelCell;
   private Cell<Image> pauseButtonCell;
@@ -86,8 +85,7 @@ public class InfoBar {
       }
     });
 
-    // title Label
-    titleLabelCell = titleTable.add(titleLabel).expandX().align(Align.center);
+    titleTable.add(titleLabel).expandX().align(Align.center);
 
     bar = new ShapeActor(GameState.UIPrimaryColour);
     stage.addActor(bar);

@@ -1,4 +1,4 @@
-@startuml Project Structure
+@startuml Project State Diagram
 [*] --> StartMenu
 
 StartMenu: Displays the name of the game, a play

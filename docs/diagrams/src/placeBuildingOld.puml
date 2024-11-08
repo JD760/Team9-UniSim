@@ -1,0 +1,15 @@
+@startuml Initial Place Building
+actor User
+Group ButtonPress
+User -> Button: Place or remove building
+Button -> Game: Game receives building request
+Game -> World: Calls addBuilding() method on world
+World -> BuildingCounter: Updates building counter
+end
+Group Render
+Game -> World: Calls render() method on world next frame
+World -> BuildingCounter: Calls render() method on building counter
+World <-- BuildingCounter: Renders updated counter
+User <-- World: Game renders updated world
+end
+@enduml

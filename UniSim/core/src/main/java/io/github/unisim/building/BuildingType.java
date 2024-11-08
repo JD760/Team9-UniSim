@@ -8,6 +8,5 @@ public enum BuildingType {
   RECREATION,
   LEARNING,
   SLEEPING,
-  EATING,
-  ROAD
+  EATING
 }
