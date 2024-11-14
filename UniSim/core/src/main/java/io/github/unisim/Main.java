@@ -30,6 +30,9 @@ public class Main extends Game {
 
   @Override
   public void resize(int width, int height) {
+    if (width + height == 0) {
+      return;
+    }
     ((FullscreenInputProcessor) GameState.fullscreenInputProcessor).resize(width, height);
     GameState.gameScreen.resize(width, height);
     GameState.settingScreen.resize(width, height);
