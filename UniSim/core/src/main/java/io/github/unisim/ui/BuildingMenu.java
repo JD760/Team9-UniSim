@@ -1,5 +1,7 @@
 package io.github.unisim.ui;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -13,12 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+
 import io.github.unisim.GameState;
 import io.github.unisim.Point;
 import io.github.unisim.building.Building;
 import io.github.unisim.building.BuildingType;
 import io.github.unisim.world.World;
-import java.util.ArrayList;
 
 /**
  * Menu used to place buildings in the world by clicking and dragging them
