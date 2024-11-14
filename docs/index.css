@@ -83,3 +83,8 @@ body {
 .dropdown-content > a:last-child, a:first-child {
     border: none;
 }
+
+#gameplay-image {
+    width: 70vw;
+    padding-left: 15vw;
+}
